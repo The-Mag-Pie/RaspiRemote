@@ -27,6 +27,18 @@ namespace RaspiRemote.ViewModels
             SaveDevices();
         }
 
+        [RelayCommand]
+        private void ConnectToDevice(RpiDevice device)
+        {
+            Application.Current.MainPage.DisplayAlert("Connect", $"Connect clicked: {device.Name}", "OK");
+        }
+
+        [RelayCommand]
+        private void OpenDeviceProperties(RpiDevice device)
+        {
+            Application.Current.MainPage.DisplayAlert("Properties", $"Properties clicked: {device.Name}", "OK");
+        }
+
         private void LoadDevices()
         {
             Devices.Clear();
