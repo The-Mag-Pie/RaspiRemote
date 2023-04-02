@@ -1,5 +1,7 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Mvvm.Input;
 using RaspiRemote.Models;
+using RaspiRemote.Popups;
 using System.Collections.ObjectModel;
 
 namespace RaspiRemote.ViewModels
@@ -14,29 +16,52 @@ namespace RaspiRemote.ViewModels
         }
 
         [RelayCommand]
-        private void AddDevice()
+        private async Task AddDevice()
         {
-            Devices.Add(new()
+            var popup = new AddDevicePopup();
+            var newDevice = await Application.Current.MainPage.ShowPopupAsync(popup) as RpiDevice;
+            if (newDevice != null)
             {
-                Name = "nazwa 1",
-                Host = "192.168.1.1",
-                Username = "użytkownik",
-                Password = "hasło"
-            });
+                Devices.Add(newDevice);
+                SaveDevices();
+            }
+        }
 
+        [RelayCommand]
+        private async Task EditDevice(RpiDevice device)
+        {
+            var popup = new EditDevicePopup(device);
+            var editedDevice = await Application.Current.MainPage.ShowPopupAsync(popup) as RpiDevice;
+            if (editedDevice != null)
+            {
+                device.Name = editedDevice.Name;
+                device.Host = editedDevice.Host;
+                device.Port = editedDevice.Port;
+                device.Username = editedDevice.Username;
+                device.Password = editedDevice.Password;
+                SaveDevices();
+            }
+        }
+
+        [RelayCommand]
+        private void DeleteDevice(RpiDevice device)
+        {
+            Devices.Remove(device);
             SaveDevices();
         }
 
         [RelayCommand]
-        private void ConnectToDevice(RpiDevice device)
+        private async Task ConnectToDevice(RpiDevice device)
         {
-            Application.Current.MainPage.DisplayAlert("Connect", $"Connect clicked: {device.Name}", "OK");
+            //Application.Current.MainPage.DisplayAlert("Connect", $"Connect clicked: {device.Name}", "OK");
+            await EditDevice(device);
         }
 
         [RelayCommand]
-        private void OpenDeviceProperties(RpiDevice device)
+        private void OpenDeviceOptions(RpiDevice device)
         {
-            Application.Current.MainPage.DisplayAlert("Properties", $"Properties clicked: {device.Name}", "OK");
+            //Application.Current.MainPage.DisplayAlert("Options", $"Options clicked: {device.Name}", "OK");
+            DeleteDevice(device);
         }
 
         private void LoadDevices()

@@ -1,11 +1,22 @@
-﻿namespace RaspiRemote.Models
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+
+namespace RaspiRemote.Models
 {
-    internal class RpiDevice
+    public partial class RpiDevice : ObservableObject
     {
-        public string Name { get; set; }
-        public string Host { get; set; }
-        public int Port { get; set; } = 22; // Default SSH port is 22
-        public string Username { get; set; }
-        public string Password { get; set; }
+        [ObservableProperty]
+        private string _name;
+
+        [ObservableProperty]
+        private string _host;
+
+        [ObservableProperty]
+        private int _port = 22; // Default SSH port is 22
+
+        [ObservableProperty]
+        private string _username;
+
+        [ObservableProperty]
+        private string _password;
     }
 }

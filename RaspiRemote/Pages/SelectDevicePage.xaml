@@ -25,11 +25,6 @@
             <Setter Property="LineBreakMode" Value="TailTruncation"/>
         </Style>
 
-        <Style x:Key="DevicePropertiesButton" TargetType="ImageButton">
-            <!--<Setter Property="BackgroundColor" Value="Green"/>-->
-            <!--<Setter Property="CornerRadius" Value="35"/>-->
-        </Style>
-
         <Style x:Key="AddButtonStyle" TargetType="ImageButton">
             <Setter Property="BackgroundColor" Value="#71FD7F"/>
             <Setter Property="VerticalOptions" Value="End"/>
@@ -52,8 +47,11 @@
                 </CollectionView.ItemsLayout>
                 <CollectionView.EmptyView>
                     <ContentView>
-                        <VerticalStackLayout>
-                            <Label Text="You have no any devices saved."/>
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="You have no any devices saved."
+                                   HorizontalOptions="Center"/>
+                            <Label Text="Click + (Add) button to add the new one."
+                                   HorizontalOptions="Center"/>
                         </VerticalStackLayout>
                     </ContentView>
                 </CollectionView.EmptyView>
@@ -92,10 +90,9 @@
                                            Text="{Binding Username, StringFormat='User: {0}'}"/>
                                 </Grid>
 
-                                <ImageButton Style="{StaticResource DevicePropertiesButton}"
-                                             Grid.Row="0" Grid.Column="2" Grid.RowSpan="2"
+                                <ImageButton Grid.Row="0" Grid.Column="2" Grid.RowSpan="2"
                                              Source="more_3dots_vertical.png"
-                                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SelectDevicePageViewModel}}, Path=OpenDevicePropertiesCommand}"
+                                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SelectDevicePageViewModel}}, Path=OpenDeviceOptionsCommand}"
                                              CommandParameter="{Binding .}"/>
 
                                 <Button Text=""
@@ -106,18 +103,6 @@
                                         CommandParameter="{Binding .}"/>
 
                             </Grid>
-                            
-                            <!--<HorizontalStackLayout>
-                                <VerticalStackLayout>
-                                    <Label Text="{Binding Name, StringFormat='Name = {0}'}"/>
-                                    <Label Text="{Binding Host, StringFormat='Host = {0}'}"/>
-                                    <Label Text="{Binding Port, StringFormat='Port = {0}'}"/>
-                                </VerticalStackLayout>
-                                <VerticalStackLayout>
-                                    <Label Text="{Binding Username, StringFormat='Username = {0}'}"/>
-                                    <Label Text="{Binding Password, StringFormat='Password = {0}'}"/>
-                                </VerticalStackLayout>
-                            </HorizontalStackLayout>-->
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
