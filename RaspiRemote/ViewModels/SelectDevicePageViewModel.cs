@@ -58,10 +58,23 @@ namespace RaspiRemote.ViewModels
         }
 
         [RelayCommand]
-        private void OpenDeviceOptions(RpiDevice device)
+        private async Task OpenDeviceOptions(RpiDevice device)
         {
-            //Application.Current.MainPage.DisplayAlert("Options", $"Options clicked: {device.Name}", "OK");
-            DeleteDevice(device);
+            var popup = new DeviceOptionsPopup();
+            var result = await Application.Current.MainPage.ShowPopupAsync(popup);
+            if (result != null)
+            {
+                switch (result)
+                {
+                    case DeviceOptionsActions.Edit:
+                        _ = EditDevice(device);
+                        break;
+
+                    case DeviceOptionsActions.Delete:
+                        DeleteDevice(device);
+                        break;
+                }
+            }
         }
 
         private void LoadDevices()
