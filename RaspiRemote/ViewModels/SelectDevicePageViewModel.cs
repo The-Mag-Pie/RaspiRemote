@@ -8,10 +8,13 @@ namespace RaspiRemote.ViewModels
 {
     internal partial class SelectDevicePageViewModel : BaseViewModel
     {
+        private SshClientContainer _sshClientContainer;
+
         public ObservableCollection<RpiDevice> Devices { get; } = new();
 
-        public SelectDevicePageViewModel()
+        public SelectDevicePageViewModel(SshClientContainer sshClientContainer)
         {
+            _sshClientContainer = sshClientContainer;
             LoadDevices();
         }
 
@@ -54,7 +57,15 @@ namespace RaspiRemote.ViewModels
         private async Task ConnectToDevice(RpiDevice device)
         {
             //Application.Current.MainPage.DisplayAlert("Connect", $"Connect clicked: {device.Name}", "OK");
-            await EditDevice(device);
+            //await EditDevice(device);
+            try
+            {
+                await Task.Run(() => _sshClientContainer.SetDataAndConnect(device));
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
+            }
         }
 
         [RelayCommand]

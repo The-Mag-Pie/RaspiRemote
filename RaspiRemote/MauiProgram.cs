@@ -21,6 +21,9 @@ public static class MauiProgram
 		builder.Logging.AddDebug();
 #endif
 
+		// Add dependencies
+		builder.Services.AddSingleton<SshClientContainer>();
+
 		return builder.Build();
 	}
 }

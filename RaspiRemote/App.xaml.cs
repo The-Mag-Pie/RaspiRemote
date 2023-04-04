@@ -4,7 +4,7 @@ namespace RaspiRemote;
 
 public partial class App : Application
 {
-	public App()
+	public App(SshClientContainer sshClientContainer)
 	{
 		InitializeComponent();
 
@@ -15,7 +15,7 @@ public partial class App : Application
         // Force light theme (disable dark theme)
         Current.UserAppTheme = AppTheme.Light;
 
-		MainPage = new NavigationPage(new SelectDevicePage());
+		MainPage = new NavigationPage(new SelectDevicePage(sshClientContainer));
 	}
 
 #if WINDOWS
@@ -36,13 +36,16 @@ public partial class App : Application
     }
 
     // Set window size on Windows system to be similar to mobile screen size
-    // and set window location to the center of the screen
+    // Set window location to the center of the screen
+    // Set window title
     protected override Window CreateWindow(IActivationState activationState)
     {
-        var windowWidth = 600;
+        var windowWidth = 600; // cannot be smaller because then the popups are not centered
         var windowHeight = 900;
 
         var window = base.CreateWindow(activationState);
+
+        window.Title = AppInfo.Current.Name;
 
         window.Activated += async (s, e) =>
         {
