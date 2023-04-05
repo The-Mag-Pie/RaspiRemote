@@ -10,13 +10,15 @@
             StrokeThickness="0"
             BackgroundColor="White"
             Padding="10"
-            WidthRequest="350"
-            HeightRequest="340">
+            WidthRequest="130"
+            HeightRequest="130">
 
-        <VerticalStackLayout Margin="5"
-                             Spacing="5">
+        <VerticalStackLayout Margin="15"
+                             Spacing="10">
 
-            <ActivityIndicator IsRunning="True"
+            <ActivityIndicator HeightRequest="50"
+                               WidthRequest="50"
+                               IsRunning="True"
                                VerticalOptions="Center"
                                HorizontalOptions="Center"/>
 

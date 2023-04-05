@@ -25,7 +25,7 @@ public partial class App : Application
         Microsoft.Maui.Handlers.WindowHandler.Mapper.AppendToMapping(nameof(IWindow), (h, v) =>
         {
             var nativeWindow = h.PlatformView;
-            nativeWindow.ExtendsContentIntoTitleBar = false; // workaround for IsMaximizable bug
+            //nativeWindow.ExtendsContentIntoTitleBar = false; // workaround for IsMaximizable bug
             IntPtr windowHandle = WinRT.Interop.WindowNative.GetWindowHandle(nativeWindow);
             var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(windowHandle);
             var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);

@@ -65,6 +65,9 @@
 	  <MauiXaml Update="Pages\SelectDevicePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\SensorsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Popups\DeviceOptionsPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

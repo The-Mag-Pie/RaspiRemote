@@ -65,7 +65,10 @@ namespace RaspiRemote.ViewModels
                 catch (Exception ex)
                 {
                     await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
+                    return;
                 }
+
+                Application.Current.MainPage = new AppShell();
             });
         }
 
