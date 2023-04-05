@@ -56,16 +56,17 @@ namespace RaspiRemote.ViewModels
         [RelayCommand]
         private async Task ConnectToDevice(RpiDevice device)
         {
-            //Application.Current.MainPage.DisplayAlert("Connect", $"Connect clicked: {device.Name}", "OK");
-            //await EditDevice(device);
-            try
+            await InvokeAsyncWithLoadingPopup(async () =>
             {
-                await Task.Run(() => _sshClientContainer.SetDataAndConnect(device));
-            }
-            catch (Exception ex)
-            {
-                await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
-            }
+                try
+                {
+                    await _sshClientContainer.SetDataAndConnectAsync(device);
+                }
+                catch (Exception ex)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
+                }
+            });
         }
 
         [RelayCommand]

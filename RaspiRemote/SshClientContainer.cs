@@ -8,7 +8,7 @@ namespace RaspiRemote
         public RpiDevice DeviceInfo { get; private set; }
         public SshClient SshClient { get; private set; }
 
-        public void SetDataAndConnect(RpiDevice deviceInfo)
+        public async Task SetDataAndConnectAsync(RpiDevice deviceInfo)
         {
             DeviceInfo = deviceInfo;
 
@@ -20,7 +20,7 @@ namespace RaspiRemote
             }
 
             SshClient = new SshClient(DeviceInfo.Host, DeviceInfo.Port, DeviceInfo.Username, DeviceInfo.Password);
-            SshClient.Connect();
+            await Task.Run(SshClient.Connect);
             if (SshClient.IsConnected == false)
             {
                 throw new Renci.SshNet.Common.SshConnectionException("Device not connected");
