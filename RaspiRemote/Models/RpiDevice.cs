@@ -4,6 +4,8 @@ namespace RaspiRemote.Models
 {
     public partial class RpiDevice : ObservableObject
     {
+        public string DeviceGUID { get; set; }
+
         [ObservableProperty]
         private string _name;
 
@@ -18,5 +20,13 @@ namespace RaspiRemote.Models
 
         [ObservableProperty]
         private string _password;
+
+        public RpiDevice(bool GenerateGUID = false)
+        {
+            if (GenerateGUID)
+            {
+                DeviceGUID = Guid.NewGuid().ToString();
+            }
+        }
     }
 }
