@@ -1,4 +1,5 @@
 ﻿using Iot.Device.DHTxx;
+using Iot.Device.OneWire;
 
 namespace ReadSensorData
 {
@@ -60,7 +61,7 @@ namespace ReadSensorData
 
         static void handleDS18B20DataRequest(int pin)
         {
-
+            OneWireThermometerDevice.EnumerateDevices().Select(d => d.Family == DeviceFamily.Ds18b20);
         }
     }
 }

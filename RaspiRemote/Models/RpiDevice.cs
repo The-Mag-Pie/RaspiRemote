@@ -21,9 +21,11 @@ namespace RaspiRemote.Models
         [ObservableProperty]
         private string _password;
 
-        public RpiDevice(bool GenerateGUID = false)
+        public RpiDevice() { }
+
+        public RpiDevice(bool generateGUID)
         {
-            if (GenerateGUID)
+            if (generateGUID)
             {
                 DeviceGUID = Guid.NewGuid().ToString();
             }
