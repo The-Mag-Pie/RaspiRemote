@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using RaspiRemote.Pages;
 
 namespace RaspiRemote;
 
@@ -20,6 +21,9 @@ public static class MauiProgram
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif
+
+		// Add pages to services for dependency injection
+		builder.Services.AddSingleton<SensorsPage>();
 
 		// Add dependencies
 		builder.Services.AddSingleton<SshClientContainer>();
