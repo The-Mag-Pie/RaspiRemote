@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.Input;
+using RaspiRemote.LocalAppData;
 using RaspiRemote.Models;
 using RaspiRemote.Popups;
 using System.Collections.ObjectModel;
@@ -96,7 +97,7 @@ namespace RaspiRemote.ViewModels
         {
             Devices.Clear();
 
-            foreach (var device in LocalAppData.GetDevicesList())
+            foreach (var device in DevicesAppData.GetDevicesList())
             {
                 Devices.Add(device);
             }
@@ -104,7 +105,7 @@ namespace RaspiRemote.ViewModels
 
         private void SaveDevices()
         {
-            LocalAppData.SaveDevicesList(Devices.ToList());
+            DevicesAppData.SaveDevicesList(Devices.ToList());
         }
     }
 }

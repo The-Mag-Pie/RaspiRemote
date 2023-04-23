@@ -37,7 +37,8 @@
         </Style>
     </ContentPage.Resources>
 
-    <VerticalStackLayout Padding="20">
+    <VerticalStackLayout Padding="20"
+                         Spacing="20">
         <Frame Style="{StaticResource SectionFrameStyle}">
             <Grid RowSpacing="10">
                 <Grid.RowDefinitions>
@@ -55,12 +56,15 @@
                            Text="DHT11"/>
                     <Picker Style="{StaticResource SensorStatePickerStyle}"
                             ItemsSource="{Binding SensorStates}"
+                            SelectedItem="{Binding DHT11SensorState}"
                             Grid.Column="1"/>
                     <HorizontalStackLayout Grid.Column="2"
                                            Spacing="5">
                         <Label Style="{StaticResource SensorHeaderLabelStyle}"
                                Text="Pin:"/>
-                        <Picker ItemsSource="{Binding GpioPins}"/>
+                        <Picker ItemsSource="{Binding GpioPins}"
+                                SelectedItem="{Binding DHT11SensorPin}"
+                                IsEnabled="{Binding IsDHT11SensorEnabled}"/>
                     </HorizontalStackLayout>
                 </Grid>
                 <Grid Grid.Row="1"
@@ -92,6 +96,50 @@
                            Style="{StaticResource SensorDataLabel}"
                            TextColor="#007DA5"
                            Text="55%"/>
+                </Grid>
+            </Grid>
+        </Frame>
+
+        <Frame Style="{StaticResource SectionFrameStyle}">
+            <Grid RowSpacing="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Style="{StaticResource SensorHeaderLabelStyle}"
+                           Grid.Column="0"
+                           Text="DS18B20"/>
+                    <Picker Style="{StaticResource SensorStatePickerStyle}"
+                            ItemsSource="{Binding SensorStates}"
+                            SelectedItem="{Binding DS18B20SensorState}"
+                            Grid.Column="1"/>
+                    <!--<HorizontalStackLayout Grid.Column="2"
+                                           Spacing="5">
+                        <Label Style="{StaticResource SensorHeaderLabelStyle}"
+                               Text="Pin:"/>
+                        <Picker ItemsSource="{Binding GpioPins}"/>
+                    </HorizontalStackLayout>-->
+                </Grid>
+                <Grid Grid.Row="1"
+                      HorizontalOptions="Center"
+                      ColumnSpacing="50">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0"
+                           Style="{StaticResource SensorDataDescriptionLabel}"
+                           Text="Temperature"/>
+                    <Label Grid.Row="1"
+                           Style="{StaticResource SensorDataLabel}"
+                           TextColor="#D83401"
+                           Text="48 C"/>
                 </Grid>
             </Grid>
         </Frame>

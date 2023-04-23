@@ -36,7 +36,7 @@ public partial class App : Application
     }
 
     // Set window size on Windows system to be similar to mobile screen size
-    // Set window location to the center of the screen
+    // Set window location to the center of the screen - disabled
     // Set window title
     protected override Window CreateWindow(IActivationState activationState)
     {
@@ -46,19 +46,21 @@ public partial class App : Application
         var window = base.CreateWindow(activationState);
 
         window.Title = AppInfo.Current.Name;
+        window.Width = windowWidth;
+        window.Height = windowHeight;
 
-        window.Activated += async (s, e) =>
-        {
-            window.Width = windowWidth;
-            window.Height = windowHeight;
+        //window.Activated += async (s, e) =>
+        //{
+        //    window.Width = windowWidth;
+        //    window.Height = windowHeight;
 
-            await window.Dispatcher.DispatchAsync(() => { });
+        //    await window.Dispatcher.DispatchAsync(() => { });
 
-            var display = DeviceDisplay.Current.MainDisplayInfo;
+        //    var display = DeviceDisplay.Current.MainDisplayInfo;
 
-            window.X = (display.Width / display.Density - window.Width) / 2;
-            window.Y = (display.Height / display.Density - window.Height) / 2;
-        };
+        //    window.X = (display.Width / display.Density - window.Width) / 2;
+        //    window.Y = (display.Height / display.Density - window.Height) / 2;
+        //};
 
         return window;
     }

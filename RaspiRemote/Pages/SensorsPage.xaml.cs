@@ -7,6 +7,10 @@ public partial class SensorsPage : ContentPage
 	public SensorsPage(SshClientContainer sshClientContainer)
 	{
 		InitializeComponent();
-		BindingContext = new SensorsPageViewModel(sshClientContainer);
+
+		var vm = new SensorsPageViewModel(sshClientContainer);
+		BindingContext = vm;
+
+		Appearing += (s, e) => vm.OnAppearing();
 	}
 }
