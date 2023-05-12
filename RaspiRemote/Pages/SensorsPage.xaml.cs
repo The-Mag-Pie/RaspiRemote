@@ -12,5 +12,6 @@ public partial class SensorsPage : ContentPage
 		BindingContext = vm;
 
 		Appearing += (s, e) => vm.OnAppearing();
+		Disappearing += (s, e) => vm.OnDisappearing();
 	}
 }

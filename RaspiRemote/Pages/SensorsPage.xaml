@@ -90,12 +90,12 @@
                            Grid.Column="0"
                            Style="{StaticResource SensorDataLabel}"
                            TextColor="#03A800"
-                           Text="24 C"/>
+                           Text="{Binding DHT11SensorTemperature, StringFormat='{0}°C'}"/>
                     <Label Grid.Row="1"
                            Grid.Column="1"
                            Style="{StaticResource SensorDataLabel}"
                            TextColor="#007DA5"
-                           Text="55%"/>
+                           Text="{Binding DHT11SensorHumidity, StringFormat='{0}%'}"/>
                 </Grid>
             </Grid>
         </Frame>
@@ -139,7 +139,7 @@
                     <Label Grid.Row="1"
                            Style="{StaticResource SensorDataLabel}"
                            TextColor="#D83401"
-                           Text="48 C"/>
+                           Text="{Binding DS18B20SensorTemperature, StringFormat='{0}°C'}"/>
                 </Grid>
             </Grid>
         </Frame>

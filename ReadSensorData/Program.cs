@@ -13,24 +13,23 @@ namespace ReadSensorData
                 return;
             }
 
-            int pin;
-            try
-            {
-                pin = int.Parse(args[1]);
-            }
-            catch
-            {
-                Console.WriteLine($"ERROR: Wrong parameter: pin = {args[1]}");
-                return;
-            }
-
             switch (args[0])
             {
                 case "dht11":
+                    int pin;
+                    try
+                    {
+                        pin = int.Parse(args[1]);
+                    }
+                    catch
+                    {
+                        Console.WriteLine($"ERROR: Wrong parameter: pin = {args[1]}");
+                        return;
+                    }
                     handleDHT11DataRequest(pin);
                     break;
                 case "ds18b20":
-                    handleDS18B20DataRequest(pin);
+                    handleDS18B20DataRequest();
                     break;
                 default:
                     Console.WriteLine($"ERROR: Unrecognized parameter: {args[0]}");
@@ -43,6 +42,7 @@ namespace ReadSensorData
             using var dht11 = new Dht11(pin);
 
             bool success;
+            //for (int _ = 0; _ < 500; _++)
             while (true)
             {
                 success = dht11.TryReadTemperature(out var temperature);
@@ -55,12 +55,15 @@ namespace ReadSensorData
 
                 Console.WriteLine(temperature.DegreesCelsius);
                 Console.WriteLine(humidity.Percent);
-                break;
+                return;
             }
+
+            Console.WriteLine("ERROR: cannot read data from DHT11 sensor");
         }
 
-        static void handleDS18B20DataRequest(int pin)
+        static void handleDS18B20DataRequest()
         {
+            // TODO
             OneWireThermometerDevice.EnumerateDevices().Select(d => d.Family == DeviceFamily.Ds18b20);
         }
     }
