@@ -89,13 +89,23 @@
                     <Label Grid.Row="1"
                            Grid.Column="0"
                            Style="{StaticResource SensorDataLabel}"
-                           TextColor="#03A800"
+                           TextColor="{Binding DHT11SensorTempLabelColor}"
                            Text="{Binding DHT11SensorTemperature, StringFormat='{0}°C'}"/>
+                    <!--<Label Grid.Row="1"
+                           Grid.Column="0"
+                           Style="{StaticResource SensorDataLabel}"
+                           TextColor="#03A800"
+                           Text="{Binding DHT11SensorTemperature, StringFormat='{0}°C'}"/>-->
                     <Label Grid.Row="1"
                            Grid.Column="1"
                            Style="{StaticResource SensorDataLabel}"
-                           TextColor="#007DA5"
+                           TextColor="{Binding DHT11SensorHumidityLabelColor}"
                            Text="{Binding DHT11SensorHumidity, StringFormat='{0}%'}"/>
+                    <!--<Label Grid.Row="1"
+                           Grid.Column="1"
+                           Style="{StaticResource SensorDataLabel}"
+                           TextColor="#007DA5"
+                           Text="{Binding DHT11SensorHumidity, StringFormat='{0}%'}"/>-->
                 </Grid>
             </Grid>
         </Frame>
@@ -138,8 +148,12 @@
                            Text="Temperature"/>
                     <Label Grid.Row="1"
                            Style="{StaticResource SensorDataLabel}"
-                           TextColor="#D83401"
+                           TextColor="{Binding DS18B20SensorTempLabelColor}"
                            Text="{Binding DS18B20SensorTemperature, StringFormat='{0}°C'}"/>
+                    <!--<Label Grid.Row="1"
+                           Style="{StaticResource SensorDataLabel}"
+                           TextColor="#D83401"
+                           Text="{Binding DS18B20SensorTemperature, StringFormat='{0}°C'}"/>-->
                 </Grid>
             </Grid>
         </Frame>

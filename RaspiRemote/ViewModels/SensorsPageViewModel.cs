@@ -39,9 +39,44 @@ namespace RaspiRemote.ViewModels
         }
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(DHT11SensorTempLabelColor))]
         private string _DHT11SensorTemperature = "--";
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(DHT11SensorHumidityLabelColor))]
         private string _DHT11SensorHumidity = "--";
+
+        public Color DHT11SensorTempLabelColor
+        {
+            get
+            {
+                if (DHT11SensorTemperature == "--")
+                    return Colors.Gray;
+
+                var temp = double.Parse(DHT11SensorTemperature, System.Globalization.NumberStyles.AllowDecimalPoint,
+                    System.Globalization.NumberFormatInfo.InvariantInfo);
+                if (temp < 10.0)
+                    return Colors.DarkBlue;
+                else if (temp < 15)
+                    return Colors.Blue;
+                else if (temp < 30)
+                    return Colors.Orange;
+                else if (temp < 40)
+                    return Colors.Red;
+                else
+                    return Colors.DarkRed;
+            }
+        }
+
+        public Color DHT11SensorHumidityLabelColor
+        {
+            get
+            {
+                if (DHT11SensorHumidity == "--")
+                    return Colors.Gray;
+                else
+                    return Color.FromArgb("#007DA5");
+            }
+        }
 
         private SensorState _ds18b20SensorState;
         public SensorState DS18B20SensorState
@@ -59,19 +94,24 @@ namespace RaspiRemote.ViewModels
         [NotifyPropertyChangedFor(nameof(DS18B20SensorTempLabelColor))]
         private string _DS18B20SensorTemperature = "--";
 
-        public SensorsLabelColor DS18B20SensorTempLabelColor
+        public Color DS18B20SensorTempLabelColor
         {
             get
             {
                 if (DS18B20SensorTemperature == "--")
-                    return SensorsLabelColor.Gray;
+                    return Colors.Gray;
 
                 var temp = double.Parse(DS18B20SensorTemperature);
                 if (temp < 10.0)
-                    return SensorsLabelColor.Darkblue;
+                    return Colors.DarkBlue;
                 else if (temp < 15)
-                    return SensorsLabelColor.Blue;
-                // TODO
+                    return Colors.Blue;
+                else if (temp < 30)
+                    return Colors.Orange;
+                else if (temp < 40)
+                    return Colors.Red;
+                else
+                    return Colors.DarkRed;
             }
         }
 
@@ -91,16 +131,26 @@ namespace RaspiRemote.ViewModels
 
         public void OnAppearing()
         {
-            _dht11UpdateThread = new Thread(DHT11UpdateData);
-            _dht11UpdateThread.Start();
-            _ds18b20UpdateThread = new Thread(DS18B20UpdateData);
-            _ds18b20UpdateThread.Start();
+            StartUpdateThreads();
         }
 
         public void OnDisappearing()
         {
+            StopUpdateThreads();
+        }
+
+        private void StartUpdateThreads()
+        {
+            _dht11UpdateThread = new Thread(DHT11UpdateData);
+            _dht11UpdateThread.Start();
+            //_ds18b20UpdateThread = new Thread(DS18B20UpdateData);
+            //_ds18b20UpdateThread.Start();
+        }
+
+        private void StopUpdateThreads()
+        {
             _dht11UpdateThread.Interrupt();
-            _ds18b20UpdateThread.Interrupt();
+            //_ds18b20UpdateThread.Interrupt();
         }
 
         private void DHT11UpdateData()
@@ -109,28 +159,31 @@ namespace RaspiRemote.ViewModels
             {
                 try
                 {
-                    var sshCommand = _sshClient.RunCommand("~/raspiremote_test/ReadSensorData dht11 4");
+                    var sshCommand = _sshClient.RunCommand($"~/raspiremote_test/ReadSensorData dht11 {(int)DHT11SensorPin}");
                     var result = sshCommand.Result;
 
-                    if (result.Length != 0 && result.Contains("ERROR") == false)
-                    {
-                        var data = result.Split('\n');
-                        //DHT11SensorTemperature = double.Parse(data[0], System.Globalization.NumberStyles.AllowDecimalPoint,
-                        //    System.Globalization.NumberFormatInfo.InvariantInfo);
-                        //DHT11SensorHumidity = int.Parse(data[1]);
-                        DHT11SensorTemperature = data[0];
-                        DHT11SensorHumidity = data[1];
-                    }
+                    if (result.Length == 0 || result.Contains("ERROR"))
+                        throw new Exception();
+
+                    var data = result.Split('\n');
+                    //DHT11SensorTemperature = double.Parse(data[0], System.Globalization.NumberStyles.AllowDecimalPoint,
+                    //    System.Globalization.NumberFormatInfo.InvariantInfo);
+                    //DHT11SensorHumidity = int.Parse(data[1]);
+                    DHT11SensorTemperature = data[0];
+                    DHT11SensorHumidity = data[1];
 
                     Thread.Sleep(3 * 1000);
                 }
                 catch (ThreadInterruptedException)
                 {
+                    DHT11SensorTemperature = "--";
+                    DHT11SensorHumidity = "--";
                     return;
                 }
-                catch (FormatException)
+                catch (Exception)
                 {
-                    return;
+                    DHT11SensorTemperature = "--";
+                    DHT11SensorHumidity = "--";
                 }
             }
         }
@@ -141,8 +194,8 @@ namespace RaspiRemote.ViewModels
             {
                 for (int i = 0; i < 50; i++)
                 {
-                    DS18B20SensorTemperature = (49.52 + i).ToString();
-                    Thread.Sleep(3 * 1000);
+                    DS18B20SensorTemperature = (-1.00 + i).ToString();
+                    Thread.Sleep(3 * 100);
                 }
             }
             catch (ThreadInterruptedException)
