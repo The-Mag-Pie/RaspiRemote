@@ -3,6 +3,7 @@ using RaspiRemote.Enums;
 using RaspiRemote.LocalAppData;
 using RaspiRemote.Models;
 using Renci.SshNet;
+using System.Reflection.Metadata;
 
 namespace RaspiRemote.ViewModels
 {
@@ -38,9 +39,9 @@ namespace RaspiRemote.ViewModels
         }
 
         [ObservableProperty]
-        private double _DHT11SensorTemperature;
+        private string _DHT11SensorTemperature = "--";
         [ObservableProperty]
-        private int _DHT11SensorHumidity;
+        private string _DHT11SensorHumidity = "--";
 
         private SensorState _ds18b20SensorState;
         public SensorState DS18B20SensorState
@@ -55,7 +56,24 @@ namespace RaspiRemote.ViewModels
         }
 
         [ObservableProperty]
-        private double _DS18B20SensorTemperature;
+        [NotifyPropertyChangedFor(nameof(DS18B20SensorTempLabelColor))]
+        private string _DS18B20SensorTemperature = "--";
+
+        public SensorsLabelColor DS18B20SensorTempLabelColor
+        {
+            get
+            {
+                if (DS18B20SensorTemperature == "--")
+                    return SensorsLabelColor.Gray;
+
+                var temp = double.Parse(DS18B20SensorTemperature);
+                if (temp < 10.0)
+                    return SensorsLabelColor.Darkblue;
+                else if (temp < 15)
+                    return SensorsLabelColor.Blue;
+                // TODO
+            }
+        }
 
         private RpiDevice _deviceInfo;
         private SshClient _sshClient;
@@ -97,9 +115,11 @@ namespace RaspiRemote.ViewModels
                     if (result.Length != 0 && result.Contains("ERROR") == false)
                     {
                         var data = result.Split('\n');
-                        DHT11SensorTemperature = double.Parse(data[0], System.Globalization.NumberStyles.AllowDecimalPoint,
-                            System.Globalization.NumberFormatInfo.InvariantInfo);
-                        DHT11SensorHumidity = int.Parse(data[1]);
+                        //DHT11SensorTemperature = double.Parse(data[0], System.Globalization.NumberStyles.AllowDecimalPoint,
+                        //    System.Globalization.NumberFormatInfo.InvariantInfo);
+                        //DHT11SensorHumidity = int.Parse(data[1]);
+                        DHT11SensorTemperature = data[0];
+                        DHT11SensorHumidity = data[1];
                     }
 
                     Thread.Sleep(3 * 1000);
@@ -121,7 +141,7 @@ namespace RaspiRemote.ViewModels
             {
                 for (int i = 0; i < 50; i++)
                 {
-                    DS18B20SensorTemperature = 49.52 + i;
+                    DS18B20SensorTemperature = (49.52 + i).ToString();
                     Thread.Sleep(3 * 1000);
                 }
             }
