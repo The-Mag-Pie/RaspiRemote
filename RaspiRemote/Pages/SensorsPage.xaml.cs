@@ -4,11 +4,11 @@ namespace RaspiRemote.Pages;
 
 public partial class SensorsPage : ContentPage
 {
-	public SensorsPage(SshClientContainer sshClientContainer)
+	public SensorsPage()
 	{
 		InitializeComponent();
 
-		var vm = new SensorsPageViewModel(sshClientContainer);
+		var vm = ServiceHelper.GetService<SensorsPageViewModel>();
 		BindingContext = vm;
 
 		Appearing += (s, e) => vm.OnAppearing();

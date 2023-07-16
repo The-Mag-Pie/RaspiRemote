@@ -7,13 +7,12 @@
     xmlns:pages="clr-namespace:RaspiRemote.Pages"
     Shell.FlyoutBehavior="Flyout">
 
+    <ShellContent Title="File Explorer"
+                  ContentTemplate="{DataTemplate pages:FileExplorerPage}"
+                  Route="FileExplorerPage"/>
+
     <ShellContent Title="Sensors"
                   ContentTemplate="{DataTemplate pages:SensorsPage}"
                   Route="SensorsPage"/>
-
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
 
 </Shell>

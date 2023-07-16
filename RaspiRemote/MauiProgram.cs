@@ -22,12 +22,13 @@ public static class MauiProgram
 		builder.Logging.AddDebug();
 #endif
 
-		// Add pages to services for dependency injection
-		builder.Services.AddSingleton<SensorsPage>();
+		// Register services for dependency injection
+		ServiceHelper.RegisterServices(builder.Services);
 
-		// Add dependencies
-		builder.Services.AddSingleton<SshClientContainer>();
+		var app = builder.Build();
 
-		return builder.Build();
+		ServiceHelper.ServiceProvider = app.Services;
+
+		return app;
 	}
 }

@@ -15,7 +15,7 @@ public partial class App : Application
         // Force light theme (disable dark theme)
         Current.UserAppTheme = AppTheme.Light;
 
-		MainPage = new NavigationPage(new SelectDevicePage(sshClientContainer));
+		MainPage = new NavigationPage(new SelectDevicePage());
 	}
 
 #if WINDOWS

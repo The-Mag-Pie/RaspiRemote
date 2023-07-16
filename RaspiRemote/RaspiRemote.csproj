@@ -56,12 +56,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Pages\FileExplorerPage.xaml.cs">
+	    <DependentUpon>FileExplorerPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Popups\DeviceOptionsPopup.xaml.cs">
 	    <DependentUpon>DeviceOptionsPopup.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Pages\FileExplorerPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\SelectDevicePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

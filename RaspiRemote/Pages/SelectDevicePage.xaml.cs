@@ -4,10 +4,10 @@ namespace RaspiRemote.Pages;
 
 public partial class SelectDevicePage : ContentPage
 {
-	public SelectDevicePage(SshClientContainer sshClientContainer)
+	public SelectDevicePage()
 	{
 		InitializeComponent();
 
-		BindingContext = new SelectDevicePageViewModel(sshClientContainer);
+		BindingContext = ServiceHelper.GetService<SelectDevicePageViewModel>();
 	}
 }
