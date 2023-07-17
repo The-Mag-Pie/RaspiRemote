@@ -9,7 +9,7 @@ namespace RaspiRemote.ViewModels
         [ObservableProperty]
         private bool _isBusy = false;
 
-        protected async Task InvokeAsyncWithLoadingPopup(Func<Task> action)
+        protected async Task InvokeAsyncWithLoader(Func<Task> action)
         {
             IsBusy = true;
             var loadingPopup = new LoadingPopup();

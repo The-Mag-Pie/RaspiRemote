@@ -8,6 +8,8 @@ public partial class FileExplorerPage : ContentPage
 	{
 		InitializeComponent();
 
-		BindingContext = ServiceHelper.GetService<FileExplorerPageViewModel>();
+		var viewModel = ServiceHelper.GetService<FileExplorerPageViewModel>();
+		BindingContext = viewModel;
+		Appearing += async (s, e) => await viewModel.OnAppearing();
 	}
 }

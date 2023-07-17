@@ -4,6 +4,7 @@
              x:Class="RaspiRemote.Pages.FileExplorerPage"
              xmlns:vm="clr-namespace:RaspiRemote.ViewModels"
              xmlns:models="clr-namespace:RaspiRemote.Models"
+             xmlns:sftp="clr-namespace:Renci.SshNet.Sftp;assembly=Renci.SshNet"
              x:DataType="vm:FileExplorerPageViewModel"
              Title="File Explorer">
 
@@ -35,7 +36,7 @@
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0"
-               Text="Path: /home/pi"/>
+               Text="{Binding Path, StringFormat='Path: {0}'}"/>
 
         <ScrollView Grid.Row="1">
             <CollectionView ItemsSource="{Binding Items}"
@@ -55,7 +56,7 @@
                     </ContentView>
                 </CollectionView.EmptyView>
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="x:String">
+                    <DataTemplate x:DataType="sftp:SftpFile">
                         <Border Style="{StaticResource ItemBorderStyle}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -78,7 +79,7 @@
 
                                     <Label Style="{StaticResource ItemNameLabel}"
                                            Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
-                                           Text="{Binding .}"/>
+                                           Text="{Binding Name}"/>
 
                                 </Grid>
 

@@ -57,7 +57,7 @@ namespace RaspiRemote.ViewModels
         [RelayCommand]
         private async Task ConnectToDevice(RpiDevice device)
         {
-            await InvokeAsyncWithLoadingPopup(async () =>
+            await InvokeAsyncWithLoader(async () =>
             {
                 try
                 {
