@@ -68,6 +68,12 @@
                                       RowSpacing="10"
                                       ColumnSpacing="5"
                                       Padding="30,10,2,10">
+
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FileExplorerPageViewModel}}, Path=ItemClickedCommand}"
+                                                              CommandParameter="{Binding .}"/>
+                                    </Grid.GestureRecognizers>
+                                    
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="25"/>
                                         <RowDefinition/>
@@ -88,11 +94,11 @@
                                              <!--Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SelectDevicePageViewModel}}, Path=OpenDeviceOptionsCommand}"
                                              CommandParameter="{Binding .}"/>-->
 
-                                <Button Text=""
+                                <!--<Button Text=""
                                         BackgroundColor="Transparent"
                                         Grid.Column="0"
                                         CornerRadius="0"/>
-                                        <!--Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SelectDevicePageViewModel}}, Path=ConnectToDeviceCommand}"
+                                        --><!--Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SelectDevicePageViewModel}}, Path=ConnectToDeviceCommand}"
                                         CommandParameter="{Binding .}"/>-->
 
                             </Grid>
@@ -109,10 +115,10 @@
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0"
                     Text="New file"
-                    Command="{Binding TestCmdCommand}"/>
+                    Command="{Binding NewFileCommand}"/>
             <Button Grid.Column="1"
-                    Text="New folder"
-                    Command="{Binding TestCmdCommand}"/>
+                    Text="New directory"
+                    Command="{Binding NewDirectoryCommand}"/>
         </Grid>
 
     </Grid>
