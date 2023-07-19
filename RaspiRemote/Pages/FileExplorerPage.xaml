@@ -9,21 +9,33 @@
              Title="File Explorer">
 
     <ContentPage.Resources>
+        <Style x:Key="PathLabelStyle" TargetType="Label">
+            <Setter Property="TextColor" Value="#514C4C"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="LineBreakMode" Value="TailTruncation"/>
+            <Setter Property="Margin" Value="20, 7"/>
+        </Style>
+        
         <Style x:Key="ItemBorderStyle" TargetType="Border">
             <Setter Property="BackgroundColor" Value="#D9D9D9"/>
             <Setter Property="StrokeThickness" Value="0"/>
             <Setter Property="StrokeShape" Value="RoundRectangle 15,15,15,15"/>
+            <Setter Property="HeightRequest" Value="75"/>
         </Style>
 
-        <Style x:Key="ItemNameLabel" TargetType="Label">
+        <Style x:Key="ItemNameLabelStyle" TargetType="Label">
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="LineBreakMode" Value="TailTruncation"/>
+            <Setter Property="VerticalOptions" Value="Center"/>
         </Style>
 
-        <Style x:Key="DeviceParametersLabel" TargetType="Label">
-            <Setter Property="TextColor" Value="#343434"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="LineBreakMode" Value="TailTruncation"/>
+        <Style x:Key="NewItemButtonsGridStyle" TargetType="Grid">
+            <Setter Property="Margin" Value="15,5"/>
+            <Setter Property="ColumnSpacing" Value="10"/>
+        </Style>
+
+        <Style x:Key="NewItemButtonStyle" TargetType="Button">
+            <Setter Property="FontSize" Value="17"/>
         </Style>
     </ContentPage.Resources>
 
@@ -36,25 +48,26 @@
         </Grid.RowDefinitions>
 
         <Label Grid.Row="0"
+               Style="{StaticResource PathLabelStyle}"
                Text="{Binding Path, StringFormat='Path: {0}'}"/>
 
         <ScrollView Grid.Row="1">
             <CollectionView ItemsSource="{Binding Items}"
-                            Margin="40,15">
+                            Margin="30,0">
+
+                <CollectionView.EmptyView>
+                    <Grid>
+                        <Label Text="Loading..."
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center"/>
+                    </Grid>
+                </CollectionView.EmptyView>
+                
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Vertical"
                                        ItemSpacing="5"/>
                 </CollectionView.ItemsLayout>
-                <CollectionView.EmptyView>
-                    <ContentView>
-                        <VerticalStackLayout Spacing="5">
-                            <Label Text="You have no any devices saved."
-                                   HorizontalOptions="Center"/>
-                            <Label Text="Click + (Add) button to add the new one."
-                                   HorizontalOptions="Center"/>
-                        </VerticalStackLayout>
-                    </ContentView>
-                </CollectionView.EmptyView>
+                
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="sftp:SftpFile">
                         <Border Style="{StaticResource ItemBorderStyle}">
@@ -65,42 +78,57 @@
                                 </Grid.ColumnDefinitions>
 
                                 <Grid Grid.Column="0"
-                                      RowSpacing="10"
-                                      ColumnSpacing="5"
-                                      Padding="30,10,2,10">
+                                      ColumnSpacing="15"
+                                      Padding="20,10,2,10">
 
                                     <Grid.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FileExplorerPageViewModel}}, Path=ItemClickedCommand}"
                                                               CommandParameter="{Binding .}"/>
                                     </Grid.GestureRecognizers>
                                     
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="25"/>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="auto"/>
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
 
-                                    <Label Style="{StaticResource ItemNameLabel}"
-                                           Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
-                                           Text="{Binding Name}"/>
+                                    <Image Grid.Column="0"
+                                           Source="file_icon.png">
+                                        <Image.Triggers>
+                                            <DataTrigger TargetType="Image"
+                                                         Binding="{Binding IsDirectory}"
+                                                         Value="True">
+                                                <Setter Property="Source"
+                                                        Value="folder_icon.png"/>
+                                            </DataTrigger>
+                                        </Image.Triggers>
+                                        <!--<Image.Shadow>
+                                            <Shadow Brush="Black"
+                                                    Radius="5"
+                                                    Opacity="0.8"/>
+                                        </Image.Shadow>-->
+                                    </Image>
+
+                                    <Label Style="{StaticResource ItemNameLabelStyle}"
+                                           Grid.Column="1" Grid.ColumnSpan="2"
+                                           Text="{Binding Name}">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label"
+                                                         Binding="{Binding Name}"
+                                                         Value="..">
+                                                <Setter Property="Text"
+                                                        Value=".. (up)"/>
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
 
                                 </Grid>
 
-                                <ImageButton Grid.Row="0" Grid.Column="2" Grid.RowSpan="2"
-                                             Source="more_3dots_vertical.png"/>
+                                <ImageButton Grid.Column="1"
+                                             BackgroundColor="Transparent"
+                                             Source="more_3dots_vertical.png"
+                                             Scale="1.2"/>
                                              <!--Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SelectDevicePageViewModel}}, Path=OpenDeviceOptionsCommand}"
                                              CommandParameter="{Binding .}"/>-->
-
-                                <!--<Button Text=""
-                                        BackgroundColor="Transparent"
-                                        Grid.Column="0"
-                                        CornerRadius="0"/>
-                                        --><!--Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SelectDevicePageViewModel}}, Path=ConnectToDeviceCommand}"
-                                        CommandParameter="{Binding .}"/>-->
-
                             </Grid>
                         </Border>
                     </DataTemplate>
@@ -108,15 +136,18 @@
             </CollectionView>
         </ScrollView>
 
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="2"
+              Style="{StaticResource NewItemButtonsGridStyle}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0"
+                    Style="{StaticResource NewItemButtonStyle}"
                     Text="New file"
                     Command="{Binding NewFileCommand}"/>
             <Button Grid.Column="1"
+                    Style="{StaticResource NewItemButtonStyle}"
                     Text="New directory"
                     Command="{Binding NewDirectoryCommand}"/>
         </Grid>

@@ -92,6 +92,8 @@
 
                                 <ImageButton Grid.Row="0" Grid.Column="2" Grid.RowSpan="2"
                                              Source="more_3dots_vertical.png"
+                                             BackgroundColor="Transparent"
+                                             Scale="1.2"
                                              Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SelectDevicePageViewModel}}, Path=OpenDeviceOptionsCommand}"
                                              CommandParameter="{Binding .}"/>
 
