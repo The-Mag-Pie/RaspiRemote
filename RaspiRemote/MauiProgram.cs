@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
-using RaspiRemote.Pages;
 
 namespace RaspiRemote;
 
@@ -21,6 +20,14 @@ public static class MauiProgram
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif
+
+		// Configure custom handlers
+		builder.ConfigureMauiHandlers(handlers =>
+		{
+#if ANDROID
+			handlers.AddHandler<CollectionView, RaspiRemote.Platforms.Android.CustomHandlers.CustomCollectionViewHandler>();
+#endif
+        });
 
 		// Register services for dependency injection
 		ServiceHelper.RegisterServices(builder.Services);

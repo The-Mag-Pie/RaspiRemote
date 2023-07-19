@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Maui.Storage;
 using RaspiRemote.Extensions;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
@@ -11,10 +10,13 @@ namespace RaspiRemote.ViewModels
 {
     internal partial class FileExplorerPageViewModel : BaseViewModel
     {
-        private SftpClient _sftpClient;
+        private readonly SftpClient _sftpClient;
+        private readonly Stack<string> _navigationStack = new();
 
         [ObservableProperty]
         private string _path;
+
+        public bool CanGoBack => _navigationStack.Count > 0;
 
         public ObservableCollection<SftpFile> Items { get; } = new();
 
@@ -53,6 +55,12 @@ namespace RaspiRemote.ViewModels
             }
         }
 
+        public async Task GoBack()
+        {
+            var path = _navigationStack.Pop();
+            await InvokeAsyncWithLoader(async () => await TryChangeDirectoryAsync(path));
+        }
+
         [RelayCommand]
         private async Task ItemClicked(SftpFile item)
         {
@@ -60,7 +68,12 @@ namespace RaspiRemote.ViewModels
             {
                 if (item.IsDirectory)
                 {
-                    await ChangeDirectoryAsync($"{Path}/{item.Name}");
+                    var oldPath = Path;
+                    if (await TryChangeDirectoryAsync($"{Path}/{item.Name}"))
+                    {
+                        if (item.Name == "..") _navigationStack.TryPop(out var _);
+                        else _navigationStack.Push(oldPath);
+                    }
                 }
                 else
                 {
@@ -69,17 +82,19 @@ namespace RaspiRemote.ViewModels
             });
         }
 
-        private async Task ChangeDirectoryAsync(string path)
+        private async Task<bool> TryChangeDirectoryAsync(string path)
         {
             try
             {
                 _sftpClient.ChangeDirectory(path);
                 Path = _sftpClient.WorkingDirectory;
                 await LoadItems();
+                return true;
             }
             catch (Exception ex)
             {
                 _ = DisplayAlert("Error", ex.Message, "OK");
+                return false;
             }
         }
 
@@ -121,16 +136,40 @@ namespace RaspiRemote.ViewModels
         }
 
         [RelayCommand]
-        private void NewDirectory()
+        private async Task NewDirectory()
         {
-            _sftpClient.CreateDirectory($"{Path}/xddDirectory");
+            var dirname = await DisplayPromptAsync("Create new directory", "Enter directory name", placeholder: "Enter directory name here...");
+            if (dirname is null) return;
+
+            // Check if the provided dirname contains illegal characters
+            if (dirname == "." || dirname == ".." || dirname.Contains('/'))
+            {
+                _ = DisplayAlert("Error", "You provided illegal characters.", "OK");
+                return;
+            }
+
+            // Check if the provided dirname already exists
+            if (Items.Select(i => i.Name).Contains(dirname))
+            {
+                _ = DisplayAlert("Error", "File or directory with provided name already exists.", "OK");
+                return;
+            }
+
+            await InvokeAsyncWithLoader(async () => await CreateDirectory($"{Path}/{dirname}"));
         }
 
-        [RelayCommand]
-        private void TestCmd()
+        private async Task CreateDirectory(string path)
         {
-            _ = DisplayAlert("xd", "good", "ok");
-            //Items.Add("xd");
+            try
+            {
+                _sftpClient.CreateDirectory(path);
+                await LoadItems();
+                _ = Toast.Make("Directory has been successfully created.").Show();
+            }
+            catch (Exception ex)
+            {
+                _ = DisplayAlert("Error", ex.Message, "OK");
+            }
         }
     }
 }
