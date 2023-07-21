@@ -126,9 +126,9 @@
                                 <ImageButton Grid.Column="1"
                                              BackgroundColor="Transparent"
                                              Source="more_3dots_vertical.png"
-                                             Scale="1.2"/>
-                                             <!--Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SelectDevicePageViewModel}}, Path=OpenDeviceOptionsCommand}"
-                                             CommandParameter="{Binding .}"/>-->
+                                             Scale="1.2"
+                                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FileExplorerPageViewModel}}, Path=OpenItemMenuCommand}"
+                                             CommandParameter="{Binding .}"/>
                             </Grid>
                         </Border>
                     </DataTemplate>

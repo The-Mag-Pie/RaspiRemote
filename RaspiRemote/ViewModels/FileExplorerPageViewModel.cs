@@ -10,6 +10,7 @@ namespace RaspiRemote.ViewModels
 {
     internal partial class FileExplorerPageViewModel : BaseViewModel
     {
+        private readonly SshClient _sshClient;
         private readonly SftpClient _sftpClient;
         private readonly Stack<string> _navigationStack = new();
 
@@ -22,6 +23,7 @@ namespace RaspiRemote.ViewModels
 
         public FileExplorerPageViewModel(SshClientContainer sshClientContainer)
         {
+            _sshClient = sshClientContainer.SshClient;
             _sftpClient = sshClientContainer.SftpClient;
 
             Path = _sftpClient.WorkingDirectory;
@@ -99,6 +101,49 @@ namespace RaspiRemote.ViewModels
         }
 
         [RelayCommand]
+        private async Task OpenItemMenu(SftpFile item)
+        {
+            var result = await DisplayMenuPopup($"File: {item.Name}", "Cancel", "Copy path", "Delete");
+
+            switch (result)
+            {
+                case "Copy path":
+                    await Clipboard.Default.SetTextAsync($"{Path}/{item.Name}");
+                    _ = Toast.Make("Path copied to clipboard.").Show();
+                    break;
+
+                case "Delete":
+                    await TryDeleteItem($"{Path}/{item.Name}");
+                    break;
+
+                default:
+                    return;
+            }
+        }
+
+        private async Task TryDeleteItem(string path)
+        {
+            try
+            {
+                // _sftpClient.Delete(path) cannot be used because it throws an error when directory is not empty
+                var result = _sshClient.RunCommand($"rm -r {path}");
+                if (result.ExitStatus == 0)
+                {
+                    await LoadItems();
+                    _ = Toast.Make("Item has been successfully deleted.").Show();
+                }
+                else
+                {
+                    throw new Renci.SshNet.Common.SshException(result.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                _ = DisplayAlert("Error", ex.Message, "OK");
+            }
+        }
+
+        [RelayCommand]
         private async Task NewFile()
         {
             var filename = await DisplayPromptAsync("Create new file", "Enter filename", placeholder: "Enter filename here...");
@@ -118,10 +163,10 @@ namespace RaspiRemote.ViewModels
                 return;
             }
 
-            await InvokeAsyncWithLoader(async () => await CreateFile($"{Path}/{filename}"));
+            await InvokeAsyncWithLoader(async () => await TryCreateFile($"{Path}/{filename}"));
         }
 
-        private async Task CreateFile(string path)
+        private async Task TryCreateFile(string path)
         {
             try
             {
@@ -155,10 +200,10 @@ namespace RaspiRemote.ViewModels
                 return;
             }
 
-            await InvokeAsyncWithLoader(async () => await CreateDirectory($"{Path}/{dirname}"));
+            await InvokeAsyncWithLoader(async () => await TryCreateDirectory($"{Path}/{dirname}"));
         }
 
-        private async Task CreateDirectory(string path)
+        private async Task TryCreateDirectory(string path)
         {
             try
             {
