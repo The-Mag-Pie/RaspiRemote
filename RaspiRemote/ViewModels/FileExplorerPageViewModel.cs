@@ -103,7 +103,7 @@ namespace RaspiRemote.ViewModels
         [RelayCommand]
         private async Task OpenItemMenu(SftpFile item)
         {
-            var result = await DisplayMenuPopup($"File: {item.Name}", "Cancel", "Copy path", "Delete");
+            var result = await DisplayMenuPopup($"Item: {item.Name}", "Cancel", "Copy path", "Delete");
 
             switch (result)
             {
@@ -113,6 +113,7 @@ namespace RaspiRemote.ViewModels
                     break;
 
                 case "Delete":
+                    //await InvokeAsyncWithLoader(async () => await TryDeleteItem($"{Path}/{item.Name}"));
                     await TryDeleteItem($"{Path}/{item.Name}");
                     break;
 
@@ -126,7 +127,7 @@ namespace RaspiRemote.ViewModels
             try
             {
                 // _sftpClient.Delete(path) cannot be used because it throws an error when directory is not empty
-                var result = _sshClient.RunCommand($"rm -r {path}");
+                var result = _sshClient.RunCommand($"rm -r \"{path}\"");
                 if (result.ExitStatus == 0)
                 {
                     await LoadItems();

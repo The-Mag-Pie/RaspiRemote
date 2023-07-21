@@ -17,6 +17,7 @@
         </Style>
         
         <Style x:Key="ItemBorderStyle" TargetType="Border">
+            <Setter Property="Margin" Value="0,0,15,0"/>
             <Setter Property="BackgroundColor" Value="#D9D9D9"/>
             <Setter Property="StrokeThickness" Value="0"/>
             <Setter Property="StrokeShape" Value="RoundRectangle 15,15,15,15"/>
@@ -51,90 +52,89 @@
                Style="{StaticResource PathLabelStyle}"
                Text="{Binding Path, StringFormat='Path: {0}'}"/>
 
-        <ScrollView Grid.Row="1">
-            <CollectionView ItemsSource="{Binding Items}"
-                            Margin="30,0">
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Items}"
+                        Margin="30,0,15,0">
 
-                <CollectionView.EmptyView>
-                    <Grid>
-                        <Label Text="Loading..."
-                               VerticalOptions="Center"
-                               HorizontalOptions="Center"/>
-                    </Grid>
-                </CollectionView.EmptyView>
-                
-                <CollectionView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Vertical"
-                                       ItemSpacing="5"/>
-                </CollectionView.ItemsLayout>
-                
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="sftp:SftpFile">
-                        <Border Style="{StaticResource ItemBorderStyle}">
-                            <Grid>
+            <CollectionView.EmptyView>
+                <Grid>
+                    <Label Text="Loading..."
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center"/>
+                </Grid>
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical"
+                                   ItemSpacing="5"/>
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="sftp:SftpFile">
+                    <Border Style="{StaticResource ItemBorderStyle}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="40"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid Grid.Column="0"
+                                  ColumnSpacing="15"
+                                  Padding="20,10,2,10">
+
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FileExplorerPageViewModel}}, Path=ItemClickedCommand}"
+                                                          CommandParameter="{Binding .}"/>
+                                </Grid.GestureRecognizers>
+
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition/>
-                                    <ColumnDefinition Width="40"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Grid Grid.Column="0"
-                                      ColumnSpacing="15"
-                                      Padding="20,10,2,10">
+                                <Image Grid.Column="0"
+                                        Source="file_icon.png">
+                                    <Image.Triggers>
+                                        <DataTrigger TargetType="Image"
+                                                     Binding="{Binding IsDirectory}"
+                                                     Value="True">
+                                            <Setter Property="Source"
+                                                    Value="folder_icon.png"/>
+                                        </DataTrigger>
+                                    </Image.Triggers>
+                                    <!--<Image.Shadow>
+                                        <Shadow Brush="Black"
+                                                Radius="5"
+                                                Opacity="0.8"/>
+                                    </Image.Shadow>-->
+                                </Image>
 
-                                    <Grid.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FileExplorerPageViewModel}}, Path=ItemClickedCommand}"
-                                                              CommandParameter="{Binding .}"/>
-                                    </Grid.GestureRecognizers>
-                                    
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="auto"/>
-                                        <ColumnDefinition/>
-                                    </Grid.ColumnDefinitions>
+                                <Label Style="{StaticResource ItemNameLabelStyle}"
+                                       Grid.Column="1" Grid.ColumnSpan="2"
+                                       Text="{Binding Name}">
+                                    <!--<Label.Triggers>
+                                        <DataTrigger TargetType="Label"
+                                                     Binding="{Binding Name}"
+                                                     Value="..">
+                                            <Setter Property="Text"
+                                                    Value=".. (up)"/>
+                                        </DataTrigger>
+                                    </Label.Triggers>-->
+                                </Label>
 
-                                    <Image Grid.Column="0"
-                                           Source="file_icon.png">
-                                        <Image.Triggers>
-                                            <DataTrigger TargetType="Image"
-                                                         Binding="{Binding IsDirectory}"
-                                                         Value="True">
-                                                <Setter Property="Source"
-                                                        Value="folder_icon.png"/>
-                                            </DataTrigger>
-                                        </Image.Triggers>
-                                        <!--<Image.Shadow>
-                                            <Shadow Brush="Black"
-                                                    Radius="5"
-                                                    Opacity="0.8"/>
-                                        </Image.Shadow>-->
-                                    </Image>
-
-                                    <Label Style="{StaticResource ItemNameLabelStyle}"
-                                           Grid.Column="1" Grid.ColumnSpan="2"
-                                           Text="{Binding Name}">
-                                        <Label.Triggers>
-                                            <DataTrigger TargetType="Label"
-                                                         Binding="{Binding Name}"
-                                                         Value="..">
-                                                <Setter Property="Text"
-                                                        Value=".. (up)"/>
-                                            </DataTrigger>
-                                        </Label.Triggers>
-                                    </Label>
-
-                                </Grid>
-
-                                <ImageButton Grid.Column="1"
-                                             BackgroundColor="Transparent"
-                                             Source="more_3dots_vertical.png"
-                                             Scale="1.2"
-                                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FileExplorerPageViewModel}}, Path=OpenItemMenuCommand}"
-                                             CommandParameter="{Binding .}"/>
                             </Grid>
-                        </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </ScrollView>
+
+                            <ImageButton Grid.Column="1"
+                                         BackgroundColor="Transparent"
+                                         Source="more_3dots_vertical.png"
+                                         Scale="1.2"
+                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FileExplorerPageViewModel}}, Path=OpenItemMenuCommand}"
+                                         CommandParameter="{Binding .}"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
         <Grid Grid.Row="2"
               Style="{StaticResource NewItemButtonsGridStyle}">
