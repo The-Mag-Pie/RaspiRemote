@@ -1,6 +1,6 @@
-using RaspiRemote.ViewModels;
+using RaspiRemote.ViewModels.FileExplorer;
 
-namespace RaspiRemote.Pages;
+namespace RaspiRemote.Pages.FileExplorer;
 
 public partial class FileExplorerPage : ContentPage
 {

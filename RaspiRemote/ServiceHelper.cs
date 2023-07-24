@@ -1,5 +1,5 @@
-﻿using RaspiRemote.Pages;
-using RaspiRemote.ViewModels;
+﻿using RaspiRemote.ViewModels;
+using RaspiRemote.ViewModels.FileExplorer;
 
 namespace RaspiRemote
 {
@@ -32,6 +32,7 @@ namespace RaspiRemote
 
             // Register ViewModels
             serviceCollection.AddTransient<FileExplorerPageViewModel>();
+            serviceCollection.AddTransient<FileEditorPageViewModel>();
             serviceCollection.AddTransient<SelectDevicePageViewModel>();
             serviceCollection.AddTransient<SensorsPageViewModel>();
         }

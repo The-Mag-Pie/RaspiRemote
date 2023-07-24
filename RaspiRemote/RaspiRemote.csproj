@@ -61,7 +61,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Pages\FileExplorerPage.xaml.cs">
+	  <Compile Update="Pages\FileExplorer\FileExplorerPage.xaml.cs">
 	    <DependentUpon>FileExplorerPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Popups\DeviceOptionsPopup.xaml.cs">
@@ -70,7 +70,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Pages\FileExplorerPage.xaml">
+	  <MauiXaml Update="Pages\FileExplorer\FileEditorPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\FileExplorer\FileExplorerPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\SelectDevicePage.xaml">

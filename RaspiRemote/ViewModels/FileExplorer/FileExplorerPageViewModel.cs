@@ -2,11 +2,12 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using RaspiRemote.Extensions;
+using RaspiRemote.Pages.FileExplorer;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
 using System.Collections.ObjectModel;
 
-namespace RaspiRemote.ViewModels
+namespace RaspiRemote.ViewModels.FileExplorer
 {
     internal partial class FileExplorerPageViewModel : BaseViewModel
     {
@@ -60,7 +61,7 @@ namespace RaspiRemote.ViewModels
         public async Task GoBack()
         {
             var path = _navigationStack.Pop();
-            await InvokeAsyncWithLoader(async () => await TryChangeDirectoryAsync(path));
+            await InvokeAsyncWithLoader(async () => await TryChangeDirectory(path));
         }
 
         [RelayCommand]
@@ -71,7 +72,7 @@ namespace RaspiRemote.ViewModels
                 if (item.IsDirectory)
                 {
                     var oldPath = Path;
-                    if (await TryChangeDirectoryAsync($"{Path}/{item.Name}"))
+                    if (await TryChangeDirectory($"{Path}/{item.Name}"))
                     {
                         if (item.Name == "..") _navigationStack.TryPop(out var _);
                         else _navigationStack.Push(oldPath);
@@ -79,12 +80,13 @@ namespace RaspiRemote.ViewModels
                 }
                 else
                 {
-                    _ = DisplayAlert("file explorer", $"file clicked: {item.Name}", "ok");
+                    //_ = DisplayAlert("file explorer", $"file clicked: {item.Name}", "ok");
+                    await TryOpenFile(item.FullName);
                 }
             });
         }
 
-        private async Task<bool> TryChangeDirectoryAsync(string path)
+        private async Task<bool> TryChangeDirectory(string path)
         {
             try
             {
@@ -100,16 +102,35 @@ namespace RaspiRemote.ViewModels
             }
         }
 
+        private async Task TryOpenFile(string path)
+        {
+            try
+            {
+                await Application.Current.MainPage.Navigation.PushAsync(new FileEditorPage(path));
+            }
+            catch (Exception ex)
+            {
+                _ = DisplayAlert("Error", ex.Message, "OK");
+            }
+        }
+
         [RelayCommand]
         private async Task OpenItemMenu(SftpFile item)
         {
-            var result = await DisplayMenuPopup($"Item: {item.Name}", "Cancel", "Copy path", "Delete");
+            var options = new string[] { "Copy path", "Rename", "Delete" };
+            var result = await DisplayMenuPopup($"Item: {item.Name}", "Cancel", options);
 
             switch (result)
             {
                 case "Copy path":
                     await Clipboard.Default.SetTextAsync($"{Path}/{item.Name}");
                     _ = Toast.Make("Path copied to clipboard.").Show();
+                    break;
+
+                case "Rename":
+                    var newName = await DisplayPromptAsync("Item's new name", "Enter item's new name", placeholder: "Enter item's new name here...");
+                    if (newName is not null) 
+                        await InvokeAsyncWithLoader(async () => await TryRenameItem(item, newName));
                     break;
 
                 case "Delete":
@@ -119,6 +140,20 @@ namespace RaspiRemote.ViewModels
 
                 default:
                     return;
+            }
+        }
+
+        private async Task TryRenameItem(SftpFile item, string newName)
+        {
+            try
+            {
+                item.MoveTo($"{Path}/{newName}");
+                await LoadItems();
+                _ = Toast.Make("Item's name has been successfully changed.").Show();
+            }
+            catch (Exception ex)
+            {
+                _ = DisplayAlert("Error", ex.Message, "OK");
             }
         }
 

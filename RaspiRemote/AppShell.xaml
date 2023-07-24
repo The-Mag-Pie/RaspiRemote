@@ -5,10 +5,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:RaspiRemote"
     xmlns:pages="clr-namespace:RaspiRemote.Pages"
+    xmlns:fepages="clr-namespace:RaspiRemote.Pages.FileExplorer"
     Shell.FlyoutBehavior="Flyout">
 
     <ShellContent Title="File Explorer"
-                  ContentTemplate="{DataTemplate pages:FileExplorerPage}"
+                  ContentTemplate="{DataTemplate fepages:FileExplorerPage}"
                   Route="FileExplorerPage"/>
 
     <ShellContent Title="Sensors"
