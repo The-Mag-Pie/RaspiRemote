@@ -40,7 +40,7 @@ namespace RaspiRemote.ViewModels.FileExplorer
 
             // Sort and show directories first
             var directories = items
-                .Where(i => i.IsDirectory)
+                .Where(i => i.IsDirectory && !i.IsSymbolicLink)
                 .OrderBy(i => i.Name)
                 .Skip(1);
             foreach (var dir in directories)
@@ -48,9 +48,18 @@ namespace RaspiRemote.ViewModels.FileExplorer
                 Items.Add(dir);
             }
 
+            // Sort and show symbolic links
+            var symlinks = items
+                .Where(i => i.IsSymbolicLink)
+                .OrderBy(i => i.Name);
+            foreach (var dir in symlinks)
+            {
+                Items.Add(dir);
+            }
+
             // Sort and show files
             var files = items
-                .Where(i => !i.IsDirectory)
+                .Where(i => !i.IsDirectory && !i.IsSymbolicLink)
                 .OrderBy(i => i.Name);
             foreach (var file in files)
             {
@@ -71,28 +80,34 @@ namespace RaspiRemote.ViewModels.FileExplorer
             {
                 if (item.IsDirectory)
                 {
-                    var oldPath = Path;
-                    if (await TryChangeDirectory($"{Path}/{item.Name}"))
-                    {
-                        if (item.Name == "..") _navigationStack.TryPop(out var _);
-                        else _navigationStack.Push(oldPath);
-                    }
+                    await HandleDirectoryClicked(item);
+                }
+                else if (item.IsSymbolicLink)
+                {
+                    await HandleSymlinkClicked(item);
                 }
                 else
                 {
-                    //_ = DisplayAlert("file explorer", $"file clicked: {item.Name}", "ok");
-                    await TryOpenFile(item.FullName);
+                    await HandleFileClicked(item);
                 }
             });
+        }
+
+        private async Task HandleDirectoryClicked(SftpFile dir)
+        {
+            var oldPath = Path;
+            if (await TryChangeDirectory(dir.FullName))
+            {
+                if (dir.Name == "..") _navigationStack.TryPop(out var _);
+                else _navigationStack.Push(oldPath);
+            }
         }
 
         private async Task<bool> TryChangeDirectory(string path)
         {
             try
             {
-                _sftpClient.ChangeDirectory(path);
-                Path = _sftpClient.WorkingDirectory;
-                await LoadItems();
+                await ChangeDirectory(path);
                 return true;
             }
             catch (Exception ex)
@@ -102,17 +117,41 @@ namespace RaspiRemote.ViewModels.FileExplorer
             }
         }
 
-        private async Task TryOpenFile(string path)
+        private async Task ChangeDirectory(string path)
+        {
+            _sftpClient.ChangeDirectory(path);
+            Path = _sftpClient.WorkingDirectory;
+            await LoadItems();
+        }
+
+        private async Task HandleSymlinkClicked(SftpFile symlink)
         {
             try
             {
-                await Application.Current.MainPage.Navigation.PushAsync(new FileEditorPage(path));
+                var oldPath = Path;
+                await ChangeDirectory(symlink.FullName);
+                _navigationStack.Push(oldPath);
+            }
+            catch
+            {
+                await HandleFileClicked(symlink);
+            }
+        }
+
+        private async Task HandleFileClicked(SftpFile file)
+        {
+            try
+            {
+                await OpenFile(file);
             }
             catch (Exception ex)
             {
                 _ = DisplayAlert("Error", ex.Message, "OK");
             }
         }
+
+        private async Task OpenFile(SftpFile file) =>
+            await Application.Current.MainPage.Navigation.PushAsync(new FileEditorPage(file));
 
         [RelayCommand]
         private async Task OpenItemMenu(SftpFile item)
@@ -145,6 +184,8 @@ namespace RaspiRemote.ViewModels.FileExplorer
 
         private async Task TryRenameItem(SftpFile item, string newName)
         {
+            if (CheckItemName(newName) is false) return;
+
             try
             {
                 item.MoveTo($"{Path}/{newName}");
@@ -179,25 +220,32 @@ namespace RaspiRemote.ViewModels.FileExplorer
             }
         }
 
+        private bool CheckItemName(string name)
+        {
+            // Check if the provided item name contains illegal characters
+            if (name == "." || name == ".." || name.Contains('/'))
+            {
+                _ = DisplayAlert("Error", "You provided illegal characters.", "OK");
+                return false;
+            }
+
+            // Check if the provided item name already exists
+            if (Items.Select(i => i.Name).Contains(name))
+            {
+                _ = DisplayAlert("Error", "File or directory with provided name already exists.", "OK");
+                return false;
+            }
+
+            return true;
+        }
+
         [RelayCommand]
         private async Task NewFile()
         {
             var filename = await DisplayPromptAsync("Create new file", "Enter filename", placeholder: "Enter filename here...");
             if (filename is null) return;
 
-            // Check if the provided filename contains illegal characters
-            if (filename == "." || filename == ".." || filename.Contains('/'))
-            {
-                _ = DisplayAlert("Error", "You provided illegal characters.", "OK");
-                return;
-            }
-
-            // Check if the provided filename already exists
-            if (Items.Select(i => i.Name).Contains(filename))
-            {
-                _ = DisplayAlert("Error", "File or directory with provided name already exists.", "OK");
-                return;
-            }
+            if (CheckItemName(filename) is false) return;
 
             await InvokeAsyncWithLoader(async () => await TryCreateFile($"{Path}/{filename}"));
         }
@@ -222,19 +270,7 @@ namespace RaspiRemote.ViewModels.FileExplorer
             var dirname = await DisplayPromptAsync("Create new directory", "Enter directory name", placeholder: "Enter directory name here...");
             if (dirname is null) return;
 
-            // Check if the provided dirname contains illegal characters
-            if (dirname == "." || dirname == ".." || dirname.Contains('/'))
-            {
-                _ = DisplayAlert("Error", "You provided illegal characters.", "OK");
-                return;
-            }
-
-            // Check if the provided dirname already exists
-            if (Items.Select(i => i.Name).Contains(dirname))
-            {
-                _ = DisplayAlert("Error", "File or directory with provided name already exists.", "OK");
-                return;
-            }
+            if (CheckItemName(dirname) is false) return;
 
             await InvokeAsyncWithLoader(async () => await TryCreateDirectory($"{Path}/{dirname}"));
         }
