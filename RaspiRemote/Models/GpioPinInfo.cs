@@ -4,18 +4,24 @@ namespace RaspiRemote.Models
 {
     public class GpioPinInfo
     {
-        public GpioPin GpioPin { get; set; }
+        /// <summary>
+        /// GPIO pin number
+        /// </summary>
+        public GpioPin Pin { get; set; }
 
-        public int GpioNumber
-        {
-            get => (int)GpioPin;
-            set => GpioPin = (GpioPin)value;
-        }
+        /// <summary>
+        /// State of the pin. True if state = 1, False if state = 0
+        /// </summary>
+        public bool State { get; set; }
 
-        public bool State { get; set; } // True when state = 1, False when state = 0
-
+        /// <summary>
+        /// Function of the pin
+        /// </summary>
         public GpioPinFunction Function { get; set; }
 
+        /// <summary>
+        /// Pull state of the pin
+        /// </summary>
         public GpioPinPull Pull { get; set; }
     }
 }

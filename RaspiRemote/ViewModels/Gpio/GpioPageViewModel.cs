@@ -2,6 +2,7 @@
 using RaspiRemote.Models;
 using RaspiRemote.Parsers;
 using Renci.SshNet;
+using System.Collections.ObjectModel;
 
 namespace RaspiRemote.ViewModels.Gpio
 {
@@ -9,6 +10,8 @@ namespace RaspiRemote.ViewModels.Gpio
     {
         private readonly SshClient _sshClient;
         private readonly RpiDevice _deviceInfo;
+
+        public ObservableCollection<GpioPinViewModel> GpioPins { get; set; } = new();
 
         public GpioPageViewModel(SshClientContainer sshClientContainer)
         {
@@ -21,9 +24,17 @@ namespace RaspiRemote.ViewModels.Gpio
             await LoadData();
         }
 
+        private async Task LoadDataWithLoader() => await InvokeAsyncWithLoader(LoadData);
+
         private async Task LoadData()
         {
             var command = _sshClient.RunCommand("raspi-gpio get");
+            if (command.ExitStatus != 0)
+            {
+                await DisplayAlert("Error", command.Error, "OK");
+                return;
+            }
+
             var result = command.Result;
             if (result.Contains("Must be root"))
             {
@@ -31,8 +42,19 @@ namespace RaspiRemote.ViewModels.Gpio
             }
             else
             {
-                var list = RaspiGpioParser.ParseAllGpioPinsInfo(result);
-                await DisplayAlert("xd", result, "ok");
+
+                var pins = RaspiGpioParser.ParseAllGpioPinsInfo(result);
+                await Task.Run(() => AddPinsToCollection(pins));
+            }
+        }
+
+        private void AddPinsToCollection(List<GpioPinInfo> pins)
+        {
+            GpioPins.Clear();
+
+            foreach (var pin in pins)
+            {
+                GpioPins.Add(new(pin, _sshClient));
             }
         }
 

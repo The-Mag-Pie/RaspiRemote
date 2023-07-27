@@ -8,12 +8,12 @@ namespace RaspiRemote.Parsers
         /// <summary>
         /// Parse information about all usable GPIO pins
         /// </summary>
-        /// <param name="content">A response from raspi-gpio command</param>
+        /// <param name="textToParse">A response from raspi-gpio command</param>
         /// <returns>A list with GPIO pins infos</returns>
-        public static List<GpioPinInfo> ParseAllGpioPinsInfo(string content)
+        public static List<GpioPinInfo> ParseAllGpioPinsInfo(string textToParse)
         {
             var output = new List<GpioPinInfo>();
-            var pinList = content.Split("\n").Skip(1).Take(28);
+            var pinList = textToParse.Split("\n").Skip(1).Take(28); // usable GPIO pins have numbers from 0 to 27
 
             foreach (var pin in pinList)
             {
@@ -26,21 +26,22 @@ namespace RaspiRemote.Parsers
         /// <summary>
         /// Parse information about single GPIO pin
         /// </summary>
-        /// <param name="content">A response from raspi-gpio command</param>
+        /// <param name="textToParse">A response from raspi-gpio command</param>
         /// <returns>A GPIO pin info</returns>
-        public static GpioPinInfo ParseGpioPinInfo(string content)
+        public static GpioPinInfo ParseGpioPinInfo(string textToParse)
         {
             var output = new GpioPinInfo();
-            output.GpioNumber = GetPinNumber(content);
-            output.State = GetState(content);
-            output.Function = GetPinFunction(content);
-            output.Pull = GetPinPull(content);
+            output.Pin = GetPinNumber(textToParse);
+            output.State = GetState(textToParse);
+            output.Function = GetPinFunction(textToParse);
+            output.Pull = GetPinPull(textToParse);
             return output;
         }
 
-        private static int GetPinNumber(string str)
+        private static GpioPin GetPinNumber(string str)
         {
-            return int.Parse(str[5..str.IndexOf(": ")]);
+            var pinNumber = int.Parse(str[5..str.IndexOf(": ")]);
+            return (GpioPin)pinNumber;
         }
 
         private static bool GetState(string str)

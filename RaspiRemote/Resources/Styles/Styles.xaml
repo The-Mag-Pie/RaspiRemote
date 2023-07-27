@@ -3,6 +3,14 @@
 <ResourceDictionary 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    
+    <!--Custom styles-->
+    <Style x:Key="ElemBorderStyle" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="#D9D9D9"/>
+        <Setter Property="StrokeThickness" Value="0"/>
+        <Setter Property="StrokeShape" Value="RoundRectangle 15,15,15,15"/>
+    </Style>
+    <!--End of custom styles-->
 
     <Style TargetType="ActivityIndicator">
         <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}" />
