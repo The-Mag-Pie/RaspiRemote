@@ -77,6 +77,9 @@
 	  <MauiXaml Update="Pages\FileExplorer\FileExplorerPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\GpioPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\SelectDevicePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

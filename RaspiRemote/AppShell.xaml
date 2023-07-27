@@ -8,6 +8,10 @@
     xmlns:fepages="clr-namespace:RaspiRemote.Pages.FileExplorer"
     Shell.FlyoutBehavior="Flyout">
 
+    <ShellContent Title="GPIO"
+                  ContentTemplate="{DataTemplate pages:GpioPage}"
+                  Route="GpioPage"/>
+
     <ShellContent Title="File Explorer"
                   ContentTemplate="{DataTemplate fepages:FileExplorerPage}"
                   Route="FileExplorerPage"/>

@@ -31,4 +31,8 @@
         Gpio26,
         Gpio27
     }
+
+    public enum GpioPinFunction { Input, Output }
+
+    public enum GpioPinPull { None, Up, Down }
 }

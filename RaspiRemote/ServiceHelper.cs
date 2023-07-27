@@ -1,5 +1,6 @@
 ﻿using RaspiRemote.ViewModels;
 using RaspiRemote.ViewModels.FileExplorer;
+using RaspiRemote.ViewModels.Gpio;
 
 namespace RaspiRemote
 {
@@ -31,10 +32,11 @@ namespace RaspiRemote
             serviceCollection.AddSingleton<SshClientContainer>();
 
             // Register ViewModels
-            serviceCollection.AddTransient<FileExplorerPageViewModel>();
-            serviceCollection.AddTransient<FileEditorPageViewModel>();
             serviceCollection.AddTransient<SelectDevicePageViewModel>();
             serviceCollection.AddTransient<SensorsPageViewModel>();
+            serviceCollection.AddTransient<FileExplorerPageViewModel>();
+            serviceCollection.AddTransient<FileEditorPageViewModel>();
+            serviceCollection.AddTransient<GpioPageViewModel>();
         }
     }
 }
