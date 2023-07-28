@@ -5,4 +5,14 @@
     xmlns:maui="using:Microsoft.Maui"
     xmlns:local="using:RaspiRemote.WinUI">
 
+    <maui:MauiWinUIApplication.Resources>
+
+        <SolidColorBrush x:Key="ComboBoxForegroundPressed" Color="Black" />
+        <SolidColorBrush x:Key="ComboBoxForegroundPointerOver" Color="Black" />
+        <SolidColorBrush x:Key="ComboBoxForegroundDisabled" Color="Gray" />
+        <SolidColorBrush x:Key="ComboBoxDropDownGlyphForeground" Color="Black" />
+        <SolidColorBrush x:Key="ComboBoxDropDownGlyphForegroundDisabled" Color="Gray" />
+
+    </maui:MauiWinUIApplication.Resources>
+
 </maui:MauiWinUIApplication>

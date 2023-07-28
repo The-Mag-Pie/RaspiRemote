@@ -1,11 +1,30 @@
 ﻿using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Maui;
 using RaspiRemote.Popups;
 
 namespace RaspiRemote.ViewModels
 {
     internal partial class BaseViewModel : ObservableObject
     {
+        private static LoadingPopup _loadingPopup = null;
+        private static bool IsLoaderVisible
+        {
+            set
+            {
+                if (_loadingPopup is not null && value is false)
+                {
+                    _loadingPopup.Close();
+                    _loadingPopup = null;
+                }
+                else if (_loadingPopup is null && value is true)
+                {
+                    _loadingPopup = new LoadingPopup();
+                    Application.Current.MainPage.ShowPopup(_loadingPopup);
+                }
+            }
+        }
+
         [ObservableProperty]
         private bool _isBusy = false;
 
@@ -16,29 +35,28 @@ namespace RaspiRemote.ViewModels
         protected async Task InvokeAsyncWithLoader(Func<Task> action)
         {
             IsBusy = true;
-            var loadingPopup = new LoadingPopup();
-            Application.Current.MainPage.ShowPopup(loadingPopup);
+            IsLoaderVisible = true;
 
             await action.Invoke();
 
-            loadingPopup.Close();
+            IsLoaderVisible = false;
             IsBusy = false;
         }
 
         /// <inheritdoc cref="Page.DisplayAlert(string, string, string)"/>
-        protected async Task DisplayAlert(string title, string message, string cancel) =>
+        protected static async Task DisplayAlert(string title, string message, string cancel) =>
             await Application.Current.MainPage.DisplayAlert(title, message, cancel);
 
         /// <inheritdoc cref="Page.DisplayAlert(string, string, string, string)"/>
-        protected async Task<bool> DisplayAlert(string title, string message, string accept, string cancel) =>
+        protected static async Task<bool> DisplayAlert(string title, string message, string accept, string cancel) =>
             await Application.Current.MainPage.DisplayAlert(title, message, accept, cancel);
 
         /// <inheritdoc cref="Page.DisplayPromptAsync(string, string, string, string, string, int, Keyboard, string)"/>
-        protected async Task<string> DisplayPromptAsync(string title, string message, string accept = "OK", string cancel = "Cancel", string placeholder = null, int maxLength = -1, Keyboard keyboard = null, string initialValue = "") =>
+        protected static async Task<string> DisplayPromptAsync(string title, string message, string accept = "OK", string cancel = "Cancel", string placeholder = null, int maxLength = -1, Keyboard keyboard = null, string initialValue = "") =>
             await Application.Current.MainPage.DisplayPromptAsync(title, message, accept, cancel, placeholder, maxLength, keyboard, initialValue);
 
         /// <inheritdoc cref="Page.DisplayActionSheet(string, string, string, string[])"/>
-        protected async Task<string> DisplayActionSheet(string title, string cancel, string destruction, params string[] buttons) =>
+        protected static async Task<string> DisplayActionSheet(string title, string cancel, string destruction, params string[] buttons) =>
             await Application.Current.MainPage.DisplayActionSheet(title, cancel, destruction, buttons);
 
         /// <summary>
@@ -51,7 +69,7 @@ namespace RaspiRemote.ViewModels
         /// <param name="cancel">Text on cancel button</param>
         /// <param name="options">Menu options</param>
         /// <returns>A string with selected option</returns>
-        protected async Task<string> DisplayMenuPopup(string title, string cancel, params string[] options) =>
+        protected static async Task<string> DisplayMenuPopup(string title, string cancel, params string[] options) =>
             await DisplayActionSheet(title, cancel, null, options);
     }
 }

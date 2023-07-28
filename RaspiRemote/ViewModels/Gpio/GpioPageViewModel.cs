@@ -1,5 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using RaspiRemote.Models;
+﻿using RaspiRemote.Models;
 using RaspiRemote.Parsers;
 using Renci.SshNet;
 using System.Collections.ObjectModel;
@@ -21,14 +20,15 @@ namespace RaspiRemote.ViewModels.Gpio
 
         public async Task OnAppearing()
         {
-            await LoadData();
+            await LoadDataWithLoader();
         }
 
+        // TODO: loader crashes an app
         private async Task LoadDataWithLoader() => await InvokeAsyncWithLoader(LoadData);
 
         private async Task LoadData()
         {
-            var command = _sshClient.RunCommand("raspi-gpio get");
+            var command = _sshClient.RunCommand(RaspiGpioCommands.GetAllPins);
             if (command.ExitStatus != 0)
             {
                 await DisplayAlert("Error", command.Error, "OK");
@@ -50,7 +50,11 @@ namespace RaspiRemote.ViewModels.Gpio
 
         private void AddPinsToCollection(List<GpioPinInfo> pins)
         {
-            GpioPins.Clear();
+            //GpioPins.Clear(); // bug in windows: after calling Clear() items in collection are duplicated
+            foreach (var item in GpioPins.ToList())
+            {
+                GpioPins.Remove(item);
+            }
 
             foreach (var pin in pins)
             {
