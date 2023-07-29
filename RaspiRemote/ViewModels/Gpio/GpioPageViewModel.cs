@@ -1,4 +1,6 @@
-﻿using RaspiRemote.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using RaspiRemote.Models;
 using RaspiRemote.Parsers;
 using Renci.SshNet;
 using System.Collections.ObjectModel;
@@ -9,6 +11,9 @@ namespace RaspiRemote.ViewModels.Gpio
     {
         private readonly SshClient _sshClient;
         private readonly RpiDevice _deviceInfo;
+
+        [ObservableProperty]
+        private bool _isRefreshing;
 
         public ObservableCollection<GpioPinViewModel> GpioPins { get; set; } = new();
 
@@ -21,6 +26,14 @@ namespace RaspiRemote.ViewModels.Gpio
         public async Task OnAppearing()
         {
             await LoadDataWithLoader();
+        }
+
+        [RelayCommand]
+        private async Task Refresh()
+        {
+            IsRefreshing = true;
+            await HandleLoadData();
+            IsRefreshing = false;
         }
 
         // TODO: loader crashes an app

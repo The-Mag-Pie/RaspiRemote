@@ -53,100 +53,90 @@
                Style="{StaticResource TipLabelStyle}"
                Text="Tip: Tap on the colored rectangle to toggle state"/>
 
-        <CollectionView Grid.Row="1"
+        <RefreshView Grid.Row="1"
+                     IsRefreshing="{Binding IsRefreshing}"
+                     Command="{Binding RefreshCommand}"
+                     Margin="30,0,15,5">
+            <CollectionView Grid.Row="1"
                         ItemsSource="{Binding GpioPins}"
-                        Margin="30,0,15,5"
                         EmptyView="Loading...">
 
-            <CollectionView.ItemsLayout>
-                <LinearItemsLayout Orientation="Vertical"
-                                   ItemSpacing="5"/>
-            </CollectionView.ItemsLayout>
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical"
+                                       ItemSpacing="5"/>
+                </CollectionView.ItemsLayout>
 
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="vm:GpioPinViewModel">
-                    <Border Style="{StaticResource PinBorderStyle}">
-                        <Grid Margin="0,10,15,10"
-                              ColumnSpacing="5">
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="auto"/>
-                            </Grid.ColumnDefinitions>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="vm:GpioPinViewModel">
+                        <Border Style="{StaticResource PinBorderStyle}">
+                            <Grid Margin="0,10,15,10"
+                                  ColumnSpacing="5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
 
-                            <Border Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
-                                    Style="{StaticResource ColoredRectangleStyle}">
-                                <Border.Triggers>
-                                    <DataTrigger TargetType="Border"
-                                                 Binding="{Binding State}"
-                                                 Value="0">
-                                        <Setter Property="BackgroundColor" Value="Red"/>
-                                    </DataTrigger>
-                                    <DataTrigger TargetType="Border"
-                                                 Binding="{Binding State}"
-                                                 Value="1">
-                                        <Setter Property="BackgroundColor" Value="Green"/>
-                                    </DataTrigger>
-                                </Border.Triggers>
-                                <Border.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding ToggleStateCommand}"/>
-                                </Border.GestureRecognizers>
-                            </Border>
+                                <Border Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
+                                        Style="{StaticResource ColoredRectangleStyle}">
+                                    <Border.Triggers>
+                                        <DataTrigger TargetType="Border"
+                                                     Binding="{Binding State}"
+                                                     Value="0">
+                                            <Setter Property="BackgroundColor" Value="Red"/>
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Border"
+                                                     Binding="{Binding State}"
+                                                     Value="1">
+                                            <Setter Property="BackgroundColor" Value="Green"/>
+                                        </DataTrigger>
+                                    </Border.Triggers>
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ToggleStateCommand}"/>
+                                    </Border.GestureRecognizers>
+                                </Border>
 
-                            <VerticalStackLayout Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
-                                                 VerticalOptions="Center"
-                                                 Spacing="5">
-                                
-                                <Label Style="{StaticResource GpioNumberLabelStyle}"
-                                       Text="{Binding PinNumber, StringFormat='GPIO {0}'}"/>
+                                <VerticalStackLayout Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
+                                                     VerticalOptions="Center"
+                                                     Spacing="5">
 
-                                <Label Style="{StaticResource SubTextLabelStyle}"
-                                       HorizontalOptions="Center"
-                                       Text="{Binding State, StringFormat='State: {0}'}"/>
-                                
-                            </VerticalStackLayout>
+                                    <Label Style="{StaticResource GpioNumberLabelStyle}"
+                                           Text="{Binding PinNumber, StringFormat='GPIO {0}'}"/>
 
-                            <Label Grid.Row="0" Grid.Column="2"
-                                   Style="{StaticResource FunctionPullLabelStyle}"
-                                   Text="Function:"/>
+                                    <Label Style="{StaticResource SubTextLabelStyle}"
+                                           HorizontalOptions="Center"
+                                           Text="{Binding State, StringFormat='State: {0}'}"/>
 
-                            <Label Grid.Row="1" Grid.Column="2"
-                                   Style="{StaticResource FunctionPullLabelStyle}"
-                                   Text="Pull:"/>
+                                </VerticalStackLayout>
 
-                            <Picker Grid.Row="0" Grid.Column="3"
-                                    Style="{StaticResource PickerStyle}"
-                                    ItemsSource="{x:Static vm:GpioPinViewModel.GpioPinFunctions}"
-                                    SelectedItem="{Binding Function}"/>
+                                <Label Grid.Row="0" Grid.Column="2"
+                                       Style="{StaticResource FunctionPullLabelStyle}"
+                                       Text="Function:"/>
 
-                            <Picker Grid.Row="1" Grid.Column="3"
-                                    Style="{StaticResource PickerStyle}"
-                                    ItemsSource="{x:Static vm:GpioPinViewModel.GpioPinPullStates}"
-                                    SelectedItem="{Binding Pull}"
-                                    IsEnabled="{Binding IsPullChangeAvailable}"/>
-                                    <!--IsEnabled="False">
-                                <Picker.Triggers>
-                                    <DataTrigger TargetType="Picker"
-                                                 Binding="{Binding IsPullChangeAvailable}"
-                                                 Value="True">
-                                        <Setter Property="IsEnabled" Value="True"/>
-                                    </DataTrigger>
-                                    <DataTrigger TargetType="Picker"
-                                                 Binding="{Binding IsPullChangeAvailable}"
-                                                 Value="False">
-                                        <Setter Property="IsEnabled" Value="False"/>
-                                    </DataTrigger>
-                                </Picker.Triggers>
-                            </Picker>-->
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                                <Label Grid.Row="1" Grid.Column="2"
+                                       Style="{StaticResource FunctionPullLabelStyle}"
+                                       Text="Pull:"/>
+
+                                <Picker Grid.Row="0" Grid.Column="3"
+                                        Style="{StaticResource PickerStyle}"
+                                        ItemsSource="{x:Static vm:GpioPinViewModel.GpioPinFunctions}"
+                                        SelectedItem="{Binding Function}"/>
+
+                                <Picker Grid.Row="1" Grid.Column="3"
+                                        Style="{StaticResource PickerStyle}"
+                                        ItemsSource="{x:Static vm:GpioPinViewModel.GpioPinPullStates}"
+                                        SelectedItem="{Binding Pull}"
+                                        IsEnabled="{Binding IsPullChangeAvailable}"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
     </Grid>
 </ContentPage>
