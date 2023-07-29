@@ -112,7 +112,7 @@ namespace RaspiRemote.ViewModels.FileExplorer
             }
             catch (Exception ex)
             {
-                _ = DisplayAlert("Error", ex.Message, "OK");
+                _ = DisplayError(ex.Message);
                 return false;
             }
         }
@@ -146,7 +146,7 @@ namespace RaspiRemote.ViewModels.FileExplorer
             }
             catch (Exception ex)
             {
-                _ = DisplayAlert("Error", ex.Message, "OK");
+                _ = DisplayError(ex.Message);
             }
         }
 
@@ -194,7 +194,7 @@ namespace RaspiRemote.ViewModels.FileExplorer
             }
             catch (Exception ex)
             {
-                _ = DisplayAlert("Error", ex.Message, "OK");
+                _ = DisplayError(ex.Message);
             }
         }
 
@@ -216,7 +216,7 @@ namespace RaspiRemote.ViewModels.FileExplorer
             }
             catch (Exception ex)
             {
-                _ = DisplayAlert("Error", ex.Message, "OK");
+                _ = DisplayError(ex.Message);
             }
         }
 
@@ -225,14 +225,14 @@ namespace RaspiRemote.ViewModels.FileExplorer
             // Check if the provided item name contains illegal characters
             if (name == "." || name == ".." || name.Contains('/'))
             {
-                _ = DisplayAlert("Error", "You provided illegal characters.", "OK");
+                _ = DisplayError("You provided illegal characters.");
                 return false;
             }
 
             // Check if the provided item name already exists
             if (Items.Select(i => i.Name).Contains(name))
             {
-                _ = DisplayAlert("Error", "File or directory with provided name already exists.", "OK");
+                _ = DisplayError("File or directory with provided name already exists.");
                 return false;
             }
 
@@ -260,7 +260,7 @@ namespace RaspiRemote.ViewModels.FileExplorer
             }
             catch (Exception ex)
             {
-                _ = DisplayAlert("Error", ex.Message, "OK");
+                _ = DisplayError(ex.Message);
             }
         }
 
@@ -285,7 +285,7 @@ namespace RaspiRemote.ViewModels.FileExplorer
             }
             catch (Exception ex)
             {
-                _ = DisplayAlert("Error", ex.Message, "OK");
+                _ = DisplayError(ex.Message);
             }
         }
     }

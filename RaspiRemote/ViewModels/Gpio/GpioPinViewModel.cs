@@ -64,7 +64,7 @@ namespace RaspiRemote.ViewModels.Gpio
             // Pin state cannot be changed if pin function = input
             if (_pinInfo.Function == GpioPinFunction.Input)
             {
-                _ = DisplayAlert("Error", "State can be changed only when GPIO pin function is set to Output", "OK");
+                _ = DisplayError("State can be changed only when GPIO pin function is set to Output");
                 return;
             }
 
@@ -110,7 +110,7 @@ namespace RaspiRemote.ViewModels.Gpio
             }
             catch (Exception ex)
             {
-                _ = DisplayAlert("Error", ex.Message, "OK");
+                _ = DisplayError(ex.Message);
                 return false;
             }
         }

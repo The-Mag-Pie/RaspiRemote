@@ -51,7 +51,7 @@ namespace RaspiRemote.ViewModels.FileExplorer
             }
             catch (Exception ex)
             {
-                _ = DisplayAlert("Error", ex.Message, "OK");
+                _ = DisplayError(ex.Message);
             }
         }
 

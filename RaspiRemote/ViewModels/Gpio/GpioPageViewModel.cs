@@ -24,21 +24,33 @@ namespace RaspiRemote.ViewModels.Gpio
         }
 
         // TODO: loader crashes an app
-        private async Task LoadDataWithLoader() => await InvokeAsyncWithLoader(LoadData);
+        private async Task LoadDataWithLoader() => await InvokeAsyncWithLoader(HandleLoadData);
+
+        private async Task HandleLoadData()
+        {
+            try
+            {
+                await LoadData();
+            }
+            catch (Exception ex)
+            {
+                _ = DisplayError(ex.Message);
+            }
+        }
 
         private async Task LoadData()
         {
             var command = _sshClient.RunCommand(RaspiGpioCommands.GetAllPins);
             if (command.ExitStatus != 0)
             {
-                await DisplayAlert("Error", command.Error, "OK");
+                await DisplayError(command.Error);
                 return;
             }
 
             var result = command.Result;
             if (result.Contains("Must be root"))
             {
-                await AddUserToGroup();
+                await HandleAddUserToGroup();
             }
             else
             {
@@ -62,12 +74,24 @@ namespace RaspiRemote.ViewModels.Gpio
             }
         }
 
+        private async Task HandleAddUserToGroup()
+        {
+            try
+            {
+                await AddUserToGroup();
+            }
+            catch (Exception ex)
+            {
+                _ = DisplayError(ex.Message);
+            }
+        }
+
         private async Task AddUserToGroup()
         {
             var command = _sshClient.RunCommand($"echo \"{_deviceInfo.Password}\" | sudo -S adduser {_deviceInfo.Username} gpio");
             if (command.ExitStatus != 0)
             {
-                await DisplayAlert("Error", $"User {_deviceInfo.Username} is not in \"gpio\" group. An attempt to add the user to the group has failed. You have to manually add the user to the \"gpio\" group in order to use this module.", "OK");
+                await DisplayError($"User {_deviceInfo.Username} is not in \"gpio\" group. An attempt to add the user to the group has failed. You have to manually add the user to the \"gpio\" group in order to use this module.");
                 // TODO: navigate to another module
             }
             else

@@ -71,5 +71,12 @@ namespace RaspiRemote.ViewModels
         /// <returns>A string with selected option</returns>
         protected static async Task<string> DisplayMenuPopup(string title, string cancel, params string[] options) =>
             await DisplayActionSheet(title, cancel, null, options);
+
+        /// <summary>
+        /// Displays an alert with error message.
+        /// </summary>
+        /// <param name="message">Message to be displayed</param>
+        protected static async Task DisplayError(string message) =>
+            await DisplayAlert("Error", message, "OK");
     }
 }
