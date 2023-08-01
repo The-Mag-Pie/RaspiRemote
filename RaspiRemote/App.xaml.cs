@@ -15,7 +15,7 @@ public partial class App : Application
         // Force light theme (disable dark theme)
         Current.UserAppTheme = AppTheme.Light;
 
-		MainPage = new NavigationPage(new SelectDevicePage());
+		MainPage = new StartPage();
 	}
 
 #if WINDOWS
