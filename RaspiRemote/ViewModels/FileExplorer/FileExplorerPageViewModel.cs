@@ -18,6 +18,9 @@ namespace RaspiRemote.ViewModels.FileExplorer
         [ObservableProperty]
         private string _path;
 
+        [ObservableProperty]
+        private bool _isRefreshing;
+
         public bool CanGoBack => _navigationStack.Count > 0;
 
         public ObservableCollection<SftpFile> Items { get; } = new();
@@ -71,6 +74,14 @@ namespace RaspiRemote.ViewModels.FileExplorer
         {
             var path = _navigationStack.Pop();
             await InvokeAsyncWithLoader(async () => await TryChangeDirectory(path));
+        }
+
+        [RelayCommand]
+        private async Task Refresh()
+        {
+            IsRefreshing = true;
+            await LoadItems();
+            IsRefreshing = false;
         }
 
         [RelayCommand]

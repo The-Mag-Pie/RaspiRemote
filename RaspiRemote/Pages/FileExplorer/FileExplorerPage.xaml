@@ -49,82 +49,84 @@
                Style="{StaticResource PathLabelStyle}"
                Text="{Binding Path, StringFormat='Path: {0}'}"/>
 
-        <CollectionView Grid.Row="1"
-                        ItemsSource="{Binding Items}"
-                        Margin="30,0,15,0">
+        <RefreshView Grid.Row="1"
+                     Margin="30,0,15,0"
+                     IsRefreshing="{Binding IsRefreshing}"
+                     Command="{Binding RefreshCommand}">
+            <CollectionView ItemsSource="{Binding Items}">
 
-            <CollectionView.EmptyView>
-                <Grid>
-                    <Label Text="Loading..."
+                <CollectionView.EmptyView>
+                    <Grid>
+                        <Label Text="Loading..."
                            VerticalOptions="Center"
                            HorizontalOptions="Center"/>
-                </Grid>
-            </CollectionView.EmptyView>
+                    </Grid>
+                </CollectionView.EmptyView>
 
-            <CollectionView.ItemsLayout>
-                <LinearItemsLayout Orientation="Vertical"
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical"
                                    ItemSpacing="5"/>
-            </CollectionView.ItemsLayout>
+                </CollectionView.ItemsLayout>
 
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="sftp:SftpFile">
-                    <Border Style="{StaticResource ItemBorderStyle}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="40"/>
-                            </Grid.ColumnDefinitions>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="sftp:SftpFile">
+                        <Border Style="{StaticResource ItemBorderStyle}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="40"/>
+                                </Grid.ColumnDefinitions>
 
-                            <Grid Grid.Column="0"
+                                <Grid Grid.Column="0"
                                   ColumnSpacing="15"
                                   Padding="20,10,2,10">
 
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
 
-                                <Image Grid.Column="0"
+                                    <Image Grid.Column="0"
                                         Source="file_icon.png">
-                                    <Image.Triggers>
-                                        <!--workaround for wrong item images (probably bug with datatrigger or collectionview)-->
-                                        <DataTrigger TargetType="Image"
+                                        <Image.Triggers>
+                                            <!--workaround for wrong item images (probably bug with datatrigger or collectionview)-->
+                                            <DataTrigger TargetType="Image"
                                                      Binding="{Binding IsSymbolicLink}"
                                                      Value="False">
-                                            <Setter Property="Source"
+                                                <Setter Property="Source"
                                                     Value="file_icon.png"/>
-                                        </DataTrigger>
-                                        <DataTrigger TargetType="Image"
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Image"
                                                      Binding="{Binding IsDirectory}"
                                                      Value="False">
-                                            <Setter Property="Source"
+                                                <Setter Property="Source"
                                                     Value="file_icon.png"/>
-                                        </DataTrigger>
-                                        <!--end of workaround-->
-                                        <DataTrigger TargetType="Image"
+                                            </DataTrigger>
+                                            <!--end of workaround-->
+                                            <DataTrigger TargetType="Image"
                                                      Binding="{Binding IsSymbolicLink}"
                                                      Value="True">
-                                            <Setter Property="Source"
+                                                <Setter Property="Source"
                                                     Value="link_icon.png"/>
-                                        </DataTrigger>
-                                        <DataTrigger TargetType="Image"
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Image"
                                                      Binding="{Binding IsDirectory}"
                                                      Value="True">
-                                            <Setter Property="Source"
+                                                <Setter Property="Source"
                                                     Value="folder_icon.png"/>
-                                        </DataTrigger>
-                                    </Image.Triggers>
-                                    <!--<Image.Shadow>
+                                            </DataTrigger>
+                                        </Image.Triggers>
+                                        <!--<Image.Shadow>
                                         <Shadow Brush="Black"
                                                 Radius="5"
                                                 Opacity="0.8"/>
                                     </Image.Shadow>-->
-                                </Image>
+                                    </Image>
 
-                                <Label Style="{StaticResource ItemNameLabelStyle}"
+                                    <Label Style="{StaticResource ItemNameLabelStyle}"
                                        Grid.Column="1" Grid.ColumnSpan="2"
                                        Text="{Binding Name}">
-                                    <!--<Label.Triggers>
+                                        <!--<Label.Triggers>
                                         <DataTrigger TargetType="Label"
                                                      Binding="{Binding Name}"
                                                      Value="..">
@@ -132,26 +134,27 @@
                                                     Value=".. (up)"/>
                                         </DataTrigger>
                                     </Label.Triggers>-->
-                                </Label>
-                            </Grid>
+                                    </Label>
+                                </Grid>
 
-                            <Button Grid.Column="0"
+                                <Button Grid.Column="0"
                                     Background="Transparent"
                                     CornerRadius="0"
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FileExplorerPageViewModel}}, Path=ItemClickedCommand}"
                                     CommandParameter="{Binding .}"/>
 
-                            <ImageButton Grid.Column="1"
+                                <ImageButton Grid.Column="1"
                                          BackgroundColor="Transparent"
                                          Source="more_3dots_vertical.png"
                                          Scale="1.2"
                                          Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FileExplorerPageViewModel}}, Path=OpenItemMenuCommand}"
                                          CommandParameter="{Binding .}"/>
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
 
         <Grid Grid.Row="2"
               Style="{StaticResource NewItemButtonsGridStyle}">
