@@ -32,78 +32,76 @@
 
     <Grid>
 
-        <ScrollView>
-            <CollectionView ItemsSource="{Binding Devices}"
-                            Margin="40,15">
-                <CollectionView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Vertical"
-                                       ItemSpacing="5"/>
-                </CollectionView.ItemsLayout>
-                <CollectionView.EmptyView>
-                    <ContentView>
-                        <VerticalStackLayout Spacing="5">
-                            <Label Text="You have no any devices saved."
-                                   HorizontalOptions="Center"/>
-                            <Label Text="Click + (Add) button to add the new one."
-                                   HorizontalOptions="Center"/>
-                        </VerticalStackLayout>
-                    </ContentView>
-                </CollectionView.EmptyView>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:RpiDevice">
-                        <Border Style="{StaticResource ElemBorderStyle}">
-                            <Grid>
+        <CollectionView ItemsSource="{Binding Devices}"
+                        Margin="40,15">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical"
+                                   ItemSpacing="5"/>
+            </CollectionView.ItemsLayout>
+            <CollectionView.EmptyView>
+                <ContentView>
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="You have no any devices saved."
+                               HorizontalOptions="Center"/>
+                        <Label Text="Click + (Add) button to add the new one."
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </ContentView>
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:RpiDevice">
+                    <Border Style="{StaticResource ElemBorderStyle}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="40"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid Grid.Column="0"
+                                  RowSpacing="10"
+                                  ColumnSpacing="5"
+                                  Padding="30,10,2,10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="25"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
-                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
 
-                                <Grid Grid.Column="0"
-                                      RowSpacing="10"
-                                      ColumnSpacing="5"
-                                      Padding="30,10,2,10">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="25"/>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition/>
-                                    </Grid.ColumnDefinitions>
+                                <Label Style="{StaticResource DeviceNameLabel}"
+                                       Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                                       Text="{Binding Name}"/>
 
-                                    <Label Style="{StaticResource DeviceNameLabel}"
-                                           Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
-                                           Text="{Binding Name}"/>
+                                <Label Style="{StaticResource DeviceParametersLabel}"
+                                       Grid.Row="1" Grid.Column="0"
+                                       Text="{Binding Host, StringFormat='Host: {0}'}"/>
 
-                                    <Label Style="{StaticResource DeviceParametersLabel}"
-                                           Grid.Row="1" Grid.Column="0"
-                                           Text="{Binding Host, StringFormat='Host: {0}'}"/>
-
-                                    <Label Style="{StaticResource DeviceParametersLabel}"
-                                           Grid.Row="1" Grid.Column="1"
-                                           Text="{Binding Username, StringFormat='User: {0}'}"/>
-                                </Grid>
-
-                                <ImageButton Grid.Row="0" Grid.Column="2" Grid.RowSpan="2"
-                                             Source="more_3dots_vertical.png"
-                                             BackgroundColor="Transparent"
-                                             Scale="1.2"
-                                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SelectDevicePageViewModel}}, Path=OpenDeviceOptionsCommand}"
-                                             CommandParameter="{Binding .}"/>
-
-                                <Button Text=""
-                                        BackgroundColor="Transparent"
-                                        Grid.Column="0"
-                                        CornerRadius="0"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SelectDevicePageViewModel}}, Path=ConnectToDeviceCommand}"
-                                        CommandParameter="{Binding .}"/>
-
+                                <Label Style="{StaticResource DeviceParametersLabel}"
+                                       Grid.Row="1" Grid.Column="1"
+                                       Text="{Binding Username, StringFormat='User: {0}'}"/>
                             </Grid>
-                        </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </ScrollView>
+
+                            <ImageButton Grid.Row="0" Grid.Column="2" Grid.RowSpan="2"
+                                         Source="more_3dots_vertical.png"
+                                         BackgroundColor="Transparent"
+                                         Scale="1.2"
+                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SelectDevicePageViewModel}}, Path=OpenDeviceOptionsCommand}"
+                                         CommandParameter="{Binding .}"/>
+
+                            <Button Text=""
+                                    BackgroundColor="Transparent"
+                                    Grid.Column="0"
+                                    CornerRadius="0"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SelectDevicePageViewModel}}, Path=ConnectToDeviceCommand}"
+                                    CommandParameter="{Binding .}"/>
+
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
         <ImageButton Style="{StaticResource AddButtonStyle}"
                      Source="plus_sign.png"
