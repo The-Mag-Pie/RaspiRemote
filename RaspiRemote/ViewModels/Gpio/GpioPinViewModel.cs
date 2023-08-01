@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using RaspiRemote.Enums;
 using RaspiRemote.Models;
+using RaspiRemote.Parsers;
 using Renci.SshNet;
 
 namespace RaspiRemote.ViewModels.Gpio
@@ -11,7 +12,7 @@ namespace RaspiRemote.ViewModels.Gpio
         public static List<GpioPinFunction> GpioPinFunctions => Enum.GetValues<GpioPinFunction>().ToList();
         public static List<GpioPinPull> GpioPinPullStates => Enum.GetValues<GpioPinPull>().ToList();
 
-        private readonly GpioPinInfo _pinInfo;
+        private GpioPinInfo _pinInfo;
         private readonly SshClient _sshClient;
 
         public int PinNumber => (int)_pinInfo.Pin;
@@ -23,9 +24,10 @@ namespace RaspiRemote.ViewModels.Gpio
             get => _pinInfo.Function;
             set
             {
-                ChangePinFunction(value);
-                OnPropertyChanged(nameof(Function));
-                OnPropertyChanged(nameof(IsPullChangeAvailable));
+                if (value != _pinInfo.Function)
+                {
+                    _ = InvokeAsyncWithLoader(async () => await ChangePinFunction(value));
+                }
             }
         }
 
@@ -34,8 +36,10 @@ namespace RaspiRemote.ViewModels.Gpio
             get => _pinInfo.Pull;
             set
             {
-                ChangePinPull(value);
-                OnPropertyChanged(nameof(Pull));
+                if (value != _pinInfo.Pull)
+                {
+                    _ = InvokeAsyncWithLoader(async () => await ChangePinPull(value));
+                }
             }
         }
 
@@ -48,14 +52,48 @@ namespace RaspiRemote.ViewModels.Gpio
             _sshClient = sshClient;
         }
 
-        private void ChangePinFunction(GpioPinFunction newValue)
+        private async Task ChangePinFunction(GpioPinFunction newValue)
         {
-            _pinInfo.Function = newValue;
+            string cmd;
+            switch (newValue)
+            {
+                case GpioPinFunction.Input:
+                    cmd = RaspiGpioCommands.SetInputCmd(PinNumber);
+                    break;
+
+                case GpioPinFunction.Output:
+                    cmd = RaspiGpioCommands.SetOutputCmd(PinNumber);
+                    break;
+
+                default:
+                    return;
+            }
+
+            await HandleRunSshCommand(cmd, "Pin function has been successfully changed.");
         }
 
-        private void ChangePinPull(GpioPinPull newValue)
+        private async Task ChangePinPull(GpioPinPull newValue)
         {
-            _pinInfo.Pull = newValue;
+            string cmd;
+            switch (newValue)
+            {
+                case GpioPinPull.Up:
+                    cmd = RaspiGpioCommands.SetPullUpCmd(PinNumber);
+                    break;
+
+                case GpioPinPull.Down:
+                    cmd = RaspiGpioCommands.SetPullDownCmd(PinNumber);
+                    break;
+
+                case GpioPinPull.None:
+                    cmd = RaspiGpioCommands.SetPullNoneCmd(PinNumber);
+                    break;
+
+                default:
+                    return;
+            }
+
+            await HandleRunSshCommand(cmd, "Pin pull state has been successfully changed.");
         }
 
         [RelayCommand]
@@ -74,33 +112,22 @@ namespace RaspiRemote.ViewModels.Gpio
         private async Task HandleToggleState()
         {
             var cmdStr = _pinInfo.State ? 
-                RaspiGpioCommands.SetLowStateCmd((int)_pinInfo.Pin) :
-                RaspiGpioCommands.SetHighStateCmd((int)_pinInfo.Pin);
+                RaspiGpioCommands.SetLowStateCmd(PinNumber) :
+                RaspiGpioCommands.SetHighStateCmd(PinNumber);
 
-            if (await HandleRunSshCommand(cmdStr, "Pin state has been changed successfully."))
-            {
-                _pinInfo.State = !_pinInfo.State;
-                OnPropertyChanged(nameof(State));
-            }
+            await HandleRunSshCommand(cmdStr, "Pin state has been successfully changed.");
         }
 
         private async Task<bool> HandleRunSshCommand(string command, string successMessage)
         {
             try
             {
-                var cmd = await Task.Run(() => _sshClient.RunCommand(command));
-                if (cmd.ExitStatus != 0 && cmd.Error == string.Empty)
-                {
-                    throw new Renci.SshNet.Common.SshException(cmd.Result);
-                }
-                else if (cmd.ExitStatus != 0)
-                {
-                    throw new Renci.SshNet.Common.SshException(cmd.Error);
-                }
+                var cmd = await RunCommandAsync(command);
 
                 if (cmd.Result == string.Empty)
                 {
                     _ = Toast.Make(successMessage);
+                    await RefreshData();
                 }
                 else
                 {
@@ -113,6 +140,32 @@ namespace RaspiRemote.ViewModels.Gpio
                 _ = DisplayError(ex.Message);
                 return false;
             }
+        }
+
+        private async Task RefreshData()
+        {
+            var cmdStr = RaspiGpioCommands.GetSinglePinCmd(PinNumber);
+            var cmd = await RunCommandAsync(cmdStr);
+            _pinInfo = RaspiGpioParser.ParseGpioPinInfo(cmd.Result);
+
+            OnPropertyChanged(nameof(State));
+            OnPropertyChanged(nameof(Function));
+            OnPropertyChanged(nameof(IsPullChangeAvailable));
+            OnPropertyChanged(nameof(Pull));
+        }
+
+        private async Task<SshCommand> RunCommandAsync(string command)
+        {
+            var cmd = await Task.Run(() => _sshClient.RunCommand(command));
+            if (cmd.ExitStatus != 0 && cmd.Error == string.Empty)
+            {
+                throw new Renci.SshNet.Common.SshException(cmd.Result);
+            }
+            else if (cmd.ExitStatus != 0)
+            {
+                throw new Renci.SshNet.Common.SshException(cmd.Error);
+            }
+            return cmd;
         }
     }
 }

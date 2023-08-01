@@ -30,6 +30,7 @@ namespace RaspiRemote.Parsers
         /// <returns>A GPIO pin info</returns>
         public static GpioPinInfo ParseGpioPinInfo(string textToParse)
         {
+            textToParse = textToParse.Trim();
             var output = new GpioPinInfo();
             output.Pin = GetPinNumber(textToParse);
             output.State = GetState(textToParse);
