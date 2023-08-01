@@ -58,14 +58,14 @@
                 <CollectionView.EmptyView>
                     <Grid>
                         <Label Text="Loading..."
-                           VerticalOptions="Center"
-                           HorizontalOptions="Center"/>
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center"/>
                     </Grid>
                 </CollectionView.EmptyView>
 
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Vertical"
-                                   ItemSpacing="5"/>
+                                       ItemSpacing="5"/>
                 </CollectionView.ItemsLayout>
 
                 <CollectionView.ItemTemplate>
@@ -78,8 +78,8 @@
                                 </Grid.ColumnDefinitions>
 
                                 <Grid Grid.Column="0"
-                                  ColumnSpacing="15"
-                                  Padding="20,10,2,10">
+                                      ColumnSpacing="15"
+                                      Padding="20,10,2,10">
 
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="auto"/>
@@ -87,33 +87,33 @@
                                     </Grid.ColumnDefinitions>
 
                                     <Image Grid.Column="0"
-                                        Source="file_icon.png">
+                                           Source="file_icon.png">
                                         <Image.Triggers>
                                             <!--workaround for wrong item images (probably bug with datatrigger or collectionview)-->
                                             <DataTrigger TargetType="Image"
-                                                     Binding="{Binding IsSymbolicLink}"
-                                                     Value="False">
+                                                         Binding="{Binding IsSymbolicLink}"
+                                                         Value="False">
                                                 <Setter Property="Source"
-                                                    Value="file_icon.png"/>
+                                                        Value="file_icon.png"/>
                                             </DataTrigger>
                                             <DataTrigger TargetType="Image"
-                                                     Binding="{Binding IsDirectory}"
-                                                     Value="False">
+                                                         Binding="{Binding IsDirectory}"
+                                                         Value="False">
                                                 <Setter Property="Source"
-                                                    Value="file_icon.png"/>
+                                                        Value="file_icon.png"/>
                                             </DataTrigger>
                                             <!--end of workaround-->
                                             <DataTrigger TargetType="Image"
-                                                     Binding="{Binding IsSymbolicLink}"
-                                                     Value="True">
+                                                         Binding="{Binding IsSymbolicLink}"
+                                                         Value="True">
                                                 <Setter Property="Source"
-                                                    Value="link_icon.png"/>
+                                                        Value="link_icon.png"/>
                                             </DataTrigger>
                                             <DataTrigger TargetType="Image"
-                                                     Binding="{Binding IsDirectory}"
-                                                     Value="True">
+                                                         Binding="{Binding IsDirectory}"
+                                                         Value="True">
                                                 <Setter Property="Source"
-                                                    Value="folder_icon.png"/>
+                                                        Value="folder_icon.png"/>
                                             </DataTrigger>
                                         </Image.Triggers>
                                         <!--<Image.Shadow>
@@ -124,8 +124,8 @@
                                     </Image>
 
                                     <Label Style="{StaticResource ItemNameLabelStyle}"
-                                       Grid.Column="1" Grid.ColumnSpan="2"
-                                       Text="{Binding Name}">
+                                           Grid.Column="1" Grid.ColumnSpan="2"
+                                           Text="{Binding Name}">
                                         <!--<Label.Triggers>
                                         <DataTrigger TargetType="Label"
                                                      Binding="{Binding Name}"
@@ -138,17 +138,17 @@
                                 </Grid>
 
                                 <Button Grid.Column="0"
-                                    Background="Transparent"
-                                    CornerRadius="0"
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FileExplorerPageViewModel}}, Path=ItemClickedCommand}"
-                                    CommandParameter="{Binding .}"/>
+                                        Background="Transparent"
+                                        CornerRadius="0"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FileExplorerPageViewModel}}, Path=ItemClickedCommand}"
+                                        CommandParameter="{Binding .}"/>
 
                                 <ImageButton Grid.Column="1"
-                                         BackgroundColor="Transparent"
-                                         Source="more_3dots_vertical.png"
-                                         Scale="1.2"
-                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FileExplorerPageViewModel}}, Path=OpenItemMenuCommand}"
-                                         CommandParameter="{Binding .}"/>
+                                             BackgroundColor="Transparent"
+                                             Source="more_3dots_vertical.png"
+                                             Scale="1.2"
+                                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FileExplorerPageViewModel}}, Path=OpenItemMenuCommand}"
+                                             CommandParameter="{Binding .}"/>
                             </Grid>
                         </Border>
                     </DataTemplate>
