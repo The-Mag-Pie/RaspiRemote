@@ -25,7 +25,8 @@
 
             <VerticalStackLayout>
                 <Label Text="Device name:"/>
-                <Entry Text="{Binding Name}"
+                <Entry x:Name="nameEntry"
+                       Text="{Binding Name}"
                        Placeholder="Enter device's name"/>
             </VerticalStackLayout>
 
@@ -36,12 +37,14 @@
                 </Grid.ColumnDefinitions>
                 <VerticalStackLayout Grid.Column="0">
                     <Label Text="Host:"/>
-                    <Entry Text="{Binding Host}"
+                    <Entry x:Name="hostEntry"
+                           Text="{Binding Host}"
                            Placeholder="Enter device's host"/>
                 </VerticalStackLayout>
                 <VerticalStackLayout Grid.Column="1">
                     <Label Text="Port:"/>
-                    <Entry Text="{Binding Port}"
+                    <Entry x:Name="portEntry"
+                           Text="{Binding Port}"
                            Placeholder="Port"
                            Keyboard="Numeric"/>
                 </VerticalStackLayout>
@@ -54,12 +57,14 @@
                 </Grid.ColumnDefinitions>
                 <VerticalStackLayout Grid.Column="0">
                     <Label Text="Username:"/>
-                    <Entry Text="{Binding Username}"
+                    <Entry x:Name="usernameEntry"
+                           Text="{Binding Username}"
                            Placeholder="Enter username"/>
                 </VerticalStackLayout>
                 <VerticalStackLayout Grid.Column="1">
                     <Label Text="Password:"/>
-                    <Entry Text="{Binding Password}"
+                    <Entry x:Name="passwordEntry"
+                           Text="{Binding Password}"
                            Placeholder="Enter password"
                            IsPassword="True"/>
                 </VerticalStackLayout>
