@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RaspiRemote.Pages.TerminalPage"
+             xmlns:vm="clr-namespace:RaspiRemote.ViewModels"
+             x:DataType="vm:TerminalPageViewModel"
+             Title="Terminal">
+
+    <ContentPage.Resources>
+        <Style x:Key="CommandInputBorderStyle" TargetType="Border" BasedOn="{StaticResource ElemBorderStyle}">
+            <Setter Property="Margin" Value="20,0"/>
+        </Style>
+
+        <Style x:Key="CommandInputEntryStyle" TargetType="Entry">
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+
+        <Style x:Key="SpecialKeysGridStyle" TargetType="Grid">
+            <Setter Property="Margin" Value="20,0"/>
+            <Setter Property="ColumnSpacing" Value="5"/>
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="BackgroundColor" Value="#00A3FF"/>
+            <Setter Property="TextColor" Value="Black"/>
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid RowSpacing="10"
+          Margin="0,0,0,10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <WebView Grid.Row="0"
+                 Source="ConsoleIndex.html"/>
+
+        <Border Grid.Row="1"
+                Style="{StaticResource CommandInputBorderStyle}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Entry Grid.Column="0"
+                       Style="{StaticResource CommandInputEntryStyle}"
+                       Placeholder="Enter command..."/>
+
+                <Button Grid.Column="1"
+                        CornerRadius="0"
+                        Text="Execute"/>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="2"
+              Style="{StaticResource SpecialKeysGridStyle}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0"
+                    Text="Ctrl + Z"/>
+
+            <Button Grid.Column="1"
+                    Text="Ctrl + X"/>
+
+            <Button Grid.Column="2"
+                    Text="Ctrl + C"/>
+        </Grid>
+    </Grid>
+    
+</ContentPage>

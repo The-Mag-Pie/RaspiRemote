@@ -9,6 +9,10 @@
     Shell.FlyoutBehavior="Flyout"
     x:DataType="local:ShellViewModel">
 
+    <ShellContent Title="Terminal"
+                  ContentTemplate="{DataTemplate pages:TerminalPage}"
+                  Route="TerminalPage"/>
+
     <ShellContent Title="GPIO"
                   ContentTemplate="{DataTemplate pages:GpioPage}"
                   Route="GpioPage"/>

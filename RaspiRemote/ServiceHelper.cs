@@ -37,6 +37,7 @@ namespace RaspiRemote
             serviceCollection.AddTransient<FileExplorerPageViewModel>();
             serviceCollection.AddTransient<FileEditorPageViewModel>();
             serviceCollection.AddTransient<GpioPageViewModel>();
+            serviceCollection.AddTransient<TerminalPageViewModel>();
         }
     }
 }
