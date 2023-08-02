@@ -6,7 +6,8 @@
     xmlns:local="clr-namespace:RaspiRemote"
     xmlns:pages="clr-namespace:RaspiRemote.Pages"
     xmlns:fepages="clr-namespace:RaspiRemote.Pages.FileExplorer"
-    Shell.FlyoutBehavior="Flyout">
+    Shell.FlyoutBehavior="Flyout"
+    x:DataType="local:ShellViewModel">
 
     <ShellContent Title="GPIO"
                   ContentTemplate="{DataTemplate pages:GpioPage}"
@@ -19,5 +20,11 @@
     <ShellContent Title="Sensors"
                   ContentTemplate="{DataTemplate pages:SensorsPage}"
                   Route="SensorsPage"/>
+
+    <MenuItem Text="Reconnect (restart an app)"
+              Command="{Binding ReconnectCommand}"/>
+    
+    <MenuItem Text="Disconnect (select another device)"
+              Command="{Binding DisconnectCommand}"/>
 
 </Shell>

@@ -5,7 +5,7 @@ using RaspiRemote.Popups;
 
 namespace RaspiRemote.ViewModels
 {
-    internal partial class BaseViewModel : ObservableObject
+    public partial class BaseViewModel : ObservableObject
     {
         private static LoadingPopup _loadingPopup = null;
         private static bool IsLoaderVisible
@@ -42,6 +42,14 @@ namespace RaspiRemote.ViewModels
             IsLoaderVisible = false;
             IsBusy = false;
         }
+
+        /// <inheritdoc cref="InvokeAsyncWithLoader(Func{Task})"/>
+        /// <remarks>
+        /// IMPORTANT: This overload uses <see cref="Task.Run(Action)"/> to invoke an action
+        /// so remember to use <see cref="IDispatcher.Dispatch(Action)"/> in order to make changes in UI.
+        /// </remarks>
+        protected async Task InvokeAsyncWithLoader(Action action) =>
+            await InvokeAsyncWithLoader(async () => await Task.Run(action));
 
         /// <inheritdoc cref="Page.DisplayAlert(string, string, string)"/>
         protected static async Task DisplayAlert(string title, string message, string cancel) =>

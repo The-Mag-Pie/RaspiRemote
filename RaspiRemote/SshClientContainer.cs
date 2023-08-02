@@ -32,6 +32,12 @@ namespace RaspiRemote
             await ConnectSftpClient(deviceInfo);
         }
 
+        public async Task ReconnectToCurrentDevice()
+        {
+            await ConnectSshClient(DeviceInfo);
+            await ConnectSftpClient(DeviceInfo);
+        }
+
         private async Task ConnectSshClient(RpiDevice deviceInfo)
         {
             // Disconnect device if already connected
