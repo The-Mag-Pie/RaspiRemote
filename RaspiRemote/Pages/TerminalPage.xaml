@@ -35,6 +35,7 @@
         </Grid.RowDefinitions>
 
         <WebView Grid.Row="0"
+                 x:Name="consoleWebview"
                  Source="ConsoleIndex.html"/>
 
         <Border Grid.Row="1"
@@ -47,11 +48,13 @@
 
                 <Entry Grid.Column="0"
                        Style="{StaticResource CommandInputEntryStyle}"
-                       Placeholder="Enter command..."/>
+                       Placeholder="Enter command..."
+                       Text="{Binding CommandText}"/>
 
                 <Button Grid.Column="1"
                         CornerRadius="0"
-                        Text="Execute"/>
+                        Text="Execute"
+                        Command="{Binding ExecuteCommand}"/>
             </Grid>
         </Border>
 
