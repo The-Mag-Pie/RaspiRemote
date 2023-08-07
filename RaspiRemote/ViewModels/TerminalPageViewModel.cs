@@ -7,7 +7,7 @@ namespace RaspiRemote.ViewModels
     internal partial class TerminalPageViewModel : BaseViewModel
     {
         private readonly SshClient _sshClient;
-        private readonly ShellStream _shellStream;
+        private ShellStream _shellStream;
 
         public event Action<string> ConsoleDataReceived;
 
@@ -17,8 +17,30 @@ namespace RaspiRemote.ViewModels
         public TerminalPageViewModel(SshClientContainer sshClientContainer)
         {
             _sshClient = sshClientContainer.SshClient;
-            _shellStream = _sshClient.CreateShellStream("xterm", 0, 0, 0, 0, 0);
 
+            _ = ConfigureShellStream();
+        }
+
+        private async Task ConfigureShellStream() => await InvokeAsyncWithLoader(() =>
+        {
+            while (ConsoleDataReceived is null)
+            {
+                Thread.Sleep(100); // waiting for console view to initialize
+            }
+
+            try
+            {
+                _shellStream = _sshClient.CreateShellStream("xterm", 0, 0, 0, 0, 0);
+                SetupShellStreamEvents();
+            }
+            catch (Exception ex)
+            {
+                _ = DisplayError(ex.Message);
+            }
+        });
+
+        private void SetupShellStreamEvents()
+        {
             _shellStream.DataReceived += (s, e) =>
             {
                 if (_shellStream.DataAvailable)
@@ -32,26 +54,33 @@ namespace RaspiRemote.ViewModels
             {
                 _ = DisplayAlert("Error", e.Exception.Message, "OK");
             };
-
-            Task.Run(() =>
-            {
-                while (ConsoleDataReceived is null)
-                {
-                    // waiting
-                }
-                _shellStream.WriteLine("");
-            });
         }
 
         [RelayCommand]
-        private void Execute()
+        private void Send(string cmdText)
         {
             try
             {
-                _shellStream.WriteLine(CommandText);
+                _shellStream.WriteLine(cmdText);
                 CommandText = string.Empty;
             }
-            catch { }
+            catch (ObjectDisposedException)
+            {
+                _ = HandleShellInterrupted();
+            }
+            catch (Exception ex)
+            {
+                _ = DisplayError(ex.Message);
+            }
+        }
+
+        private async Task HandleShellInterrupted()
+        {
+            var result = await DisplayAlert("Shell interrupted", "Do you want to reconnect to the shell?", "Yes", "No");
+            if (result)
+            {
+                _ = ConfigureShellStream();
+            }
         }
     }
 }

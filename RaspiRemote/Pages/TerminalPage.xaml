@@ -26,10 +26,10 @@
         </Style>
     </ContentPage.Resources>
 
-    <Grid RowSpacing="10"
+    <Grid RowSpacing="5"
           Margin="0,0,0,10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
@@ -47,14 +47,20 @@
                 </Grid.ColumnDefinitions>
 
                 <Entry Grid.Column="0"
+                       x:Name="commandEntry"
                        Style="{StaticResource CommandInputEntryStyle}"
                        Placeholder="Enter command..."
-                       Text="{Binding CommandText}"/>
+                       Text="{Binding CommandText}"
+                       ReturnCommand="{Binding SendCommand}"
+                       ReturnCommandParameter="{Binding CommandText}"
+                       Completed="CommandEntryCompleted"/>
 
                 <Button Grid.Column="1"
                         CornerRadius="0"
                         Text="Execute"
-                        Command="{Binding ExecuteCommand}"/>
+                        Command="{Binding SendCommand}"
+                        CommandParameter="{Binding CommandText}"
+                        Clicked="ExecuteButtonClicked"/>
             </Grid>
         </Border>
 
