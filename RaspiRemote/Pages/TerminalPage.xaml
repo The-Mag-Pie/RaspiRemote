@@ -13,6 +13,7 @@
 
         <Style x:Key="CommandInputEntryStyle" TargetType="Entry">
             <Setter Property="Margin" Value="5"/>
+            <Setter Property="PlaceholderColor" Value="Gray"/>
         </Style>
 
         <Style x:Key="SpecialKeysGridStyle" TargetType="Grid">
@@ -23,6 +24,7 @@
         <Style TargetType="Button">
             <Setter Property="BackgroundColor" Value="#00A3FF"/>
             <Setter Property="TextColor" Value="Black"/>
+            <Setter Property="CornerRadius" Value="15"/>
         </Style>
     </ContentPage.Resources>
 
@@ -30,6 +32,7 @@
           Margin="0,0,0,10">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
@@ -51,14 +54,15 @@
                        Style="{StaticResource CommandInputEntryStyle}"
                        Placeholder="Enter command..."
                        Text="{Binding CommandText}"
-                       ReturnCommand="{Binding SendCommand}"
+                       ReturnCommand="{Binding SendLineCommand}"
                        ReturnCommandParameter="{Binding CommandText}"
                        Completed="CommandEntryCompleted"/>
 
                 <Button Grid.Column="1"
                         CornerRadius="0"
-                        Text="Execute"
-                        Command="{Binding SendCommand}"
+                        Text="Send"
+                        WidthRequest="80"
+                        Command="{Binding SendLineCommand}"
                         CommandParameter="{Binding CommandText}"
                         Clicked="ExecuteButtonClicked"/>
             </Grid>
@@ -70,16 +74,52 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
             <Button Grid.Column="0"
-                    Text="Ctrl + Z"/>
+                    Text="Up"
+                    Command="{Binding UpCommand}"/>
 
             <Button Grid.Column="1"
-                    Text="Ctrl + X"/>
+                    Text="Down"
+                    Command="{Binding DownCommand}"/>
 
             <Button Grid.Column="2"
-                    Text="Ctrl + C"/>
+                    Text="Left"
+                    Command="{Binding LeftCommand}"/>
+
+            <Button Grid.Column="3"
+                    Text="Right"
+                    Command="{Binding RightCommand}"/>
+        </Grid>
+
+        <Grid Grid.Row="3"
+              Style="{StaticResource SpecialKeysGridStyle}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0"
+                    Text="Tab"
+                    Command="{Binding TabCommand}"/>
+
+            <Button Grid.Column="1"
+                    Text="Esc"
+                    Command="{Binding EscCommand}"/>
+
+            <HorizontalStackLayout Grid.Column="2"
+                                   HorizontalOptions="Center">
+                <CheckBox IsChecked="{Binding SendCtrlKey}"/>
+                <Label Text="Ctrl+..."
+                       VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+
+            <Button Grid.Column="2"
+                BackgroundColor="Transparent"
+                Command="{Binding ChangeSendCtrlKeyCommand}"/>
         </Grid>
     </Grid>
     
