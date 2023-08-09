@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using RaspiRemote.Parsers;
 using Renci.SshNet;
 
 namespace RaspiRemote.ViewModels
@@ -10,6 +11,7 @@ namespace RaspiRemote.ViewModels
         private ShellStream _shellStream;
 
         public event Action<string> ConsoleDataReceived;
+        public (double, double) ConsoleDimensions { private get; set; } = (0, 0);
 
         [ObservableProperty]
         private string _commandText;
@@ -26,14 +28,15 @@ namespace RaspiRemote.ViewModels
 
         private async Task ConfigureShellStream() => await InvokeAsyncWithLoader(() =>
         {
-            while (ConsoleDataReceived is null)
+            while (ConsoleDataReceived is null || ConsoleDimensions == (0, 0))
             {
                 Thread.Sleep(100); // waiting for console view to initialize
             }
 
             try
             {
-                _shellStream = _sshClient.CreateShellStream("xterm", 0, 0, 0, 0, 0);
+                var colsAndRows = GetColsAndRows();
+                _shellStream = _sshClient.CreateShellStream("xterm", colsAndRows.Item1, colsAndRows.Item2, 0, 0, 0);
                 SetupShellStreamEvents();
             }
             catch (Exception ex)
@@ -41,6 +44,25 @@ namespace RaspiRemote.ViewModels
                 _ = DisplayError(ex.Message);
             }
         });
+
+        private (uint, uint) GetColsAndRows()
+        {
+            var cellWidth = 7;
+            var cellHeight = 14;
+
+#if WINDOWS
+            // 15 is the width of scrollbar, 2 is a margin of error
+            var consoleCols = (uint)((ConsoleDimensions.Item1 - 15) / cellWidth) - 2;
+            var consoleRows = (uint)(ConsoleDimensions.Item2 / cellHeight);
+#elif ANDROID
+            // 5 is a margin of error
+            var consoleCols = (uint)(ConsoleDimensions.Item1 / cellWidth) - 5;
+            // 0.5 is a number representing how much of the screen the console takes while soft keyboard is open (more or less)
+            var consoleRows = (uint)(ConsoleDimensions.Item2 * 0.4 / cellHeight);
+#endif
+
+            return (consoleCols, consoleRows);
+        }
 
         private void SetupShellStreamEvents()
         {
@@ -60,12 +82,33 @@ namespace RaspiRemote.ViewModels
         }
 
         [RelayCommand]
+        private void HandleSendBtn()
+        {
+            try
+            {
+                if (SendCtrlKey)
+                {
+                    var ctrlKey = CtrlCharacterParser.GetCtrlCharacter(CommandText);
+                    Send(ctrlKey.ToString());
+                    SendCtrlKey = false;
+                }
+                else
+                {
+                    SendLine(CommandText);
+                }
+                CommandText = string.Empty;
+            }
+            catch (Exception ex)
+            {
+                _ = DisplayError(ex.Message);
+            }
+        }
+
         private void SendLine(string cmdText)
         {
             try
             {
                 _shellStream.WriteLine(cmdText);
-                CommandText = string.Empty;
             }
             catch (ObjectDisposedException)
             {

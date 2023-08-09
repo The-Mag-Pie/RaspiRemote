@@ -9,6 +9,9 @@
         const term = new Terminal();
         const fitAddon = new FitAddon.FitAddon();
 
+        term._publicOptions.fontSize = 12;
+        term._publicOptions.disableStdin = true;
+
         function Initialize() {
             term.loadAddon(fitAddon);
             term.open(document.getElementById('terminal'));

@@ -14,6 +14,7 @@ public partial class TerminalPage : ContentPage
         consoleWebview.Navigated += (s, e) =>
         {
             vm.ConsoleDataReceived += WriteToConsole;
+            vm.ConsoleDimensions = (consoleWebview.Width, consoleWebview.Height);
         };
     }
 
@@ -28,7 +29,7 @@ public partial class TerminalPage : ContentPage
         });
 	}
 
-    private void ExecuteButtonClicked(object sender, EventArgs e)
+    private void SetFocusForEntry(object sender, EventArgs e)
     {
 		commandEntry.Focus();
     }
