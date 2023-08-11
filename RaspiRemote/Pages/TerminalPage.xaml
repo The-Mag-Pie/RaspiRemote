@@ -26,6 +26,10 @@
             <Setter Property="TextColor" Value="Black"/>
             <Setter Property="CornerRadius" Value="15"/>
         </Style>
+
+        <Style TargetType="CheckBox">
+            <Setter Property="Color" Value="#00A3FF"/>
+        </Style>
     </ContentPage.Resources>
 
     <Grid RowSpacing="5"
@@ -98,6 +102,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
             <Button Grid.Column="0"
@@ -110,12 +115,24 @@
 
             <HorizontalStackLayout Grid.Column="2"
                                    HorizontalOptions="Center">
+                <CheckBox IsChecked="{Binding SendFnKey}"/>
+                <Label Text="Fn key"
+                       VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+
+            <Button Grid.Column="2"
+                    BackgroundColor="Transparent"
+                    Command="{Binding ChangeSendFnKeyCommand}"
+                    Clicked="SetFocusForEntry"/>
+
+            <HorizontalStackLayout Grid.Column="3"
+                                   HorizontalOptions="Center">
                 <CheckBox IsChecked="{Binding SendCtrlKey}"/>
                 <Label Text="Ctrl+..."
                        VerticalOptions="Center"/>
             </HorizontalStackLayout>
 
-            <Button Grid.Column="2"
+            <Button Grid.Column="3"
                     BackgroundColor="Transparent"
                     Command="{Binding ChangeSendCtrlKeyCommand}"
                     Clicked="SetFocusForEntry"/>

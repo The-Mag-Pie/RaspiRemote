@@ -28,7 +28,6 @@
                 throw new ArgumentException("Specified input is not a valid Ctrl character.");
 
             return (char)idx;
-
         }
     }
 }

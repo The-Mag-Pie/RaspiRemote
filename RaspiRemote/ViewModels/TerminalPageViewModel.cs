@@ -11,13 +11,35 @@ namespace RaspiRemote.ViewModels
         private ShellStream _shellStream;
 
         public event Action<string> ConsoleDataReceived;
+        public bool IsConsoleInitialized { get; set; } = false;
         public (double, double) ConsoleDimensions { private get; set; } = (0, 0);
 
         [ObservableProperty]
         private string _commandText;
 
-        [ObservableProperty]
         private bool _sendCtrlKey;
+        public bool SendCtrlKey
+        {
+            get => _sendCtrlKey;
+            set
+            {
+                if (SendFnKey) SendFnKey = false;
+                _sendCtrlKey = value;
+                OnPropertyChanged(nameof(SendCtrlKey));
+            }
+        }
+
+        private bool _sendFnKey;
+        public bool SendFnKey
+        {
+            get => _sendFnKey;
+            set
+            {
+                if (SendCtrlKey) SendCtrlKey = false;
+                _sendFnKey = value;
+                OnPropertyChanged(nameof(SendFnKey));
+            }
+        }
 
         public TerminalPageViewModel(SshClientContainer sshClientContainer)
         {
@@ -28,7 +50,8 @@ namespace RaspiRemote.ViewModels
 
         private async Task ConfigureShellStream() => await InvokeAsyncWithLoader(() =>
         {
-            while (ConsoleDataReceived is null || ConsoleDimensions == (0, 0))
+            //while (ConsoleDataReceived is null || ConsoleDimensions == (0, 0))
+            while (IsConsoleInitialized is false)
             {
                 Thread.Sleep(100); // waiting for console view to initialize
             }
@@ -91,6 +114,12 @@ namespace RaspiRemote.ViewModels
                     var ctrlKey = CtrlCharacterParser.GetCtrlCharacter(CommandText);
                     Send(ctrlKey.ToString());
                     SendCtrlKey = false;
+                }
+                else if (SendFnKey)
+                {
+                    var fnKeyCode = FnKeyCodeParser.GetFnKeyCode(CommandText);
+                    Send(fnKeyCode);
+                    SendFnKey = false;
                 }
                 else
                 {
@@ -162,6 +191,9 @@ namespace RaspiRemote.ViewModels
 
         [RelayCommand]
         private void Esc() => Send(((char)0x1B).ToString());
+
+        [RelayCommand]
+        private void ChangeSendFnKey() => SendFnKey = !SendFnKey;
 
         [RelayCommand]
         private void ChangeSendCtrlKey() => SendCtrlKey = !SendCtrlKey;

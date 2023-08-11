@@ -4,18 +4,25 @@ namespace RaspiRemote.Pages;
 
 public partial class TerminalPage : ContentPage
 {
+    private TerminalPageViewModel _vm;
+
 	public TerminalPage()
 	{
 		InitializeComponent();
 		
-		var vm = ServiceHelper.GetService<TerminalPageViewModel>();
-		BindingContext = vm;
+		_vm = ServiceHelper.GetService<TerminalPageViewModel>();
+		BindingContext = _vm;
 
-        consoleWebview.Navigated += (s, e) =>
-        {
-            vm.ConsoleDataReceived += WriteToConsole;
-            vm.ConsoleDimensions = (consoleWebview.Width, consoleWebview.Height);
-        };
+        consoleWebview.Navigated += (s, e) => ConfigureViewModel();
+    }
+
+    private void ConfigureViewModel()
+    {
+        if (_vm.IsConsoleInitialized) return;
+
+        _vm.ConsoleDataReceived += WriteToConsole;
+        _vm.ConsoleDimensions = (consoleWebview.Width, consoleWebview.Height);
+        _vm.IsConsoleInitialized = true;
     }
 
     private void WriteToConsole(string content)
