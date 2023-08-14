@@ -105,7 +105,7 @@ namespace RaspiRemote.ViewModels
         }
 
         [RelayCommand]
-        private void HandleSendBtn()
+        private void HandleSendBtn(string mode)
         {
             try
             {
@@ -123,7 +123,8 @@ namespace RaspiRemote.ViewModels
                 }
                 else
                 {
-                    SendLine(CommandText);
+                    if (mode == "Send") Send(CommandText);
+                    else if (mode == "Execute") SendLine(CommandText);
                 }
                 CommandText = string.Empty;
             }
@@ -187,10 +188,13 @@ namespace RaspiRemote.ViewModels
         private void Right() => Send("\x1B[C");
 
         [RelayCommand]
-        private void Tab() => Send(((char)0x09).ToString());
+        private void Backspace() => Send("\x08");
 
         [RelayCommand]
-        private void Esc() => Send(((char)0x1B).ToString());
+        private void Tab() => Send("\x09");
+
+        [RelayCommand]
+        private void Esc() => Send("\x1B");
 
         [RelayCommand]
         private void ChangeSendFnKey() => SendFnKey = !SendFnKey;

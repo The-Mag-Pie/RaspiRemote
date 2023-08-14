@@ -16,15 +16,23 @@
             <Setter Property="PlaceholderColor" Value="Gray"/>
         </Style>
 
+        <Style x:Key="BaseButtonStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="#00A3FF"/>
+            <Setter Property="TextColor" Value="Black"/>
+        </Style>
+
+        <Style x:Key="SendExecuteButtonsStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
+            <Setter Property="CornerRadius" Value="0"/>
+            <Setter Property="WidthRequest" Value="70"/>
+        </Style>
+
+        <Style TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
+            <Setter Property="CornerRadius" Value="15"/>
+        </Style>
+
         <Style x:Key="SpecialKeysGridStyle" TargetType="Grid">
             <Setter Property="Margin" Value="20,0"/>
             <Setter Property="ColumnSpacing" Value="5"/>
-        </Style>
-
-        <Style TargetType="Button">
-            <Setter Property="BackgroundColor" Value="#00A3FF"/>
-            <Setter Property="TextColor" Value="Black"/>
-            <Setter Property="CornerRadius" Value="15"/>
         </Style>
 
         <Style TargetType="CheckBox">
@@ -51,6 +59,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
 
                 <Entry Grid.Column="0"
@@ -59,13 +68,22 @@
                        Placeholder="Enter command..."
                        Text="{Binding CommandText}"
                        ReturnCommand="{Binding HandleSendBtnCommand}"
+                       ReturnCommandParameter="Execute"
                        Completed="CommandEntryCompleted"/>
 
                 <Button Grid.Column="1"
-                        CornerRadius="0"
+                        Style="{StaticResource SendExecuteButtonsStyle}"
                         Text="Send"
-                        WidthRequest="80"
                         Command="{Binding HandleSendBtnCommand}"
+                        CommandParameter="Send"
+                        Clicked="SetFocusForEntry"/>
+
+                <Button Grid.Column="2"
+                        Style="{StaticResource SendExecuteButtonsStyle}"
+                        FontSize="25"
+                        Text="&#x21A9;"
+                        Command="{Binding HandleSendBtnCommand}"
+                        CommandParameter="Execute"
                         Clicked="SetFocusForEntry"/>
             </Grid>
         </Border>
@@ -77,23 +95,28 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
             <Button Grid.Column="0"
-                    Text="Up"
+                    Text="&#x1F845;"
                     Command="{Binding UpCommand}"/>
 
             <Button Grid.Column="1"
-                    Text="Down"
+                    Text="&#x1F847;"
                     Command="{Binding DownCommand}"/>
 
             <Button Grid.Column="2"
-                    Text="Left"
+                    Text="&#x1F844;"
                     Command="{Binding LeftCommand}"/>
 
             <Button Grid.Column="3"
-                    Text="Right"
+                    Text="&#x1F846;"
                     Command="{Binding RightCommand}"/>
+
+            <Button Grid.Column="4"
+                    Text="&#x232B;"
+                    Command="{Binding BackspaceCommand}"/>
         </Grid>
 
         <Grid Grid.Row="3"
