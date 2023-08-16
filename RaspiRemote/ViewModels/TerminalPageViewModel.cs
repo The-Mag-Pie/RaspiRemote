@@ -2,6 +2,9 @@
 using CommunityToolkit.Mvvm.Input;
 using RaspiRemote.Parsers;
 using Renci.SshNet;
+using System.Net;
+using WebSocketSharp;
+using WebSocketSharp.Server;
 
 namespace RaspiRemote.ViewModels
 {
@@ -9,6 +12,7 @@ namespace RaspiRemote.ViewModels
     {
         private readonly SshClient _sshClient;
         private ShellStream _shellStream;
+        private readonly WebSocketServer _webSockServer;
 
         public event Action<string> ConsoleDataReceived;
         public bool IsConsoleInitialized { get; set; } = false;
@@ -44,6 +48,7 @@ namespace RaspiRemote.ViewModels
         public TerminalPageViewModel(SshClientContainer sshClientContainer)
         {
             _sshClient = sshClientContainer.SshClient;
+            _webSockServer = new("ws://localhost:8880");
 
             _ = ConfigureShellStream();
         }
@@ -87,8 +92,37 @@ namespace RaspiRemote.ViewModels
             return (consoleCols, consoleRows);
         }
 
+        private class MyWebSocket : WebSocketBehavior
+        {
+            public ShellStream ShellStream { get; set; }
+
+            protected override void OnMessage(MessageEventArgs e)
+            {
+                ShellStream?.Write(e.Data);
+            }
+
+            public new void Send(byte[] data) => base.Send(data);
+        }
+
         private void SetupShellStreamEvents()
         {
+            _webSockServer.AddWebSocketService<MyWebSocket>("/shell", (webSock) =>
+            {
+                webSock.ShellStream = _shellStream;
+
+                //_shellStream.DataReceived += (s, e) =>
+                //{
+                //    if (_shellStream.DataAvailable)
+                //    {
+                //        Span<byte> buffer = new();
+                //        _shellStream.Read(buffer);
+                //        webSock.Send(buffer.ToArray());
+                //    }
+                //};
+            });
+
+            _webSockServer.Start();
+
             _shellStream.DataReceived += (s, e) =>
             {
                 if (_shellStream.DataAvailable)

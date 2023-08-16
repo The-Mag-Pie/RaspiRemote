@@ -54,6 +54,7 @@
 	  <None Remove="Resources\Images\link_icon.svg" />
 	  <None Remove="Resources\Raw\ConsoleIndex.html" />
 	  <None Remove="Resources\Raw\res\base64.js" />
+	  <None Remove="Resources\Raw\res\xterm-addon-attach.js" />
 	  <None Remove="Resources\Raw\res\xterm-addon-fit.js" />
 	</ItemGroup>
 
@@ -62,6 +63,7 @@
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="SSH.NET" Version="2020.0.2" />
+		<PackageReference Include="WebSocketSharp-netstandard" Version="1.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>

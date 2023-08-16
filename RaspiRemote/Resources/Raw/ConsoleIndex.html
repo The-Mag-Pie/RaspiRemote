@@ -4,15 +4,25 @@
     <link rel="stylesheet" href="res/xterm.css" />
     <script src="res/xterm.js"></script>
     <script src="res/xterm-addon-fit.js"></script>
+    <script src="res/xterm-addon-attach.js"></script>
     <script src="res/base64.js"></script>
     <script type="text/javascript">
         const term = new Terminal();
         const fitAddon = new FitAddon.FitAddon();
 
+        const sock = new WebSocket('ws://localhost:8880/shell');
+        const attachAddon = new AttachAddon.AttachAddon(sock);
+
+        sock.onmessage = (e) => {
+            console.log(e.data);
+            
+        }
+
         term._publicOptions.fontSize = 12;
-        term._publicOptions.disableStdin = true;
+        //term._publicOptions.disableStdin = true;
 
         function Initialize() {
+            term.loadAddon(attachAddon);
             term.loadAddon(fitAddon);
             term.open(document.getElementById('terminal'));
             fitAddon.fit();
