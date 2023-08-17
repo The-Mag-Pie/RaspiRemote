@@ -18,36 +18,17 @@ public partial class TerminalPage : ContentPage
 
     private void ConfigureViewModel()
     {
-        if (_vm.IsConsoleInitialized) return;
+        if (_vm.IsWebViewLoaded) return;
 
-        _vm.ConsoleDataReceived += WriteToConsole;
+        _vm.InitializeConsoleFunction = InitXterm;
+        _vm.ReloadConsoleFunction = consoleWebview.Reload;
         _vm.ConsoleDimensions = (consoleWebview.Width, consoleWebview.Height);
-        _vm.IsConsoleInitialized = true;
+        _vm.IsWebViewLoaded = true;
     }
 
-    private void WriteToConsole(string content)
-	{
-		// there was some problems with special characters when passing non-encoded content to javascript function
-		var base64content = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(content));
-		// Without invoking BeginInvokeOnMainThread() the Eval() method does not evaluate the script on Android
-		MainThread.BeginInvokeOnMainThread(() =>
-		{
-            consoleWebview.Eval($"WriteToConsole(`{base64content}`);");
-        });
-	}
-
-    private void SetFocusForEntry(object sender, EventArgs e)
+    // Without invoking BeginInvokeOnMainThread() the Eval() method does not evaluate the script on Android
+    private void InitXterm() => MainThread.BeginInvokeOnMainThread(() =>
     {
-		commandEntry.Focus();
-    }
-
-    private void CommandEntryCompleted(object sender, EventArgs e)
-    {
-#if ANDROID
-        // Soft keyboard is not showing up when Focus() is called. Workaround:
-        commandEntry.IsEnabled = false;
-        commandEntry.IsEnabled = true;
-#endif
-        commandEntry.Focus();
-    }
+        consoleWebview.Eval($"Initialize();");
+    });
 }

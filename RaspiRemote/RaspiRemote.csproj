@@ -53,7 +53,6 @@
 	  <None Remove="Resources\Images\folder_icon.svg" />
 	  <None Remove="Resources\Images\link_icon.svg" />
 	  <None Remove="Resources\Raw\ConsoleIndex.html" />
-	  <None Remove="Resources\Raw\res\base64.js" />
 	  <None Remove="Resources\Raw\res\xterm-addon-attach.js" />
 	  <None Remove="Resources\Raw\res\xterm-addon-fit.js" />
 	</ItemGroup>

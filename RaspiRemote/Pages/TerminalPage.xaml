@@ -7,26 +7,9 @@
              Title="Terminal">
 
     <ContentPage.Resources>
-        <Style x:Key="CommandInputBorderStyle" TargetType="Border" BasedOn="{StaticResource ElemBorderStyle}">
-            <Setter Property="Margin" Value="20,0"/>
-        </Style>
-
-        <Style x:Key="CommandInputEntryStyle" TargetType="Entry">
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="PlaceholderColor" Value="Gray"/>
-        </Style>
-
-        <Style x:Key="BaseButtonStyle" TargetType="Button">
+        <Style TargetType="Button">
             <Setter Property="BackgroundColor" Value="#00A3FF"/>
             <Setter Property="TextColor" Value="Black"/>
-        </Style>
-
-        <Style x:Key="SendExecuteButtonsStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
-            <Setter Property="CornerRadius" Value="0"/>
-            <Setter Property="WidthRequest" Value="70"/>
-        </Style>
-
-        <Style TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
             <Setter Property="CornerRadius" Value="15"/>
         </Style>
 
@@ -46,49 +29,13 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
         <WebView Grid.Row="0"
                  x:Name="consoleWebview"
                  Source="ConsoleIndex.html"/>
 
-        <Border Grid.Row="1"
-                Style="{StaticResource CommandInputBorderStyle}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                </Grid.ColumnDefinitions>
-
-                <Entry Grid.Column="0"
-                       x:Name="commandEntry"
-                       Style="{StaticResource CommandInputEntryStyle}"
-                       Placeholder="Enter command..."
-                       Text="{Binding CommandText}"
-                       ReturnCommand="{Binding HandleSendBtnCommand}"
-                       ReturnCommandParameter="Execute"
-                       Completed="CommandEntryCompleted"/>
-
-                <Button Grid.Column="1"
-                        Style="{StaticResource SendExecuteButtonsStyle}"
-                        Text="Send"
-                        Command="{Binding HandleSendBtnCommand}"
-                        CommandParameter="Send"
-                        Clicked="SetFocusForEntry"/>
-
-                <Button Grid.Column="2"
-                        Style="{StaticResource SendExecuteButtonsStyle}"
-                        FontSize="25"
-                        Text="&#x21A9;"
-                        Command="{Binding HandleSendBtnCommand}"
-                        CommandParameter="Execute"
-                        Clicked="SetFocusForEntry"/>
-            </Grid>
-        </Border>
-
-        <Grid Grid.Row="2"
+        <Grid Grid.Row="1"
               Style="{StaticResource SpecialKeysGridStyle}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -119,7 +66,7 @@
                     Command="{Binding BackspaceCommand}"/>
         </Grid>
 
-        <Grid Grid.Row="3"
+        <Grid Grid.Row="2"
               Style="{StaticResource SpecialKeysGridStyle}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -145,8 +92,7 @@
 
             <Button Grid.Column="2"
                     BackgroundColor="Transparent"
-                    Command="{Binding ChangeSendFnKeyCommand}"
-                    Clicked="SetFocusForEntry"/>
+                    Command="{Binding ChangeSendFnKeyCommand}"/>
 
             <HorizontalStackLayout Grid.Column="3"
                                    HorizontalOptions="Center">
@@ -157,8 +103,7 @@
 
             <Button Grid.Column="3"
                     BackgroundColor="Transparent"
-                    Command="{Binding ChangeSendCtrlKeyCommand}"
-                    Clicked="SetFocusForEntry"/>
+                    Command="{Binding ChangeSendCtrlKeyCommand}"/>
         </Grid>
     </Grid>
     

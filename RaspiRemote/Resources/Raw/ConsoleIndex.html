@@ -5,31 +5,27 @@
     <script src="res/xterm.js"></script>
     <script src="res/xterm-addon-fit.js"></script>
     <script src="res/xterm-addon-attach.js"></script>
-    <script src="res/base64.js"></script>
     <script type="text/javascript">
-        const term = new Terminal();
-        const fitAddon = new FitAddon.FitAddon();
-
-        const sock = new WebSocket('ws://localhost:8880/shell');
-        const attachAddon = new AttachAddon.AttachAddon(sock);
-
-        sock.onmessage = (e) => {
-            console.log(e.data);
-            
-        }
+        var term = new Terminal();
+        var fitAddon = new FitAddon.FitAddon();
+        var attachAddon = undefined;
+        var sock = undefined;
 
         term._publicOptions.fontSize = 12;
-        //term._publicOptions.disableStdin = true;
 
         function Initialize() {
+            term.open(document.getElementById('terminal'));
+
+            sock = new WebSocket('ws://localhost:8880/shell');
+            // send any character to load shell data that has been retrieved before console initialization
+            sock.onopen = () => setTimeout(() => sock.send("\x08"), 200);
+
+            attachAddon = new AttachAddon.AttachAddon(sock);
+
             term.loadAddon(attachAddon);
             term.loadAddon(fitAddon);
-            term.open(document.getElementById('terminal'));
+            
             fitAddon.fit();
-        }
-
-        function WriteToConsole(text) {
-            term.write(Base64.decode(text));
         }
 
         addEventListener("resize", () => fitAddon.fit());
@@ -39,13 +35,17 @@
             margin: 0;
         }
         #terminal {
+            position: absolute;
             height: 100vh;
             width: 100vw;
+        }
+        #loadingInfo {
+            position: absolute;
         }
     </style>
 </head>
 <body>
+    <p id="loadingInfo">Loading...</p>
     <div id="terminal"></div>
-    <script type="text/javascript">Initialize();</script>
 </body>
 </html>
