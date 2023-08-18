@@ -2,7 +2,7 @@
 <html>
 <head>
     <link rel="stylesheet" href="res/xterm.css" />
-    <script src="res/xterm.js"></script>
+    <script src="res/xterm_modified.js"></script>
     <script src="res/xterm-addon-fit.js"></script>
     <script src="res/xterm-addon-attach.js"></script>
     <script type="text/javascript">
@@ -26,6 +26,19 @@
             term.loadAddon(fitAddon);
             
             fitAddon.fit();
+
+            // Fix: Android soft keyboard input is sent to websocket only after return pressed
+            if (navigator.userAgent.contains("Android")) {
+                var elem = document.getElementsByTagName("textarea")[0];
+                elem.addEventListener("input", (e) => {
+                    sock.send(e.data);
+                    e.target.value = '';
+                });
+                elem.autocomplete = "off";
+                elem.autocorrect = "off";
+                elem.autocapitalize = "off";
+                elem.spellcheck = false;
+            }
         }
 
         addEventListener("resize", () => fitAddon.fit());
