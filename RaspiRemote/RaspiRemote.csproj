@@ -49,13 +49,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiCss Remove="Resources\Raw\res\style.css" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Remove="Resources\Images\file_icon.svg" />
 	  <None Remove="Resources\Images\folder_icon.svg" />
 	  <None Remove="Resources\Images\link_icon.svg" />
 	  <None Remove="Resources\Raw\ConsoleIndex.html" />
+	  <None Remove="Resources\Raw\res\script.js" />
 	  <None Remove="Resources\Raw\res\xterm-addon-attach.js" />
 	  <None Remove="Resources\Raw\res\xterm-addon-fit.js" />
-	  <None Remove="Resources\Raw\res\xterm_modified.js" />
+	  <None Remove="Resources\Raw\res\xterm.js" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -73,12 +78,6 @@
 	  <Compile Update="Popups\DeviceOptionsPopup.xaml.cs">
 	    <DependentUpon>DeviceOptionsPopup.xaml</DependentUpon>
 	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <MauiAsset Update="Resources\Raw\res\xterm_modified.js">
-	    <LogicalName>%(RecursiveDir)%(Filename)%(Extension)</LogicalName>
-	  </MauiAsset>
 	</ItemGroup>
 
 	<ItemGroup>

@@ -14,8 +14,10 @@
         </Style>
 
         <Style x:Key="SpecialKeysGridStyle" TargetType="Grid">
-            <Setter Property="Margin" Value="20,0"/>
+            <Setter Property="Margin" Value="10,0,10,10"/>
             <Setter Property="ColumnSpacing" Value="5"/>
+            <Setter Property="RowSpacing" Value="5"/>
+            <Setter Property="IsVisible" Value="{OnPlatform Android=True, WinUI=False}"/>
         </Style>
 
         <Style TargetType="CheckBox">
@@ -23,11 +25,9 @@
         </Style>
     </ContentPage.Resources>
 
-    <Grid RowSpacing="5"
-          Margin="0,0,0,10">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
@@ -37,73 +37,48 @@
 
         <Grid Grid.Row="1"
               Style="{StaticResource SpecialKeysGridStyle}">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0"
+            <Button Grid.Row="0" Grid.Column="0"
                     Text="&#x1F845;"
                     Command="{Binding UpCommand}"/>
 
-            <Button Grid.Column="1"
+            <Button Grid.Row="0" Grid.Column="1"
                     Text="&#x1F847;"
                     Command="{Binding DownCommand}"/>
 
-            <Button Grid.Column="2"
+            <Button Grid.Row="0" Grid.Column="2"
                     Text="&#x1F844;"
                     Command="{Binding LeftCommand}"/>
 
-            <Button Grid.Column="3"
+            <Button Grid.Row="0" Grid.Column="3"
                     Text="&#x1F846;"
                     Command="{Binding RightCommand}"/>
 
-            <Button Grid.Column="4"
-                    Text="&#x232B;"
-                    Command="{Binding BackspaceCommand}"/>
-        </Grid>
-
-        <Grid Grid.Row="2"
-              Style="{StaticResource SpecialKeysGridStyle}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-
-            <Button Grid.Column="0"
+            <Button Grid.Row="1" Grid.Column="0"
                     Text="Tab"
                     Command="{Binding TabCommand}"/>
 
-            <Button Grid.Column="1"
+            <Button Grid.Row="1" Grid.Column="1"
                     Text="Esc"
                     Command="{Binding EscCommand}"/>
 
-            <HorizontalStackLayout Grid.Column="2"
-                                   HorizontalOptions="Center">
-                <CheckBox IsChecked="{Binding SendFnKey}"/>
-                <Label Text="Fn key"
-                       VerticalOptions="Center"/>
-            </HorizontalStackLayout>
+            <Button Grid.Row="1" Grid.Column="2"
+                    Text="Fn key"
+                    Command="{Binding FnKeyCommand}"/>
 
-            <Button Grid.Column="2"
-                    BackgroundColor="Transparent"
-                    Command="{Binding ChangeSendFnKeyCommand}"/>
-
-            <HorizontalStackLayout Grid.Column="3"
-                                   HorizontalOptions="Center">
-                <CheckBox IsChecked="{Binding SendCtrlKey}"/>
-                <Label Text="Ctrl+..."
-                       VerticalOptions="Center"/>
-            </HorizontalStackLayout>
-
-            <Button Grid.Column="3"
-                    BackgroundColor="Transparent"
-                    Command="{Binding ChangeSendCtrlKeyCommand}"/>
+            <Button Grid.Row="1" Grid.Column="3"
+                    Text="Ctrl key"
+                    Command="{Binding CtrlKeyCommand}"/>
         </Grid>
     </Grid>
     

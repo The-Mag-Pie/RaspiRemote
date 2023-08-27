@@ -2,62 +2,16 @@
 <html>
 <head>
     <link rel="stylesheet" href="res/xterm.css" />
-    <script src="res/xterm_modified.js"></script>
+    <link rel="stylesheet" href="res/style.css" />
+    <script src="res/xterm.js"></script>
     <script src="res/xterm-addon-fit.js"></script>
     <script src="res/xterm-addon-attach.js"></script>
-    <script type="text/javascript">
-        var term = new Terminal();
-        var fitAddon = new FitAddon.FitAddon();
-        var attachAddon = undefined;
-        var sock = undefined;
-
-        term._publicOptions.fontSize = 12;
-
-        function Initialize() {
-            term.open(document.getElementById('terminal'));
-
-            sock = new WebSocket('ws://localhost:8880/shell');
-            // send any character to load shell data that has been retrieved before console initialization
-            sock.onopen = () => setTimeout(() => sock.send("\x08"), 200);
-
-            attachAddon = new AttachAddon.AttachAddon(sock);
-
-            term.loadAddon(attachAddon);
-            term.loadAddon(fitAddon);
-            
-            fitAddon.fit();
-
-            // Fix: Android soft keyboard input is sent to websocket only after return pressed
-            if (navigator.userAgent.contains("Android")) {
-                var elem = document.getElementsByTagName("textarea")[0];
-                elem.addEventListener("input", (e) => {
-                    sock.send(e.data);
-                    e.target.value = '';
-                });
-                elem.autocomplete = "off";
-                elem.autocorrect = "off";
-                elem.autocapitalize = "off";
-                elem.spellcheck = false;
-            }
-        }
-
-        addEventListener("resize", () => fitAddon.fit());
-    </script>
-    <style>
-        body {
-            margin: 0;
-        }
-        #terminal {
-            position: absolute;
-            height: 100vh;
-            width: 100vw;
-        }
-        #loadingInfo {
-            position: absolute;
-        }
-    </style>
+    <script src="res/script.js"></script>
 </head>
 <body>
+    <form id="hiddenInputForm" onsubmit="return false;">
+        <input id="hiddenInput" type="password" />
+    </form>
     <p id="loadingInfo">Loading...</p>
     <div id="terminal"></div>
 </body>

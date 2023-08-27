@@ -1,0 +1,21 @@
+﻿body {
+    margin: 0;
+}
+
+#terminal {
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+}
+
+#loadingInfo {
+    position: absolute;
+}
+
+#hiddenInputForm {
+    position: absolute;
+}
+
+#hiddenInput {
+    border: none;
+}

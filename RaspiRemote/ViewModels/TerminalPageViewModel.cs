@@ -19,30 +19,6 @@ namespace RaspiRemote.ViewModels
         public Action ReloadConsoleFunction { private get; set; }
         public (double, double) ConsoleDimensions { private get; set; } = (0, 0);
 
-        private bool _sendCtrlKey;
-        public bool SendCtrlKey
-        {
-            get => _sendCtrlKey;
-            set
-            {
-                if (SendFnKey) SendFnKey = false;
-                _sendCtrlKey = value;
-                OnPropertyChanged(nameof(SendCtrlKey));
-            }
-        }
-
-        private bool _sendFnKey;
-        public bool SendFnKey
-        {
-            get => _sendFnKey;
-            set
-            {
-                if (SendCtrlKey) SendCtrlKey = false;
-                _sendFnKey = value;
-                OnPropertyChanged(nameof(SendFnKey));
-            }
-        }
-
         public TerminalPageViewModel(SshClientContainer sshClientContainer)
         {
             _sshClient = sshClientContainer.SshClient;
@@ -200,10 +176,44 @@ namespace RaspiRemote.ViewModels
         private void Esc() => Send("\x1B");
 
         [RelayCommand]
-        private void ChangeSendFnKey() => SendFnKey = !SendFnKey;
+        private async Task FnKey()
+        {
+            var key = await DisplayPromptAsync("Fn key", "Enter Fn key number (0-12)", "Send", keyboard: Keyboard.Numeric);
+            if (key is null) return;
+
+            string fnKey;
+            try
+            {
+                fnKey = FnKeyCodeParser.GetFnKeyCode(key);
+            }
+            catch (Exception ex)
+            {
+                _ = DisplayError(ex.Message);
+                return;
+            }
+
+            Send(fnKey);
+        }
 
         [RelayCommand]
-        private void ChangeSendCtrlKey() => SendCtrlKey = !SendCtrlKey;
+        private async Task CtrlKey()
+        {
+            var key = await DisplayPromptAsync("Ctrl key", "Enter Ctrl key character (Ctrl+...)", "Send");
+            if (key is null) return;
+
+            char ctrlKey;
+            try
+            {
+                ctrlKey = CtrlCharacterParser.GetCtrlCharacter(key);
+            }
+            catch (Exception ex)
+            {
+                _ = DisplayError(ex.Message);
+                return;
+            }
+
+            Send(ctrlKey.ToString());
+        }
 
         public void Dispose()
         {
