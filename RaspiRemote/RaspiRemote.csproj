@@ -53,6 +53,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\arrow_downward.svg" />
+	  <None Remove="Resources\Images\arrow_left.svg" />
+	  <None Remove="Resources\Images\arrow_right.svg" />
+	  <None Remove="Resources\Images\arrow_upward.svg" />
 	  <None Remove="Resources\Images\file_icon.svg" />
 	  <None Remove="Resources\Images\folder_icon.svg" />
 	  <None Remove="Resources\Images\link_icon.svg" />

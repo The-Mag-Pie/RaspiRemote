@@ -48,21 +48,21 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Row="0" Grid.Column="0"
-                    Text="&#x1F845;"
-                    Command="{Binding UpCommand}"/>
+            <ImageButton Grid.Row="0" Grid.Column="0"
+                         Source="arrow_upward.png"
+                         Command="{Binding UpCommand}"/>
 
-            <Button Grid.Row="0" Grid.Column="1"
-                    Text="&#x1F847;"
-                    Command="{Binding DownCommand}"/>
+            <ImageButton Grid.Row="0" Grid.Column="1"
+                         Source="arrow_downward.png"
+                         Command="{Binding DownCommand}"/>
 
-            <Button Grid.Row="0" Grid.Column="2"
-                    Text="&#x1F844;"
-                    Command="{Binding LeftCommand}"/>
+            <ImageButton Grid.Row="0" Grid.Column="2"
+                         Source="arrow_left.png"
+                         Command="{Binding LeftCommand}"/>
 
-            <Button Grid.Row="0" Grid.Column="3"
-                    Text="&#x1F846;"
-                    Command="{Binding RightCommand}"/>
+            <ImageButton Grid.Row="0" Grid.Column="3"
+                         Source="arrow_right.png"
+                         Command="{Binding RightCommand}"/>
 
             <Button Grid.Row="1" Grid.Column="0"
                     Text="Tab"
