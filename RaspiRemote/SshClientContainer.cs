@@ -6,6 +6,12 @@ namespace RaspiRemote
     public class SshClientContainer : IDisposable
     {
         /// <summary>
+        /// Event fired when app is disconnecting from device (also fired when reconnecting).
+        /// Event handlers are removed after firing this event.
+        /// </summary>
+        public event Action Disconnecting;
+
+        /// <summary>
         /// Information about connected device
         /// </summary>
         public RpiDevice DeviceInfo { get; private set; }
@@ -32,8 +38,20 @@ namespace RaspiRemote
             await ConnectSftpClient(deviceInfo);
         }
 
+        /// <summary>
+        /// Disconnect from current device.
+        /// </summary>
+        /// <returns></returns>
+        public async Task DisconnectFromDevice() => await Task.Run(Dispose);
+        
+        /// <summary>
+        /// Disconnect and connect again to current device.
+        /// </summary>
+        /// <returns></returns>
         public async Task ReconnectToCurrentDevice()
         {
+            Dispose();
+
             await ConnectSshClient(DeviceInfo);
             await ConnectSftpClient(DeviceInfo);
         }
@@ -77,11 +95,26 @@ namespace RaspiRemote
         /// </summary>
         public void Dispose()
         {
+            InvokeDisconnectingEvent();
+
             SshClient?.Disconnect();
             SshClient?.Dispose();
+            SshClient = null;
 
             SftpClient?.Disconnect();
             SftpClient?.Dispose();
+            SftpClient = null;
+        }
+
+        private void InvokeDisconnectingEvent()
+        {
+            Disconnecting?.Invoke();
+
+            // remove all event handlers
+            foreach (var d in Disconnecting.GetInvocationList())
+            {
+                Disconnecting -= (Action)d;
+            }
         }
     }
 }

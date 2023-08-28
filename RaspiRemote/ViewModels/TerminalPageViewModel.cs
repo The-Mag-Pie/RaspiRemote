@@ -23,6 +23,9 @@ namespace RaspiRemote.ViewModels
         {
             _sshClient = sshClientContainer.SshClient;
             _webSockServer = new("ws://localhost:8880");
+            _webSockServer.ReuseAddress = true;
+
+            sshClientContainer.Disconnecting += Dispose;
 
             _ = Configure();
         }
@@ -39,7 +42,9 @@ namespace RaspiRemote.ViewModels
                 var colsAndRows = GetColsAndRows();
                 _shellStream = _sshClient.CreateShellStream("xterm", colsAndRows.Item1, colsAndRows.Item2, 0, 0, 0);
                 SetupShellStream();
+
                 SetupWebSocket();
+
                 InitializeConsoleFunction.Invoke();
             }
             catch (Exception ex)
@@ -115,43 +120,12 @@ namespace RaspiRemote.ViewModels
 
         private void ResetConsole()
         {
-            _webSockServer.Stop();
-            _webSockServer.RemoveWebSocketService("/shell");
+            Dispose();
 
             IsWebViewLoaded = false;
             ReloadConsoleFunction.Invoke();
 
             _ = Configure();
-        }
-
-        [RelayCommand]
-        private void HandleSendBtn(string mode)
-        {
-            try
-            {
-                //if (SendCtrlKey)
-                //{
-                //    var ctrlKey = CtrlCharacterParser.GetCtrlCharacter(CommandText);
-                //    Send(ctrlKey.ToString());
-                //    SendCtrlKey = false;
-                //}
-                //else if (SendFnKey)
-                //{
-                //    var fnKeyCode = FnKeyCodeParser.GetFnKeyCode(CommandText);
-                //    Send(fnKeyCode);
-                //    SendFnKey = false;
-                //}
-                //else
-                //{
-                //    if (mode == "Send") Send(CommandText);
-                //    else if (mode == "Execute") SendLine(CommandText);
-                //}
-                //CommandText = string.Empty;
-            }
-            catch (Exception ex)
-            {
-                _ = DisplayError(ex.Message);
-            }
         }
 
         [RelayCommand]
@@ -218,9 +192,11 @@ namespace RaspiRemote.ViewModels
         public void Dispose()
         {
             _webSockServer?.Stop();
+            _webSockServer?.RemoveWebSocketService("/shell");
 
             _shellStream?.Close();
             _shellStream?.Dispose();
+            _shellStream = null;
         }
     }
 }

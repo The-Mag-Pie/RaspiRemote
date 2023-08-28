@@ -20,10 +20,13 @@ namespace RaspiRemote.ViewModels
                 else if (_loadingPopup is null && value is true)
                 {
                     _loadingPopup = new LoadingPopup();
-                    Application.Current.MainPage.ShowPopup(_loadingPopup);
+                    ShowPopup(_loadingPopup);
                 }
             }
         }
+
+        private static void ShowPopup(Popup popup) => MainThread.BeginInvokeOnMainThread(() =>
+            Application.Current.MainPage.ShowPopup(popup));
 
         [ObservableProperty]
         private bool _isBusy = false;
@@ -84,7 +87,7 @@ namespace RaspiRemote.ViewModels
         /// Displays an alert with error message.
         /// </summary>
         /// <param name="message">Message to be displayed</param>
-        protected static async Task DisplayError(string message) =>
-            await DisplayAlert("Error", message, "OK");
+        protected static async Task DisplayError(string message) => await MainThread.InvokeOnMainThreadAsync(async () =>
+            await DisplayAlert("Error", message, "OK"));
     }
 }

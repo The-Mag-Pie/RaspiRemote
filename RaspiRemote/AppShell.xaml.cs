@@ -24,8 +24,11 @@ public partial class ShellViewModel : BaseViewModel
     });
 
     [RelayCommand]
-    private async Task Disconnect() => await InvokeAsyncWithLoader(() =>
+    private async Task Disconnect() => await InvokeAsyncWithLoader(async () =>
     {
+        var sshContainer = ServiceHelper.GetService<SshClientContainer>();
+        await sshContainer.DisconnectFromDevice();
+
         var page = new StartPage();
         Application.Current.Dispatcher.Dispatch(() =>
         {
