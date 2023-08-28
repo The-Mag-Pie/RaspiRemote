@@ -14,6 +14,11 @@ public partial class TerminalPage : ContentPage
 		BindingContext = _vm;
 
         consoleWebview.Navigated += (s, e) => ConfigureViewModel();
+        consoleWebview.SizeChanged += (s, e) =>
+        {
+            _vm.ConsoleDimensions = (consoleWebview.Width, consoleWebview.Height);
+            _vm.OnConsoleSizeChanged();
+        };
     }
 
     private void ConfigureViewModel()

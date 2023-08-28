@@ -3,7 +3,6 @@ using RaspiRemote.Enums;
 using RaspiRemote.LocalAppData;
 using RaspiRemote.Models;
 using Renci.SshNet;
-using System.Reflection.Metadata;
 
 namespace RaspiRemote.ViewModels
 {

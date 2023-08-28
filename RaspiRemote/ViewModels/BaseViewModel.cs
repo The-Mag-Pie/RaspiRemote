@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.Maui;
 using RaspiRemote.Popups;
 
 namespace RaspiRemote.ViewModels

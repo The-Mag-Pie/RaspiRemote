@@ -702,6 +702,17 @@ namespace Renci.SshNet
             Write(line + "\r");
         }
 
+        /// <inheritdoc cref="IChannelSession.SendWindowChangeRequest(uint, uint, uint, uint)"/>
+        public bool SendWindowChangeRequest(uint columns, uint rows, uint width, uint height)
+        {
+            if (_channel is null)
+            {
+                return false;
+            }
+
+            return _channel.SendWindowChangeRequest(columns, rows, width, height);
+        }
+
         /// <summary>
         /// Releases the unmanaged resources used by the <see cref="Stream"/> and optionally releases the managed resources.
         /// </summary>

@@ -1,9 +1,7 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 using RaspiRemote.Parsers;
 using RaspiRemote.WebSocket;
 using Renci.SshNet;
-using WebSocketSharp;
 using WebSocketSharp.Server;
 
 namespace RaspiRemote.ViewModels
@@ -28,6 +26,12 @@ namespace RaspiRemote.ViewModels
             sshClientContainer.Disconnecting += Dispose;
 
             _ = Configure();
+        }
+
+        public void OnConsoleSizeChanged()
+        {
+            var colsAndRows = GetColsAndRows();
+            _shellStream?.SendWindowChangeRequest(colsAndRows.Item1, colsAndRows.Item2, 0, 0);
         }
 
         private async Task Configure() => await InvokeAsyncWithLoader(() =>
@@ -59,15 +63,13 @@ namespace RaspiRemote.ViewModels
             var cellHeight = 14;
 
 #if WINDOWS
-            // 15 is the width of scrollbar, 2 is a margin of error
+            // 15 is the width of scrollbar, 2 is a margin of error on Windows
             var consoleCols = (uint)((ConsoleDimensions.Item1 - 15) / cellWidth) - 2;
-            var consoleRows = (uint)(ConsoleDimensions.Item2 / cellHeight);
 #elif ANDROID
-            // 5 is a margin of error
+            // 5 is a margin of error on Android
             var consoleCols = (uint)(ConsoleDimensions.Item1 / cellWidth) - 5;
-            // 0.5 is a number representing how much of the screen height the console takes while soft keyboard is open (more or less)
-            var consoleRows = (uint)(ConsoleDimensions.Item2 * 0.4 / cellHeight);
 #endif
+            var consoleRows = (uint)(ConsoleDimensions.Item2 / cellHeight);
 
             return (consoleCols, consoleRows);
         }
