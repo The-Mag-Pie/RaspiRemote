@@ -23,7 +23,7 @@ namespace RaspiRemote.ViewModels.FileExplorer
 
         public bool CanGoBack => _navigationStack.Count > 0;
 
-        public ObservableCollection<SftpFile> Items { get; } = new();
+        public ObservableCollection<ISftpFile> Items { get; } = new();
 
         public FileExplorerPageViewModel(SshClientContainer sshClientContainer)
         {

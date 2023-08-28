@@ -15,7 +15,7 @@ namespace RaspiRemote.ViewModels
                 if (_loadingPopup is not null && value is false)
                 {
                     _loadingPopup.Close();
-                    _loadingPopup = null;
+                    _loadingPopup = null;   
                 }
                 else if (_loadingPopup is null && value is true)
                 {
