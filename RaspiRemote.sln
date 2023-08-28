@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RaspiRemote", "RaspiRemote\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadSensorData", "ReadSensorData\ReadSensorData.csproj", "{863D5B90-ED56-42D4-B2BC-447737014C2C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Renci.SshNet", "Renci.SshNet\Renci.SshNet.csproj", "{3DF2DB7C-0989-40F8-A889-C5F43CCAC759}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,10 +23,6 @@ Global
 		{863D5B90-ED56-42D4-B2BC-447737014C2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{863D5B90-ED56-42D4-B2BC-447737014C2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{863D5B90-ED56-42D4-B2BC-447737014C2C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3DF2DB7C-0989-40F8-A889-C5F43CCAC759}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3DF2DB7C-0989-40F8-A889-C5F43CCAC759}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3DF2DB7C-0989-40F8-A889-C5F43CCAC759}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3DF2DB7C-0989-40F8-A889-C5F43CCAC759}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

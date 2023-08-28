@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using RaspiRemote.Extensions;
 using RaspiRemote.Parsers;
 using RaspiRemote.WebSocket;
 using Renci.SshNet;
