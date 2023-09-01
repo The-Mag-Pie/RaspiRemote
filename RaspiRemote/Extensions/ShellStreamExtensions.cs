@@ -17,9 +17,17 @@ namespace RaspiRemote.Extensions
 
             if (channel == null) return false;
 
-            var result = channel.GetType()
-                .GetMethod("SendWindowChangeRequest", BindingFlags.Public | BindingFlags.Instance)?
-                .Invoke(channel, new object[] { columns, rows, width, height });
+            object result = null;
+            try
+            {
+                result = channel.GetType()
+                    .GetMethod("SendWindowChangeRequest", BindingFlags.Public | BindingFlags.Instance)?
+                    .Invoke(channel, new object[] { columns, rows, width, height });
+            }
+            catch
+            {
+                return false;
+            }
 
             if (result == null) return false;
 
