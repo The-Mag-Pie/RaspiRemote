@@ -100,6 +100,9 @@
 	  <MauiXaml Update="Pages\SensorsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\SystemInfoPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\TerminalPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

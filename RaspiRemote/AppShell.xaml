@@ -9,6 +9,10 @@
     Shell.FlyoutBehavior="Flyout"
     x:DataType="local:ShellViewModel">
 
+    <ShellContent Title="System Info"
+                  ContentTemplate="{DataTemplate pages:SystemInfoPage}"
+                  Route="SystemInfoPage"/>
+
     <ShellContent Title="Terminal"
                   ContentTemplate="{DataTemplate pages:TerminalPage}"
                   Route="TerminalPage"/>
