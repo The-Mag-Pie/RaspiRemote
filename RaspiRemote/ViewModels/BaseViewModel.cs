@@ -25,7 +25,17 @@ namespace RaspiRemote.ViewModels
         }
 
         private static void ShowPopup(Popup popup) => MainThread.BeginInvokeOnMainThread(() =>
-            Application.Current.MainPage.ShowPopup(popup));
+        {
+            // ShowPopup() is sometimes problematic (especially on Windows)
+            try
+            {
+                Application.Current.MainPage.ShowPopup(popup);
+            }
+            catch
+            {
+                _loadingPopup = null;
+            }
+        });
 
         [ObservableProperty]
         private bool _isBusy = false;

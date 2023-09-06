@@ -25,12 +25,7 @@ namespace RaspiRemote.ViewModels.Gpio
 
         public async Task OnAppearing()
         {
-#if WINDOWS
-            // Loader is disabled on Windows because it crashes the app
-            await HandleLoadData();
-#else
             await LoadDataWithLoader();
-#endif
         }
 
         [RelayCommand]
