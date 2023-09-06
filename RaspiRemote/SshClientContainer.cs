@@ -111,7 +111,9 @@ namespace RaspiRemote
             Disconnecting?.Invoke();
 
             // remove all event handlers
-            foreach (var d in Disconnecting.GetInvocationList())
+            var delegates = Disconnecting?.GetInvocationList();
+            if (delegates is null) return;
+            foreach (var d in delegates)
             {
                 Disconnecting -= (Action)d;
             }
