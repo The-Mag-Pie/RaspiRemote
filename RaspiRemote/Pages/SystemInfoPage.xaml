@@ -5,10 +5,118 @@
              xmlns:vm="clr-namespace:RaspiRemote.ViewModels"
              x:DataType="vm:SystemInfoPageViewModel"
              Title="System information">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+
+    <ContentPage.Resources>
+        <Style x:Key="TitleLabelStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+        </Style>
+
+        <Style x:Key="BasicInfoItemDescriptionLabel" TargetType="Label">
+            <Setter Property="VerticalOptions" Value="Center"/>
+        </Style>
+
+        <Style x:Key="BasicInfoItemValueLabel" TargetType="Label">
+
+        </Style>
+    </ContentPage.Resources>
+
+    <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                 Command="{Binding RefreshCommand}">
+        <ScrollView>
+            <VerticalStackLayout Spacing="10"
+                                 Margin="15">
+                <Border Style="{StaticResource ElemBorderStyle}">
+                    <Grid Margin="15,10"
+                          ColumnSpacing="8"
+                          RowSpacing="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                               Style="{StaticResource TitleLabelStyle}"
+                               Text="Basic info"/>
+
+                        <Label Grid.Row="1" Grid.Column="0"
+                               Style="{StaticResource BasicInfoItemDescriptionLabel}"
+                               Text="Model:"/>
+
+                        <Label Grid.Row="2" Grid.Column="0"
+                               Style="{StaticResource BasicInfoItemDescriptionLabel}"
+                               Text="Architecture:"/>
+
+                        <Label Grid.Row="3" Grid.Column="0"
+                               Style="{StaticResource BasicInfoItemDescriptionLabel}"
+                               Text="OS name:"/>
+
+                        <Label Grid.Row="4" Grid.Column="0"
+                               Style="{StaticResource BasicInfoItemDescriptionLabel}"
+                               Text="OS version:"/>
+
+                        <Label Grid.Row="5" Grid.Column="0"
+                               Style="{StaticResource BasicInfoItemDescriptionLabel}"
+                               Text="Kernel:"/>
+
+                        <Label Grid.Row="6" Grid.Column="0"
+                               Style="{StaticResource BasicInfoItemDescriptionLabel}"
+                               Text="Hostname:"/>
+
+                        <Label Grid.Row="7" Grid.Column="0"
+                               Style="{StaticResource BasicInfoItemDescriptionLabel}"
+                               Text="IPv4 Address(es):"/>
+
+                        <Label Grid.Row="8" Grid.Column="0"
+                               Style="{StaticResource BasicInfoItemDescriptionLabel}"
+                               Text="IPv6 Address(es):"/>
+
+                        <Label Grid.Row="1" Grid.Column="1"
+                               Style="{StaticResource BasicInfoItemValueLabel}"
+                               Text="{Binding Model}"/>
+
+                        <Label Grid.Row="2" Grid.Column="1"
+                               Style="{StaticResource BasicInfoItemValueLabel}"
+                               Text="{Binding Architecture}"/>
+
+                        <Label Grid.Row="3" Grid.Column="1"
+                               Style="{StaticResource BasicInfoItemValueLabel}"
+                               Text="{Binding OSName}"/>
+
+                        <Label Grid.Row="4" Grid.Column="1"
+                               Style="{StaticResource BasicInfoItemValueLabel}"
+                               Text="{Binding OSVersion}"/>
+
+                        <Label Grid.Row="5" Grid.Column="1"
+                               Style="{StaticResource BasicInfoItemValueLabel}"
+                               Text="{Binding Kernel}"/>
+
+                        <Label Grid.Row="6" Grid.Column="1"
+                               Style="{StaticResource BasicInfoItemValueLabel}"
+                               Text="{Binding Hostname}"/>
+
+                        <Label Grid.Row="7" Grid.Column="1"
+                               Style="{StaticResource BasicInfoItemValueLabel}"
+                               Text="{Binding IPv4Addresses}"/>
+
+                        <Label Grid.Row="8" Grid.Column="1"
+                               Style="{StaticResource BasicInfoItemValueLabel}"
+                               Text="{Binding IPv6Addresses}"/>
+                    </Grid>
+                </Border>
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
+    
 </ContentPage>
