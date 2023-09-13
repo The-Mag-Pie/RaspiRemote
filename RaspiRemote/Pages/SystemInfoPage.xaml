@@ -7,6 +7,12 @@
              Title="System information">
 
     <ContentPage.Resources>
+        <Style x:Key="SectionGridStyle" TargetType="Grid">
+            <Setter Property="Margin" Value="15,10"/>
+            <Setter Property="ColumnSpacing" Value="8"/>
+            <Setter Property="RowSpacing" Value="10"/>
+        </Style>
+        
         <Style x:Key="TitleLabelStyle" TargetType="Label">
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="FontAttributes" Value="Bold"/>
@@ -19,6 +25,15 @@
         <Style x:Key="BasicInfoItemValueLabel" TargetType="Label">
 
         </Style>
+
+        <Style x:Key="LiveDataItemValueLabel" TargetType="Label">
+            <Setter Property="HorizontalOptions" Value="Center"/>
+        </Style>
+
+        <Style x:Key="LiveDataProgressBarStyle" TargetType="ProgressBar">
+            <Setter Property="ScaleY" Value="{OnPlatform Android=6, WinUI=7}"/>
+            <Setter Property="TranslationY" Value="{OnPlatform Android=0, WinUI=3}"/>
+        </Style>
     </ContentPage.Resources>
 
     <RefreshView IsRefreshing="{Binding IsRefreshing}"
@@ -26,10 +41,9 @@
         <ScrollView>
             <VerticalStackLayout Spacing="10"
                                  Margin="15">
+                
                 <Border Style="{StaticResource ElemBorderStyle}">
-                    <Grid Margin="15,10"
-                          ColumnSpacing="8"
-                          RowSpacing="10">
+                    <Grid Style="{StaticResource SectionGridStyle}">
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition/>
@@ -115,6 +129,62 @@
                                Text="{Binding IPv6Addresses}"/>
                     </Grid>
                 </Border>
+
+                <Border Style="{StaticResource ElemBorderStyle}">
+                    <Grid Style="{StaticResource SectionGridStyle}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                               Style="{StaticResource TitleLabelStyle}"
+                               Text="Live data"/>
+
+                        <Label Grid.Row="1" Grid.Column="0"
+                               Text="CPU Usage:"/>
+
+                        <Label Grid.Row="2" Grid.Column="0"
+                               Text="CPU Temperature:"/>
+
+                        <Label Grid.Row="3" Grid.Column="0"
+                               Text="RAM Usage:"/>
+
+                        <Label Grid.Row="4" Grid.Column="0"
+                               Text="Swap Usage:"/>
+
+                        <Label Grid.Row="5" Grid.Column="0"
+                               Text="Root disk usage:"/>
+
+                        <ProgressBar Grid.Row="1" Grid.Column="1"
+                                     Style="{StaticResource LiveDataProgressBarStyle}"
+                                     Progress="{Binding CPUUsage}">
+                        </ProgressBar>
+
+                        <Label Grid.Row="1" Grid.Column="1"
+                               Style="{StaticResource LiveDataItemValueLabel}"
+                               Text="{Binding CPUUsagePercent, StringFormat='{0}%'}"/>
+
+                        <ProgressBar Grid.Row="2" Grid.Column="1"
+                                     Style="{StaticResource LiveDataProgressBarStyle}"
+                                     Progress="{Binding CPUTemperature}">
+                        </ProgressBar>
+
+                        <Label Grid.Row="2" Grid.Column="1"
+                               Style="{StaticResource LiveDataItemValueLabel}"
+                               Text="{Binding CPUTemperatureDeg, StringFormat='{0}&#186;C'}"/>
+
+                    </Grid>
+                </Border>
+
             </VerticalStackLayout>
         </ScrollView>
     </RefreshView>

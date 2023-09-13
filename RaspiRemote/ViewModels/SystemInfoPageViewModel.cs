@@ -8,6 +8,7 @@ namespace RaspiRemote.ViewModels
     internal partial class SystemInfoPageViewModel : BaseViewModel
     {
         private readonly SshClient _sshClient;
+        private CancellationTokenSource _cts;
 
         [ObservableProperty]
         private bool _isRefreshing;
@@ -36,6 +37,27 @@ namespace RaspiRemote.ViewModels
         [ObservableProperty]
         private string _IPv6Addresses;
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(CPUUsagePercent))]
+        private double _CPUUsage;
+        public double CPUUsagePercent => Math.Round(CPUUsage * 100, 1);
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(CPUTemperatureDeg))]
+        private double _CPUTemperature;
+        public double CPUTemperatureDeg => Math.Round(CPUTemperature * 100, 1);
+
+        public void OnAppearing()
+        {
+            if (_cts is not null && _cts.IsCancellationRequested is false)
+                OnDisappearing();
+
+            _cts = new CancellationTokenSource();
+            
+            Task.Run(UpdateLiveData);
+        }
+
+        public void OnDisappearing() => _cts.Cancel();
 
         public SystemInfoPageViewModel(SshClientContainer sshClientContainer)
         {
@@ -55,6 +77,17 @@ namespace RaspiRemote.ViewModels
             IPv4Addresses = SystemInfoHelpers.GetIPv4Addresses(_sshClient);
             IPv6Addresses = SystemInfoHelpers.GetIPv6Addresses(_sshClient);
         });
+
+        private void UpdateLiveData()
+        {
+            System.Diagnostics.Debug.WriteLine("Update task started");
+            while (_cts.IsCancellationRequested is false)
+            {
+                CPUUsage = SystemInfoHelpers.GetCPUUsage(_sshClient);
+                CPUTemperature = SystemInfoHelpers.GetCPUTemperature(_sshClient);
+            }
+            System.Diagnostics.Debug.WriteLine("Update task stopped");
+        }
 
         [RelayCommand]
         private async Task Refresh()

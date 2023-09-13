@@ -8,6 +8,10 @@ public partial class SystemInfoPage : ContentPage
 	{
 		InitializeComponent();
 
-		BindingContext = ServiceHelper.GetService<SystemInfoPageViewModel>();
+		var vm = ServiceHelper.GetService<SystemInfoPageViewModel>();
+		BindingContext = vm;
+
+		Appearing += (s, e) => vm.OnAppearing();
+		Disappearing += (s, e) => vm.OnDisappearing();
 	}
 }
