@@ -15,6 +15,8 @@ namespace RaspiRemote.Helpers
         public const string IPv6Addresses = "ip add show | grep -v \"inet6 ::1\" | grep inet6 | awk -F ' ' '{print $2}'";
         public const string CPUUsage = "top -bn2 | grep '%Cpu(s)' | awk -F ' ' '{print $8*10}' | sed -n 2p";
         public const string CPUTemperature = "cat /sys/class/thermal/thermal_zone0/temp";
+        public const string RAMUsage = "free --mega | grep Mem | awk -F ' ' '{print $3}{print$2}'";
+        public const string SwapUsage = "free --mega | grep Swap | awk -F ' ' '{print $3}{print$2}'";
     }
 
     public static class SystemInfoHelpers
@@ -52,6 +54,24 @@ namespace RaspiRemote.Helpers
             {
                 throw new InvalidShellOutputException("Invalid output for CPU temperature command.");
             }
+        }
+
+        public static (int, int) GetRAMUsage(SshClient sshClient) => GetMemUsage(sshClient, SystemInfoCommands.RAMUsage);
+        public static (int, int) GetSwapUsage(SshClient sshClient) => GetMemUsage(sshClient, SystemInfoCommands.SwapUsage);
+
+        private static (int, int) GetMemUsage(SshClient sshClient, string command)
+        {
+            var output = ExecuteCommand(sshClient, command).Split("\n");
+            if (output.Length != 2)
+                throw new InvalidShellOutputException("Invalid output for memory usage command.");
+
+            if (int.TryParse(output[0], out int used) is false)
+                throw new InvalidShellOutputException("Invalid output for memory usage command.");
+
+            if (int.TryParse(output[1], out int total) is false)
+                throw new InvalidShellOutputException("Invalid output for memory usage command.");
+
+            return (used, total);
         }
 
         private static string ExecuteCommand(SshClient sshClient, string commandText)

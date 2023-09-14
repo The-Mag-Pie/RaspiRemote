@@ -47,6 +47,16 @@ namespace RaspiRemote.ViewModels
         private double _CPUTemperature;
         public double CPUTemperatureDeg => Math.Round(CPUTemperature * 100, 1);
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(RAMUsage))]
+        private (int, int) _RAMUsageMegabytes;
+        public double RAMUsage => (double)RAMUsageMegabytes.Item1 / (double)RAMUsageMegabytes.Item2;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(SwapUsage))]
+        private (int, int) _SwapUsageMegabytes;
+        public double SwapUsage => (double)SwapUsageMegabytes.Item1 / (double)SwapUsageMegabytes.Item2;
+
         public void OnAppearing()
         {
             if (_cts is not null && _cts.IsCancellationRequested is false)
@@ -85,6 +95,8 @@ namespace RaspiRemote.ViewModels
             {
                 CPUUsage = SystemInfoHelpers.GetCPUUsage(_sshClient);
                 CPUTemperature = SystemInfoHelpers.GetCPUTemperature(_sshClient);
+                RAMUsageMegabytes = SystemInfoHelpers.GetRAMUsage(_sshClient);
+                SwapUsageMegabytes = SystemInfoHelpers.GetSwapUsage(_sshClient);
             }
             System.Diagnostics.Debug.WriteLine("Update task stopped");
         }
