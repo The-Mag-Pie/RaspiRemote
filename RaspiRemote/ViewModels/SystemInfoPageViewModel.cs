@@ -39,23 +39,28 @@ namespace RaspiRemote.ViewModels
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(CPUUsagePercent))]
-        private double _CPUUsage;
-        public double CPUUsagePercent => Math.Round(CPUUsage * 100, 1);
+        private double _CPUUsageRatio;
+        public double CPUUsagePercent => Math.Round(CPUUsageRatio * 100, 1);
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(CPUTemperatureDeg))]
-        private double _CPUTemperature;
-        public double CPUTemperatureDeg => Math.Round(CPUTemperature * 100, 1);
+        private double _CPUTemperatureRatio;
+        public double CPUTemperatureDeg => Math.Round(CPUTemperatureRatio * 100, 1);
 
         [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(RAMUsage))]
+        [NotifyPropertyChangedFor(nameof(RAMUsageRatio))]
         private (int, int) _RAMUsageMegabytes;
-        public double RAMUsage => (double)RAMUsageMegabytes.Item1 / (double)RAMUsageMegabytes.Item2;
+        public double RAMUsageRatio => (double)RAMUsageMegabytes.Item1 / (double)RAMUsageMegabytes.Item2;
 
         [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(SwapUsage))]
+        [NotifyPropertyChangedFor(nameof(SwapUsageRatio))]
         private (int, int) _SwapUsageMegabytes;
-        public double SwapUsage => (double)SwapUsageMegabytes.Item1 / (double)SwapUsageMegabytes.Item2;
+        public double SwapUsageRatio => (double)SwapUsageMegabytes.Item1 / (double)SwapUsageMegabytes.Item2;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(RootPartitionUsageRatio))]
+        private (int, int) _RootPartitionUsageMegabytes;
+        public double RootPartitionUsageRatio => (double)RootPartitionUsageMegabytes.Item1 / (double)RootPartitionUsageMegabytes.Item2;
 
         public void OnAppearing()
         {
@@ -90,15 +95,14 @@ namespace RaspiRemote.ViewModels
 
         private void UpdateLiveData()
         {
-            System.Diagnostics.Debug.WriteLine("Update task started");
             while (_cts.IsCancellationRequested is false)
             {
-                CPUUsage = SystemInfoHelpers.GetCPUUsage(_sshClient);
-                CPUTemperature = SystemInfoHelpers.GetCPUTemperature(_sshClient);
+                CPUUsageRatio = SystemInfoHelpers.GetCPUUsage(_sshClient);
+                CPUTemperatureRatio = SystemInfoHelpers.GetCPUTemperature(_sshClient);
                 RAMUsageMegabytes = SystemInfoHelpers.GetRAMUsage(_sshClient);
                 SwapUsageMegabytes = SystemInfoHelpers.GetSwapUsage(_sshClient);
+                RootPartitionUsageMegabytes = SystemInfoHelpers.GetRootPartitionUsage(_sshClient);
             }
-            System.Diagnostics.Debug.WriteLine("Update task stopped");
         }
 
         [RelayCommand]

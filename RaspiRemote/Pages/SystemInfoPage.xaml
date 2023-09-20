@@ -162,11 +162,11 @@
                                Text="Swap Usage:"/>
 
                         <Label Grid.Row="5" Grid.Column="0"
-                               Text="Root disk usage:"/>
+                               Text="Root Partition Usage:"/>
 
                         <ProgressBar Grid.Row="1" Grid.Column="1"
                                      Style="{StaticResource LiveDataProgressBarStyle}"
-                                     Progress="{Binding CPUUsage}">
+                                     Progress="{Binding CPUUsageRatio}">
                         </ProgressBar>
 
                         <Label Grid.Row="1" Grid.Column="1"
@@ -175,7 +175,7 @@
 
                         <ProgressBar Grid.Row="2" Grid.Column="1"
                                      Style="{StaticResource LiveDataProgressBarStyle}"
-                                     Progress="{Binding CPUTemperature}">
+                                     Progress="{Binding CPUTemperatureRatio}">
                         </ProgressBar>
 
                         <Label Grid.Row="2" Grid.Column="1"
@@ -184,7 +184,7 @@
 
                         <ProgressBar Grid.Row="3" Grid.Column="1"
                                      Style="{StaticResource LiveDataProgressBarStyle}"
-                                     Progress="{Binding RAMUsage}">
+                                     Progress="{Binding RAMUsageRatio}">
                         </ProgressBar>
 
                         <Label Grid.Row="3" Grid.Column="1"
@@ -199,7 +199,7 @@
 
                         <ProgressBar Grid.Row="4" Grid.Column="1"
                                      Style="{StaticResource LiveDataProgressBarStyle}"
-                                     Progress="{Binding SwapUsage}">
+                                     Progress="{Binding SwapUsageRatio}">
                         </ProgressBar>
 
                         <Label Grid.Row="4" Grid.Column="1"
@@ -208,6 +208,21 @@
                                 <MultiBinding StringFormat="{}{0} / {1} MB">
                                     <Binding Path="SwapUsageMegabytes[0]"/>
                                     <Binding Path="SwapUsageMegabytes[1]"/>
+                                </MultiBinding>
+                            </Label.Text>
+                        </Label>
+
+                        <ProgressBar Grid.Row="5" Grid.Column="1"
+                                     Style="{StaticResource LiveDataProgressBarStyle}"
+                                     Progress="{Binding RootPartitionUsageRatio}">
+                        </ProgressBar>
+
+                        <Label Grid.Row="5" Grid.Column="1"
+                               Style="{StaticResource LiveDataItemValueLabel}">
+                            <Label.Text>
+                                <MultiBinding StringFormat="{}{0} / {1} MB">
+                                    <Binding Path="RootPartitionUsageMegabytes[0]"/>
+                                    <Binding Path="RootPartitionUsageMegabytes[1]"/>
                                 </MultiBinding>
                             </Label.Text>
                         </Label>

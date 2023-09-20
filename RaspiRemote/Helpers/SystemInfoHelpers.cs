@@ -17,6 +17,7 @@ namespace RaspiRemote.Helpers
         public const string CPUTemperature = "cat /sys/class/thermal/thermal_zone0/temp";
         public const string RAMUsage = "free --mega | grep Mem | awk -F ' ' '{print $3}{print$2}'";
         public const string SwapUsage = "free --mega | grep Swap | awk -F ' ' '{print $3}{print$2}'";
+        public const string RootPartitionUsage = "df -BM | grep \"/dev/root\" | awk -F ' ' '{print $3}{print $2}'";
     }
 
     public static class SystemInfoHelpers
@@ -70,6 +71,24 @@ namespace RaspiRemote.Helpers
 
             if (int.TryParse(output[1], out int total) is false)
                 throw new InvalidShellOutputException("Invalid output for memory usage command.");
+
+            return (used, total);
+        }
+
+        public static (int, int) GetRootPartitionUsage(SshClient sshClient)
+        {
+            var output = ExecuteCommand(sshClient, SystemInfoCommands.RootPartitionUsage).Split("\n");
+            if (output.Length != 2)
+                throw new InvalidShellOutputException("Invalid output for root partition usage command.");
+
+            output[0] = output[0].Replace("M", null);
+            output[1] = output[1].Replace("M", null);
+
+            if (int.TryParse(output[0], out int used) is false)
+                throw new InvalidShellOutputException("Invalid output for root partition usage command.");
+
+            if (int.TryParse(output[1], out int total) is false)
+                throw new InvalidShellOutputException("Invalid output for root partition usage command.");
 
             return (used, total);
         }
