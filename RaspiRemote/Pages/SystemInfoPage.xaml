@@ -16,14 +16,21 @@
         <Style x:Key="TitleLabelStyle" TargetType="Label">
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="FontAttributes" Value="Bold"/>
+            
         </Style>
 
         <Style x:Key="BasicInfoItemDescriptionLabel" TargetType="Label">
             <Setter Property="VerticalOptions" Value="Center"/>
+            <Setter Property="TextColor" Value="DarkRed"/>
         </Style>
 
         <Style x:Key="BasicInfoItemValueLabel" TargetType="Label">
 
+        </Style>
+
+        <Style x:Key="LiveDataItemDescriptionLabel" TargetType="Label">
+            <Setter Property="VerticalOptions" Value="Center"/>
+            <Setter Property="TextColor" Value="DarkBlue"/>
         </Style>
 
         <Style x:Key="LiveDataItemValueLabel" TargetType="Label">
@@ -150,18 +157,23 @@
                                Text="Live data"/>
 
                         <Label Grid.Row="1" Grid.Column="0"
+                               Style="{StaticResource LiveDataItemDescriptionLabel}"
                                Text="CPU Usage:"/>
 
                         <Label Grid.Row="2" Grid.Column="0"
+                               Style="{StaticResource LiveDataItemDescriptionLabel}"
                                Text="CPU Temperature:"/>
 
                         <Label Grid.Row="3" Grid.Column="0"
+                               Style="{StaticResource LiveDataItemDescriptionLabel}"
                                Text="RAM Usage:"/>
 
                         <Label Grid.Row="4" Grid.Column="0"
+                               Style="{StaticResource LiveDataItemDescriptionLabel}"
                                Text="Swap Usage:"/>
 
                         <Label Grid.Row="5" Grid.Column="0"
+                               Style="{StaticResource LiveDataItemDescriptionLabel}"
                                Text="Root Partition Usage:"/>
 
                         <ProgressBar Grid.Row="1" Grid.Column="1"

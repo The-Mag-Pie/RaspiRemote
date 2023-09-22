@@ -40,7 +40,8 @@ namespace RaspiRemote.Helpers
             }
             else
             {
-                throw new InvalidShellOutputException("Invalid output for CPU usage command.");
+                return 0.0;
+                //throw new InvalidShellOutputException("Invalid output for CPU usage command.");
             }
         }
 
@@ -53,7 +54,8 @@ namespace RaspiRemote.Helpers
             }
             else
             {
-                throw new InvalidShellOutputException("Invalid output for CPU temperature command.");
+                return 0.0;
+                //throw new InvalidShellOutputException("Invalid output for CPU temperature command.");
             }
         }
 
@@ -62,33 +64,45 @@ namespace RaspiRemote.Helpers
 
         private static (int, int) GetMemUsage(SshClient sshClient, string command)
         {
-            var output = ExecuteCommand(sshClient, command).Split("\n");
+            var output = ExecuteCommand(sshClient, command)?.Split("\n");
+            if (output is null)
+                return (0, 0);
+
             if (output.Length != 2)
-                throw new InvalidShellOutputException("Invalid output for memory usage command.");
+                return (0, 0);
+                //throw new InvalidShellOutputException("Invalid output for memory usage command.");
 
             if (int.TryParse(output[0], out int used) is false)
-                throw new InvalidShellOutputException("Invalid output for memory usage command.");
+                return (0, 0);
+                //throw new InvalidShellOutputException("Invalid output for memory usage command.");
 
             if (int.TryParse(output[1], out int total) is false)
-                throw new InvalidShellOutputException("Invalid output for memory usage command.");
+                return (0, 0);
+                //throw new InvalidShellOutputException("Invalid output for memory usage command.");
 
             return (used, total);
         }
 
         public static (int, int) GetRootPartitionUsage(SshClient sshClient)
         {
-            var output = ExecuteCommand(sshClient, SystemInfoCommands.RootPartitionUsage).Split("\n");
+            var output = ExecuteCommand(sshClient, SystemInfoCommands.RootPartitionUsage)?.Split("\n");
+            if (output is null)
+                return (0, 0);
+
             if (output.Length != 2)
-                throw new InvalidShellOutputException("Invalid output for root partition usage command.");
+                return (0, 0);
+                //throw new InvalidShellOutputException("Invalid output for root partition usage command.");
 
             output[0] = output[0].Replace("M", null);
             output[1] = output[1].Replace("M", null);
 
             if (int.TryParse(output[0], out int used) is false)
-                throw new InvalidShellOutputException("Invalid output for root partition usage command.");
+                return (0, 0);
+                //throw new InvalidShellOutputException("Invalid output for root partition usage command.");
 
             if (int.TryParse(output[1], out int total) is false)
-                throw new InvalidShellOutputException("Invalid output for root partition usage command.");
+                return (0, 0);
+                //throw new InvalidShellOutputException("Invalid output for root partition usage command.");
 
             return (used, total);
         }
@@ -96,15 +110,21 @@ namespace RaspiRemote.Helpers
         private static string ExecuteCommand(SshClient sshClient, string commandText)
         {
             var command = sshClient.RunCommand(commandText);
-
-            if (command.ExitStatus != 0 && command.Error.Length > 0)
-                throw new SshException(command.Error);
-            else if (command.ExitStatus != 0 && command.Result.Length > 0)
-                throw new SshException(command.Result);
-            else if (command.ExitStatus != 0)
-                throw new SshException("Error during loading data.");
+            
+            if (command.ExitStatus != 0 || command.Result.Length == 0)
+                return null;
             else
                 return command.Result.Trim();
+            //if (command.ExitStatus != 0 && command.Error.Length > 0)
+            //    throw new SshException(command.Error);
+            //else if (command.ExitStatus != 0 && command.Result.Length > 0)
+            //    throw new SshException(command.Result);
+            //else if (command.ExitStatus != 0)
+            //    throw new SshException("Error during loading data.");
+            //else if (command.Result.Length == 0)
+            //    return null;
+            //else
+            //    return command.Result.Trim();
         }
     }
 
