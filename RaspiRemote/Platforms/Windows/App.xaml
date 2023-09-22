@@ -13,6 +13,8 @@
         <SolidColorBrush x:Key="ComboBoxDropDownGlyphForeground" Color="Black" />
         <SolidColorBrush x:Key="ComboBoxDropDownGlyphForegroundDisabled" Color="Gray" />
 
+        <x:Double x:Key="ProgressBarTrackHeight">5</x:Double>
+
     </maui:MauiWinUIApplication.Resources>
 
 </maui:MauiWinUIApplication>
