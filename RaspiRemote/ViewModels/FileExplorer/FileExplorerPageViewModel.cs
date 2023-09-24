@@ -48,7 +48,8 @@ namespace RaspiRemote.ViewModels.FileExplorer
                 .Skip(1);
             foreach (var dir in directories)
             {
-                Items.Add(dir);
+                if ((Path == "/" && dir.Name == "..") is false)
+                    Items.Add(dir);
             }
 
             // Sort and show symbolic links

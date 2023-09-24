@@ -137,7 +137,7 @@
                                     </Label>
                                 </Grid>
 
-                                <Button Grid.Column="0"
+                                <Button Grid.Column="0" Grid.ColumnSpan="2"
                                         Background="Transparent"
                                         CornerRadius="0"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FileExplorerPageViewModel}}, Path=ItemClickedCommand}"
@@ -148,7 +148,15 @@
                                              Source="more_3dots_vertical.png"
                                              Scale="1.2"
                                              Command="{Binding Source={RelativeSource AncestorType={x:Type vm:FileExplorerPageViewModel}}, Path=OpenItemMenuCommand}"
-                                             CommandParameter="{Binding .}"/>
+                                             CommandParameter="{Binding .}">
+                                    <ImageButton.Triggers>
+                                        <DataTrigger TargetType="ImageButton"
+                                                     Binding="{Binding Name}"
+                                                     Value="..">
+                                            <Setter Property="IsVisible" Value="False"/>
+                                        </DataTrigger>
+                                    </ImageButton.Triggers>
+                                </ImageButton>
                             </Grid>
                         </Border>
                     </DataTemplate>
