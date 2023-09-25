@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using RaspiRemote.Helpers;
+using RaspiRemote.Models;
 using Renci.SshNet;
 
 namespace RaspiRemote.ViewModels
@@ -47,20 +48,11 @@ namespace RaspiRemote.ViewModels
         private double _CPUTemperatureRatio;
         public double CPUTemperatureDeg => Math.Round(CPUTemperatureRatio * 100, 1);
 
-        [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(RAMUsageRatio))]
-        private (int, int) _RAMUsageMegabytes;
-        public double RAMUsageRatio => (double)RAMUsageMegabytes.Item1 / (double)RAMUsageMegabytes.Item2;
+        public UsedTotalUsage RAMUsage { get; } = new();
 
-        [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(SwapUsageRatio))]
-        private (int, int) _SwapUsageMegabytes;
-        public double SwapUsageRatio => (double)SwapUsageMegabytes.Item1 / (double)SwapUsageMegabytes.Item2;
+        public UsedTotalUsage SwapUsage { get; } = new();
 
-        [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(RootPartitionUsageRatio))]
-        private (int, int) _RootPartitionUsageMegabytes;
-        public double RootPartitionUsageRatio => (double)RootPartitionUsageMegabytes.Item1 / (double)RootPartitionUsageMegabytes.Item2;
+        public UsedTotalUsage RootPartitionUsage { get; } = new();
 
         public void OnAppearing()
         {
@@ -99,9 +91,9 @@ namespace RaspiRemote.ViewModels
             {
                 CPUUsageRatio = SystemInfoHelpers.GetCPUUsage(_sshClient);
                 CPUTemperatureRatio = SystemInfoHelpers.GetCPUTemperature(_sshClient);
-                RAMUsageMegabytes = SystemInfoHelpers.GetRAMUsage(_sshClient);
-                SwapUsageMegabytes = SystemInfoHelpers.GetSwapUsage(_sshClient);
-                RootPartitionUsageMegabytes = SystemInfoHelpers.GetRootPartitionUsage(_sshClient);
+                RAMUsage.Usage = SystemInfoHelpers.GetRAMUsage(_sshClient);
+                SwapUsage.Usage = SystemInfoHelpers.GetSwapUsage(_sshClient);
+                RootPartitionUsage.Usage = SystemInfoHelpers.GetRootPartitionUsage(_sshClient);
             }
         }
 
