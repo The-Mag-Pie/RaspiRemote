@@ -10,18 +10,22 @@
     x:DataType="local:ShellViewModel">
 
     <ShellContent Title="System Info"
+                  Icon="info_icon.png"
                   ContentTemplate="{DataTemplate pages:SystemInfoPage}"
                   Route="SystemInfoPage"/>
 
     <ShellContent Title="Terminal"
+                  Icon="terminal_icon.png"
                   ContentTemplate="{DataTemplate pages:TerminalPage}"
                   Route="TerminalPage"/>
 
     <ShellContent Title="GPIO"
+                  Icon="pins_icon.png"
                   ContentTemplate="{DataTemplate pages:GpioPage}"
                   Route="GpioPage"/>
 
     <ShellContent Title="File Explorer"
+                  Icon="file_explorer_icon.png"
                   ContentTemplate="{DataTemplate fepages:FileExplorerPage}"
                   Route="FileExplorerPage"/>
 

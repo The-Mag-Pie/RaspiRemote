@@ -32,7 +32,7 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" />
 
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
@@ -58,6 +58,10 @@
 	  <None Remove="Resources\Images\arrow_right.svg" />
 	  <None Remove="Resources\Images\arrow_upward.svg" />
 	  <None Remove="Resources\Images\file_icon.svg" />
+	  <None Remove="Resources\Images\Flyout\file_explorer_icon.svg" />
+	  <None Remove="Resources\Images\Flyout\info_icon.svg" />
+	  <None Remove="Resources\Images\Flyout\pins_icon.svg" />
+	  <None Remove="Resources\Images\Flyout\terminal_icon.svg" />
 	  <None Remove="Resources\Images\folder_icon.svg" />
 	  <None Remove="Resources\Images\link_icon.svg" />
 	  <None Remove="Resources\Raw\ConsoleIndex.html" />
@@ -65,6 +69,13 @@
 	  <None Remove="Resources\Raw\res\xterm-addon-attach.js" />
 	  <None Remove="Resources\Raw\res\xterm-addon-fit.js" />
 	  <None Remove="Resources\Raw\res\xterm.js" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiImage Include="Resources\Images\Flyout\file_explorer_icon.svg" />
+	  <MauiImage Include="Resources\Images\Flyout\info_icon.svg" />
+	  <MauiImage Include="Resources\Images\Flyout\pins_icon.svg" />
+	  <MauiImage Include="Resources\Images\Flyout\terminal_icon.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
