@@ -30,13 +30,26 @@
                   Route="FileExplorerPage"/>
 
     <ShellContent Title="Sensors"
+                  Icon="sensors_icon.png"
                   ContentTemplate="{DataTemplate pages:SensorsPage}"
                   Route="SensorsPage"/>
 
+    <MenuItem Text="Shutdown"
+              IconImageSource="shutdown_icon.png"
+              Command="{Binding PowerCommand}"
+              CommandParameter="Shutdown"/>
+    
+    <MenuItem Text="Reboot"
+              IconImageSource="refresh_icon.png"
+              Command="{Binding PowerCommand}"
+              CommandParameter="Reboot"/>
+
     <MenuItem Text="Reconnect (restart an app)"
+              IconImageSource="refresh_icon.png"
               Command="{Binding ReconnectCommand}"/>
     
     <MenuItem Text="Disconnect (select another device)"
+              IconImageSource="link_off_icon.png"
               Command="{Binding DisconnectCommand}"/>
 
 </Shell>

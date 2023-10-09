@@ -32,8 +32,8 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'" Include="Resources\AppIcon\appicon.svg" ForegroundScale="0.55" Color="#29A6AE"/>
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" Color="#29A6AE"/>
+		<MauiIcon Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'" Include="Resources\AppIcon\appicon.svg" ForegroundScale="0.55" Color="#29A6AE" />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" Color="#29A6AE" />
 
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
@@ -61,7 +61,11 @@
 	  <None Remove="Resources\Images\file_icon.svg" />
 	  <None Remove="Resources\Images\Flyout\file_explorer_icon.svg" />
 	  <None Remove="Resources\Images\Flyout\info_icon.svg" />
+	  <None Remove="Resources\Images\Flyout\link_off_icon.svg" />
 	  <None Remove="Resources\Images\Flyout\pins_icon.svg" />
+	  <None Remove="Resources\Images\Flyout\refresh_icon.svg" />
+	  <None Remove="Resources\Images\Flyout\sensors_icon.svg" />
+	  <None Remove="Resources\Images\Flyout\shutdown_icon.svg" />
 	  <None Remove="Resources\Images\Flyout\terminal_icon.svg" />
 	  <None Remove="Resources\Images\folder_icon.svg" />
 	  <None Remove="Resources\Images\link_icon.svg" />
@@ -76,7 +80,11 @@
 	  <MauiImage Include="Resources\Images\Flyout\file_explorer_icon.svg" />
 	  <MauiImage Include="Resources\Images\Flyout\info_icon.svg" />
 	  <MauiImage Include="Resources\Images\Flyout\pins_icon.svg" />
+	  <MauiImage Include="Resources\Images\Flyout\sensors_icon.svg" />
 	  <MauiImage Include="Resources\Images\Flyout\terminal_icon.svg" />
+	  <MauiImage Include="Resources\Images\Flyout\link_off_icon.svg" />
+	  <MauiImage Include="Resources\Images\Flyout\refresh_icon.svg" />
+	  <MauiImage Include="Resources\Images\Flyout\shutdown_icon.svg" />
 	</ItemGroup>
 
 	<ItemGroup>
