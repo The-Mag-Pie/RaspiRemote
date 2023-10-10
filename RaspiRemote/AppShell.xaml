@@ -40,7 +40,7 @@
               CommandParameter="Shutdown"/>
     
     <MenuItem Text="Reboot"
-              IconImageSource="refresh_icon.png"
+              IconImageSource="restart_icon.png"
               Command="{Binding PowerCommand}"
               CommandParameter="Reboot"/>
 

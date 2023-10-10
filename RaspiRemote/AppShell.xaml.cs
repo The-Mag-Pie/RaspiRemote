@@ -33,12 +33,13 @@ public partial class ShellViewModel : BaseViewModel
 
         try
         {
-            //var resultCmd = sshClient.RunCommand($"echo \"{deviceInfo.Password}\" | sudo -S -k bash -c \"(sleep 3 && {command}) &\"");
             var resultCmd = sshClient.RunCommand($"echo \"{deviceInfo.Password}\" | sudo -S -k {command}");
 
             if (resultCmd.ExitStatus != 0 || resultCmd.Error.Length > 0)
             {
-                throw new Renci.SshNet.Common.SshException($"{resultCmd.Error}{resultCmd.Result}");
+                throw new Renci.SshNet.Common.SshException(
+                    resultCmd.Error.Length > 0 ?
+                    resultCmd.Error : $"{resultCmd.Error}{resultCmd.Result}");
             }
 
             await Disconnect();

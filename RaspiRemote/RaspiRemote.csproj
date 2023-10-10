@@ -64,6 +64,7 @@
 	  <None Remove="Resources\Images\Flyout\link_off_icon.svg" />
 	  <None Remove="Resources\Images\Flyout\pins_icon.svg" />
 	  <None Remove="Resources\Images\Flyout\refresh_icon.svg" />
+	  <None Remove="Resources\Images\Flyout\restart_icon.svg" />
 	  <None Remove="Resources\Images\Flyout\sensors_icon.svg" />
 	  <None Remove="Resources\Images\Flyout\shutdown_icon.svg" />
 	  <None Remove="Resources\Images\Flyout\terminal_icon.svg" />
@@ -80,6 +81,7 @@
 	  <MauiImage Include="Resources\Images\Flyout\file_explorer_icon.svg" />
 	  <MauiImage Include="Resources\Images\Flyout\info_icon.svg" />
 	  <MauiImage Include="Resources\Images\Flyout\pins_icon.svg" />
+	  <MauiImage Include="Resources\Images\Flyout\restart_icon.svg" />
 	  <MauiImage Include="Resources\Images\Flyout\sensors_icon.svg" />
 	  <MauiImage Include="Resources\Images\Flyout\terminal_icon.svg" />
 	  <MauiImage Include="Resources\Images\Flyout\link_off_icon.svg" />
