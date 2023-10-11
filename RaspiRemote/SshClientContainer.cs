@@ -66,6 +66,7 @@ namespace RaspiRemote
             }
 
             SshClient = new SshClient(DeviceInfo.Host, DeviceInfo.Port, DeviceInfo.Username, DeviceInfo.Password);
+            SshClient.KeepAliveInterval = TimeSpan.FromSeconds(30);
             await Task.Run(SshClient.Connect);
             if (SshClient.IsConnected == false)
             {
