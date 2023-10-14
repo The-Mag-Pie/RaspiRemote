@@ -25,18 +25,7 @@ namespace ReadSensorData
             switch (args[0])
             {
                 case "dht11":
-                    int pin;
-                    try
-                    {
-                        pin = int.Parse(args[1]);
-                    }
-                    catch
-                    {
-                        Console.WriteLine($"ERROR: Wrong parameter: pin = {args[1]}");
-                        Environment.Exit(27);
-                        return;
-                    }
-                    handleDHT11DataRequest(pin);
+                    handleDHT11DataRequest(args[1]);
                     break;
                 case "ds18b20":
                     handleDS18B20DataRequest(args[1]);
@@ -48,8 +37,20 @@ namespace ReadSensorData
             }
         }
 
-        static void handleDHT11DataRequest(int pin)
+        static void handleDHT11DataRequest(string arg)
         {
+            int pin;
+            try
+            {
+                pin = int.Parse(arg);
+            }
+            catch
+            {
+                Console.WriteLine($"ERROR: Wrong parameter: pin = {arg}");
+                Environment.Exit(27);
+                return;
+            }
+
             using var dht11 = new Dht11(pin);
 
             bool success;
@@ -67,8 +68,6 @@ namespace ReadSensorData
                 Console.WriteLine(humidity.Percent);
                 return;
             }
-
-            Console.WriteLine("ERROR: cannot read data from DHT11 sensor");
         }
 
         static void handleDS18B20DataRequest(string arg)
