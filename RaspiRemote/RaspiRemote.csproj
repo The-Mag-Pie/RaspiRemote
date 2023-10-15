@@ -50,6 +50,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiAsset Remove="Resources\Raw\AboutAssets.txt" />
+	  <MauiAsset Remove="Resources\Raw\sensors32\libSystem.IO.Ports.Native.so" />
+	  <MauiAsset Remove="Resources\Raw\sensors32\ReadSensorData.pdb" />
+	  <MauiAsset Remove="Resources\Raw\sensors64\libSystem.IO.Ports.Native.so" />
+	  <MauiAsset Remove="Resources\Raw\sensors64\ReadSensorData.pdb" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiCss Remove="Resources\Raw\res\style.css" />
 	</ItemGroup>
 

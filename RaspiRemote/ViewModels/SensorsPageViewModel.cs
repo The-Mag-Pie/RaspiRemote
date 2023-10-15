@@ -116,26 +116,66 @@ namespace RaspiRemote.ViewModels
 
         private RpiDevice _deviceInfo;
         private SshClient _sshClient;
+        private SftpClient _sftpClient;
+
+        private bool _isInitialized = false;
+
+        private Thread _dht11UpdateThread;
+        private Thread _ds18b20UpdateThread;
 
         public SensorsPageViewModel(SshClientContainer sshClientContainer)
         {
             _deviceInfo = sshClientContainer.DeviceInfo;
             _sshClient = sshClientContainer.SshClient;
+            _sftpClient = sshClientContainer.SftpClient;
+
+            sshClientContainer.Disconnecting += DeleteExecutable;
 
             LoadSettings();
         }
 
-        private Thread _dht11UpdateThread;
-        private Thread _ds18b20UpdateThread;
-
-        public void OnAppearing()
+        public async Task OnAppearing()
         {
-            StartUpdateThreads();
+            if (_isInitialized is false)
+            {
+                await UploadExecutable();
+                _isInitialized = true;
+            }
+
+            //StartUpdateThreads();
         }
 
         public void OnDisappearing()
         {
-            StopUpdateThreads();
+            //StopUpdateThreads();
+        }
+
+        private async Task UploadExecutable() => await InvokeAsyncWithLoader(async () =>
+        {
+            try
+            {
+                var dirPath = "~/raspiremote";
+                var filePath = dirPath + "/ReadSensorData";
+
+                _sshClient.RunCommand($"mkdir {dirPath}");
+                filePath = _sshClient.RunCommand($"echo {filePath}").Result.Trim(); // ~ to home directory path conversion
+
+                var bit = _sshClient.RunCommand("getconf LONG_BIT").Result.Trim();
+                using var fileStream = await FileSystem.OpenAppPackageFileAsync($"sensors{bit}/ReadSensorData");
+
+                _sftpClient.UploadFile(fileStream, filePath, true);
+                _sshClient.RunCommand($"chmod +x {filePath}");
+            }
+            catch (Exception ex)
+            {
+                await DisplayError(ex.Message);
+            }
+        });
+
+        private void DeleteExecutable()
+        {
+            var dirPath = "~/raspiremote";
+            _sshClient.RunCommand($"rm -r {dirPath}");
         }
 
         private void StartUpdateThreads()
