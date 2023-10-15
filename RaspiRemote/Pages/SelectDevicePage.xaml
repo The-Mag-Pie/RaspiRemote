@@ -22,16 +22,6 @@
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="LineBreakMode" Value="TailTruncation"/>
         </Style>
-
-        <Style x:Key="AddButtonStyle" TargetType="ImageButton">
-            <Setter Property="BackgroundColor" Value="#71FD7F"/>
-            <Setter Property="VerticalOptions" Value="End"/>
-            <Setter Property="HorizontalOptions" Value="End"/>
-            <Setter Property="CornerRadius" Value="30"/>
-            <Setter Property="HeightRequest" Value="60"/>
-            <Setter Property="WidthRequest" Value="60"/>
-            <Setter Property="Margin" Value="0,0,30,30"/>
-        </Style>
     </ContentPage.Resources>
 
     <Grid>

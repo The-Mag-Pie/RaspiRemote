@@ -66,6 +66,7 @@
 	  <None Remove="Resources\Images\arrow_left.svg" />
 	  <None Remove="Resources\Images\arrow_right.svg" />
 	  <None Remove="Resources\Images\arrow_upward.svg" />
+	  <None Remove="Resources\Images\delete_icon.svg" />
 	  <None Remove="Resources\Images\file_icon.svg" />
 	  <None Remove="Resources\Images\Flyout\file_explorer_icon.svg" />
 	  <None Remove="Resources\Images\Flyout\info_icon.svg" />

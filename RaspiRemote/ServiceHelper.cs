@@ -1,6 +1,7 @@
 ﻿using RaspiRemote.ViewModels;
 using RaspiRemote.ViewModels.FileExplorer;
 using RaspiRemote.ViewModels.Gpio;
+using RaspiRemote.ViewModels.Sensors;
 
 namespace RaspiRemote
 {

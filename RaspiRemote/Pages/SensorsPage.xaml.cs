@@ -1,4 +1,4 @@
-using RaspiRemote.ViewModels;
+using RaspiRemote.ViewModels.Sensors;
 
 namespace RaspiRemote.Pages;
 

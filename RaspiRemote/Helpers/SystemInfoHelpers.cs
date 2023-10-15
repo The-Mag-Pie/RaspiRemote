@@ -1,5 +1,4 @@
 ﻿using Renci.SshNet;
-using Renci.SshNet.Common;
 
 namespace RaspiRemote.Helpers
 {

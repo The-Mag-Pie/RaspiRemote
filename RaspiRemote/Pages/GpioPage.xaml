@@ -7,12 +7,6 @@
              Title="GPIO">
 
     <ContentPage.Resources>
-        <Style x:Key="TipLabelStyle" TargetType="Label">
-            <Setter Property="TextColor" Value="#414141"/>
-            <Setter Property="HorizontalOptions" Value="Center"/>
-            <Setter Property="Margin" Value="0,7,0,2"/>
-        </Style>
-
         <Style x:Key="PinBorderStyle" TargetType="Border" BasedOn="{StaticResource ElemBorderStyle}">
             <Setter Property="Margin" Value="0,0,15,0"/>
         </Style>
