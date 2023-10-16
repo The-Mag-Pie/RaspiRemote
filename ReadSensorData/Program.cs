@@ -53,21 +53,35 @@ namespace ReadSensorData
 
             using var dht11 = new Dht11(pin);
 
-            bool success;
-            while (true)
+            UnitsNet.Temperature temperature = new();
+            UnitsNet.RelativeHumidity humidity = new();
+
+            bool temp_success = Task.Run(() =>
             {
-                success = dht11.TryReadTemperature(out var temperature);
-                if (success == false)
-                    continue;
+                while (true)
+                {
+                    if (dht11.TryReadTemperature(out temperature))
+                        break;
+                }
+            }).Wait(20 * 1000);
 
-                success = dht11.TryReadHumidity(out var humidity);
-                if (success == false)
-                    continue;
+            bool humidity_success = Task.Run(() =>
+            {
+                while (true)
+                {
+                    if (dht11.TryReadHumidity(out humidity))
+                        break;
+                }
+            }).Wait(20 * 1000);
 
-                Console.WriteLine(temperature.DegreesCelsius);
-                Console.WriteLine(humidity.Percent);
-                return;
+            if (temp_success is false || humidity_success is false)
+            {
+                Environment.Exit(24);
             }
+
+            Console.WriteLine(temperature.DegreesCelsius);
+            Console.WriteLine(humidity.Percent);
+            return;
         }
 
         static void handleDS18B20DataRequest(string arg)
