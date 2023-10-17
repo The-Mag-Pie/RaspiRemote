@@ -1,30 +1,50 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using RaspiRemote.Enums;
+using Renci.SshNet;
 
 namespace RaspiRemote.ViewModels.Sensors
 {
     public partial class DHT11SensorViewModel : ObservableObject
     {
-        public event Action PinChanged;
+        private readonly SshClient _sshClient;
 
-        public List<GpioPin> GpioPins { get; } = Enum.GetValues<GpioPin>().ToList();
+        [ObservableProperty]
+        private GpioPin _pin;
 
-        private GpioPin _pin = GpioPin.Gpio0;
-        public GpioPin Pin
+        [ObservableProperty]
+        private string _temperature = "--";
+
+        [ObservableProperty]
+        private string _humidity = "--";
+
+        public DHT11SensorViewModel(GpioPin pin)
         {
-            get => _pin;
-            set
-            {
-                _pin = value;
-                PinChanged?.Invoke();
-                OnPropertyChanged(nameof(Pin));
-            }
+            _sshClient = ServiceHelper.GetService<SshClientContainer>().SshClient;
+            Pin = pin;
+            StartUpdating();
         }
 
-        public DHT11SensorViewModel() { }
-        public DHT11SensorViewModel(int pin)
+        public DHT11SensorViewModel(int pin) : this((GpioPin)pin) { }
+
+        public void StartUpdating()
         {
-            Pin = (GpioPin)pin;
+            var cmd = _sshClient.CreateCommand($"~/raspiremote/ReadSensorData dht11 {(int)Pin}");
+            Task.Run(() =>
+            {
+                cmd.Execute();
+
+                var result = cmd.Result.Trim().Split("\n");
+                if (cmd.ExitStatus == 0 && result.Length == 2)
+                {
+                    Temperature = result[0];
+                    Humidity = result[1];
+                } 
+            });
+        }
+
+        public void StopUpdating()
+        {
+
         }
     }
 }

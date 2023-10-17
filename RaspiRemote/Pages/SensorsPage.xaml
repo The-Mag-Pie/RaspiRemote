@@ -16,6 +16,7 @@
         <Style x:Key="SensorHeaderLabelStyle" TargetType="Label">
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="VerticalOptions" Value="Center"/>
+            <Setter Property="HorizontalOptions" Value="Center"/>
         </Style>
         <Style x:Key="SensorStatePickerStyle" TargetType="Picker">
             <!--<Setter Property="BackgroundColor" Value="White"/>
@@ -71,14 +72,9 @@
                                         <Label Style="{StaticResource SensorHeaderLabelStyle}"
                                                Grid.Column="0"
                                                Text="DHT11"/>
-                                        <HorizontalStackLayout Grid.Column="1"
-                                                               HorizontalOptions="Center"
-                                                               Spacing="5">
-                                            <Label Style="{StaticResource SensorHeaderLabelStyle}"
-                                                   Text="Pin:"/>
-                                            <Picker ItemsSource="{Binding GpioPins}"
-                                                    SelectedItem="{Binding Pin}"/>
-                                        </HorizontalStackLayout>
+                                        <Label Grid.Column="1"
+                                               Style="{StaticResource SensorHeaderLabelStyle}"
+                                               Text="{Binding Pin, StringFormat='Pin: {0}'}"/>
                                         <ImageButton Grid.Column="2"
                                                      Source="delete_icon.png"
                                                      BackgroundColor="Transparent"
@@ -109,14 +105,12 @@
                                                Grid.Column="0"
                                                Style="{StaticResource SensorDataLabel}"
                                                TextColor="#03A800"
-                                               Text="22°C"/>
-                                        <!--Text="{Binding DHT11SensorTemperature, StringFormat='{0}°C'}"/>-->
+                                               Text="{Binding Temperature, StringFormat='{0}°C'}"/>
                                         <Label Grid.Row="1"
                                                Grid.Column="1"
                                                Style="{StaticResource SensorDataLabel}"
                                                TextColor="#007DA5"
-                                               Text="54%"/>
-                                        <!--Text="{Binding DHT11SensorHumidity, StringFormat='{0}%'}"/>-->
+                                               Text="{Binding Humidity, StringFormat='{0}%'}"/>
                                     </Grid>
                                 </Grid>
                             </Frame>

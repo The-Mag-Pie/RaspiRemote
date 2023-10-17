@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+using RaspiRemote.Enums;
 using RaspiRemote.LocalAppData;
 using RaspiRemote.Models;
 using Renci.SshNet;
@@ -8,11 +9,14 @@ namespace RaspiRemote.ViewModels.Sensors
 {
     internal partial class SensorsPageViewModel : BaseViewModel
     {
-        private bool _isInitialized = false;
+        private static readonly IEnumerable<string> GpioPins = Enum.GetValues<GpioPin>().Select(v => v.ToString());
 
         private RpiDevice _deviceInfo;
         private SshClient _sshClient;
         private SftpClient _sftpClient;
+
+        private event Action Appearing;
+        private event Action Disappearing;
 
         public ObservableCollection<DHT11SensorViewModel> DHT11Sensors { get; } = new();
         public ObservableCollection<DS18B20SensorViewModel> DS18B20Sensors { get; } = new();
@@ -36,12 +40,13 @@ namespace RaspiRemote.ViewModels.Sensors
 
         public void OnAppearing()
         {
-
+            Appearing?.Invoke();
         }
 
         public void OnDisappearing()
         {
 
+            Disappearing?.Invoke();
         }
 
         private async Task UploadExecutable() => await InvokeAsyncWithLoader(async () =>
@@ -84,16 +89,30 @@ namespace RaspiRemote.ViewModels.Sensors
             foreach (var sensorPin in sensorsList)
             {
                 var sensor = new DHT11SensorViewModel(sensorPin);
-                sensor.PinChanged += SaveDHT11Sensors;
+                Appearing += sensor.StartUpdating;
+                Disappearing += sensor.StopUpdating;
+
                 DHT11Sensors.Add(sensor);
             }
         }
 
         [RelayCommand]
-        private void AddDHT11Sensor()
+        private async Task AddDHT11Sensor()
         {
-            var sensor = new DHT11SensorViewModel();
-            sensor.PinChanged += SaveDHT11Sensors;
+            var response = await DisplayActionSheet("Select DHT11 sensor pin", "Cancel", null,
+                GpioPins.Where(v => DHT11Sensors.Any(s => s.Pin.ToString() == v) is false).ToArray());
+            if (response == null || response == "Cancel") return;
+
+            if (Enum.TryParse(response, out GpioPin sensorPin) is false)
+            {
+                await DisplayError("Error: wrong GPIO pin.");
+                return;
+            }
+
+            var sensor = new DHT11SensorViewModel(sensorPin);
+            Appearing += sensor.StartUpdating;
+            Disappearing += sensor.StopUpdating;
+
             DHT11Sensors.Add(sensor);
             SaveDHT11Sensors();
         }
@@ -101,6 +120,7 @@ namespace RaspiRemote.ViewModels.Sensors
         [RelayCommand]
         private void DeleteDHT11Sensor(DHT11SensorViewModel sensor)
         {
+            sensor.StopUpdating();
             DHT11Sensors.Remove(sensor);
             SaveDHT11Sensors();
         }
