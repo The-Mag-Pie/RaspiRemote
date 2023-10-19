@@ -1,12 +1,16 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using RaspiRemote.Enums;
 using Renci.SshNet;
+using System.Diagnostics;
 
 namespace RaspiRemote.ViewModels.Sensors
 {
     public partial class DHT11SensorViewModel : ObservableObject
     {
         private readonly SshClient _sshClient;
+        private CancellationTokenSource _ctSource;
+        private CancellationToken _ct;
+        private bool _ctSourceDisposed = false;
 
         [ObservableProperty]
         private GpioPin _pin;
@@ -28,8 +32,30 @@ namespace RaspiRemote.ViewModels.Sensors
 
         public void StartUpdating()
         {
+            StopUpdating();
+
+            _ctSource = new CancellationTokenSource();
+            _ct = _ctSource.Token;
+            _ctSourceDisposed = false;
+
+            Task.Run(Update, _ct);
+        }
+
+        public void StopUpdating()
+        {
+            if (_ctSource is not null && _ctSourceDisposed is false)
+            {
+                _ctSource.Cancel();
+                _ctSource.Dispose();
+                _ctSourceDisposed = true;
+            }
+        }
+
+        private void Update()
+        {
             var cmd = _sshClient.CreateCommand($"~/raspiremote/ReadSensorData dht11 {(int)Pin}");
-            Task.Run(() =>
+
+            while (_ct.IsCancellationRequested is false)
             {
                 cmd.Execute();
 
@@ -38,13 +64,12 @@ namespace RaspiRemote.ViewModels.Sensors
                 {
                     Temperature = result[0];
                     Humidity = result[1];
-                } 
-            });
-        }
+                }
 
-        public void StopUpdating()
-        {
+                Thread.Sleep(5 * 1000);
+            }
 
+            _ct.ThrowIfCancellationRequested();
         }
     }
 }

@@ -28,6 +28,7 @@ namespace RaspiRemote.ViewModels.Sensors
             _sftpClient = sshClientContainer.SftpClient;
 
             sshClientContainer.Disconnecting += RemoveExecutable;
+            sshClientContainer.Disconnecting += OnDisappearing;
 
             _ = Initialize();
         }
@@ -77,12 +78,6 @@ namespace RaspiRemote.ViewModels.Sensors
             _sshClient.RunCommand($"rm -r {dirPath}");
         }
 
-        private void SaveDHT11Sensors()
-        {
-            var sensorsList = DHT11Sensors.Select(s => (int)s.Pin).ToList();
-            SensorsAppData.SaveDHT11SensorsList(_deviceInfo.DeviceGUID, sensorsList);
-        }
-
         private void LoadDHT11Sensors()
         {
             var sensorsList = SensorsAppData.GetDHT11SensorsList(_deviceInfo.DeviceGUID);
@@ -94,6 +89,12 @@ namespace RaspiRemote.ViewModels.Sensors
 
                 DHT11Sensors.Add(sensor);
             }
+        }
+
+        private void SaveDHT11Sensors()
+        {
+            var sensorsList = DHT11Sensors.Select(s => (int)s.Pin).ToList();
+            SensorsAppData.SaveDHT11SensorsList(_deviceInfo.DeviceGUID, sensorsList);
         }
 
         [RelayCommand]
