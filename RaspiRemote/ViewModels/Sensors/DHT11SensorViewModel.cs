@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using RaspiRemote.Enums;
-using System.Diagnostics;
+using System.Globalization;
 
 namespace RaspiRemote.ViewModels.Sensors
 {
@@ -34,9 +34,11 @@ namespace RaspiRemote.ViewModels.Sensors
                 cmd.Execute();
                 var result = cmd.Result.Trim().Split("\n");
 
-                if (cmd.ExitStatus == 0 && result.Length == 2)
+                if (cmd.ExitStatus == 0 && result.Length == 2 &&
+                    double.TryParse(result[0], NumberStyles.Any, CultureInfo.InvariantCulture, out var temperature) &&
+                    int.TryParse(result[1], out _))
                 {
-                    Temperature = result[0];
+                    Temperature = Math.Round(temperature, 2).ToString();
                     Humidity = result[1];
                 }
 

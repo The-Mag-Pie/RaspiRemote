@@ -4,6 +4,7 @@ using RaspiRemote.LocalAppData;
 using RaspiRemote.Models;
 using Renci.SshNet;
 using System.Collections.ObjectModel;
+using System.Text.Json;
 
 namespace RaspiRemote.ViewModels.Sensors
 {
@@ -37,6 +38,7 @@ namespace RaspiRemote.ViewModels.Sensors
         {
             await UploadExecutable();
             LoadDHT11Sensors();
+            LoadDS18B20Sensors();
         });
 
         public void OnAppearing()
@@ -88,6 +90,33 @@ namespace RaspiRemote.ViewModels.Sensors
                 Disappearing += sensor.StopUpdating;
 
                 DHT11Sensors.Add(sensor);
+            }
+        }
+
+        private void LoadDS18B20Sensors()
+        {
+            var cmd = _sshClient.RunCommand("~/raspiremote/ReadSensorData ds18b20 list");
+            var result = cmd.Result.Trim();
+
+            if (cmd.ExitStatus == 0 && result.Length > 2)
+            {
+                var sensorIds = JsonSerializer.Deserialize<List<string>>(result);
+                if (sensorIds is null) return;
+
+                foreach (var sensorId in sensorIds)
+                {
+                    var sensor = new DS18B20SensorViewModel(sensorId);
+                    Appearing += sensor.StartUpdating;
+                    Disappearing += sensor.StopUpdating;
+
+                    DS18B20Sensors.Add(sensor);
+                }
+            }
+            else if (cmd.ExitStatus == 25)
+            {
+                _ = DisplayAlert("Error",
+                    "OneWire interface must be enabled in order to view available DS18B20 sensors. Enable it using raspi-config command.",
+                    "OK");
             }
         }
 
