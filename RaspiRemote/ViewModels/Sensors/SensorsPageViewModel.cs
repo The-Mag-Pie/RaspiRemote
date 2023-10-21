@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using RaspiRemote.Enums;
 using RaspiRemote.LocalAppData;
 using RaspiRemote.Models;
@@ -19,6 +20,9 @@ namespace RaspiRemote.ViewModels.Sensors
         private event Action Appearing;
         private event Action Disappearing;
 
+        [ObservableProperty]
+        private bool _isRefreshing;
+
         public ObservableCollection<DHT11SensorViewModel> DHT11Sensors { get; } = new();
         public ObservableCollection<DS18B20SensorViewModel> DS18B20Sensors { get; } = new();
 
@@ -37,8 +41,8 @@ namespace RaspiRemote.ViewModels.Sensors
         public async Task Initialize() => await InvokeAsyncWithLoader(async () =>
         {
             await UploadExecutable();
-            LoadDHT11Sensors();
             LoadDS18B20Sensors();
+            LoadDHT11Sensors();
         });
 
         public void OnAppearing()
@@ -80,19 +84,6 @@ namespace RaspiRemote.ViewModels.Sensors
             _sshClient.RunCommand($"rm -r {dirPath}");
         }
 
-        private void LoadDHT11Sensors()
-        {
-            var sensorsList = SensorsAppData.GetDHT11SensorsList(_deviceInfo.DeviceGUID);
-            foreach (var sensorPin in sensorsList)
-            {
-                var sensor = new DHT11SensorViewModel(sensorPin);
-                Appearing += sensor.StartUpdating;
-                Disappearing += sensor.StopUpdating;
-
-                DHT11Sensors.Add(sensor);
-            }
-        }
-
         private void LoadDS18B20Sensors()
         {
             var cmd = _sshClient.RunCommand("~/raspiremote/ReadSensorData ds18b20 list");
@@ -117,6 +108,19 @@ namespace RaspiRemote.ViewModels.Sensors
                 _ = DisplayAlert("Error",
                     "OneWire interface must be enabled in order to view available DS18B20 sensors. Enable it using raspi-config command.",
                     "OK");
+            }
+        }
+
+        private void LoadDHT11Sensors()
+        {
+            var sensorsList = SensorsAppData.GetDHT11SensorsList(_deviceInfo.DeviceGUID);
+            foreach (var sensorPin in sensorsList)
+            {
+                var sensor = new DHT11SensorViewModel(sensorPin);
+                Appearing += sensor.StartUpdating;
+                Disappearing += sensor.StopUpdating;
+
+                DHT11Sensors.Add(sensor);
             }
         }
 
@@ -153,6 +157,39 @@ namespace RaspiRemote.ViewModels.Sensors
             sensor.StopUpdating();
             DHT11Sensors.Remove(sensor);
             SaveDHT11Sensors();
+        }
+
+        [RelayCommand]
+        private async Task Refresh() => await Task.Run(() =>
+        {
+            IsRefreshing = true;
+
+            OnDisappearing();
+            DS18B20Sensors.Clear();
+            DHT11Sensors.Clear();
+            RemoveEventHandlers();
+
+            LoadDS18B20Sensors();
+            LoadDHT11Sensors();
+
+            IsRefreshing = false;
+        });
+
+        private void RemoveEventHandlers()
+        {
+            var appearingDelegates = Appearing?.GetInvocationList();
+            if (appearingDelegates is null) return;
+            foreach (var d in appearingDelegates)
+            {
+                Appearing -= (Action)d;
+            }
+
+            var disappearingDelegates = Disappearing?.GetInvocationList();
+            if (disappearingDelegates is null) return;
+            foreach (var d in disappearingDelegates)
+            {
+                Disappearing -= (Action)d;
+            }
         }
     }
 }

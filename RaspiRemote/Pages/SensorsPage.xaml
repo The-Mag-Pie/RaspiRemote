@@ -46,128 +46,138 @@
                Style="{StaticResource TipLabelStyle}"
                Text="DS18B20 sensors will be loaded automatically if present."/>
 
-        <ScrollView Grid.Row="1">
-            <VerticalStackLayout Margin="20,0,20,5"
-                                 Spacing="5">
-                <CollectionView ItemsSource="{Binding DS18B20Sensors}">
-                    <CollectionView.ItemsLayout>
-                        <LinearItemsLayout Orientation="Vertical"
-                                           ItemSpacing="5"/>
-                    </CollectionView.ItemsLayout>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="vm:DS18B20SensorViewModel">
-                            <Frame Style="{StaticResource SectionFrameStyle}">
-                                <Grid RowSpacing="10">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <Grid Grid.Row="0">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="auto"/>
-                                            <ColumnDefinition/>
-                                        </Grid.ColumnDefinitions>
-
-                                        <Label Grid.Column="0"
-                                               Style="{StaticResource SensorNameLabelStyle}"
-                                               Text="DS18B20"/>
-                                        <Label Grid.Column="1"
-                                               Style="{StaticResource SensorHeaderLabelStyle}"
-                                               HorizontalOptions="End"
-                                               Text="{Binding SensorID, StringFormat='Sensor ID: {0}'}"/>
-                                    </Grid>
-
-                                    <Grid Grid.Row="1"
-                                          HorizontalOptions="Center">
+        <RefreshView Grid.Row="1"
+                     IsRefreshing="{Binding IsRefreshing}"
+                     Command="{Binding RefreshCommand}">
+            <ScrollView Grid.Row="1">
+                <VerticalStackLayout Margin="20,0,20,5"
+                                     Spacing="5">
+                    <CollectionView ItemsSource="{Binding DS18B20Sensors}">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical"
+                                               ItemSpacing="5"/>
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.EmptyView>
+                            <StackLayout></StackLayout>
+                        </CollectionView.EmptyView>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="vm:DS18B20SensorViewModel">
+                                <Frame Style="{StaticResource SectionFrameStyle}">
+                                    <Grid RowSpacing="10">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="auto"/>
-                                            <RowDefinition/>
+                                            <RowDefinition Height="auto"/>
                                         </Grid.RowDefinitions>
-                                        <Label Grid.Row="0"
-                                               Style="{StaticResource SensorDataDescriptionLabel}"
-                                               Text="Temperature"/>
-                                        <Label Grid.Row="1"
-                                               Style="{StaticResource SensorDataLabel}"
-                                               Text="{Binding Temperature, StringFormat='{0}°C'}"/>
-                                    </Grid>
-                                </Grid>
-                            </Frame>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-                
-                <CollectionView ItemsSource="{Binding DHT11Sensors}">
-                    <CollectionView.ItemsLayout>
-                        <LinearItemsLayout Orientation="Vertical"
-                                           ItemSpacing="5"/>
-                    </CollectionView.ItemsLayout>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="vm:DHT11SensorViewModel">
-                            <Frame Style="{StaticResource SectionFrameStyle}">
-                                <Grid RowSpacing="10">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
 
-                                    <Grid Grid.Row="0">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="auto"/>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition Width="auto"/>
-                                        </Grid.ColumnDefinitions>
+                                        <Grid Grid.Row="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto"/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
 
-                                        <Label Style="{StaticResource SensorNameLabelStyle}"
-                                               Grid.Column="0"
-                                               Text="DHT11"/>
-                                        <Label Grid.Column="1"
-                                               Style="{StaticResource SensorHeaderLabelStyle}"
-                                               Text="{Binding Pin, StringFormat='Pin: {0}'}"/>
-                                        <ImageButton Grid.Column="2"
-                                                     Source="delete_icon.png"
-                                                     BackgroundColor="Transparent"
-                                                     WidthRequest="{OnPlatform Android=30, WinUI=1}"
-                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SensorsPageViewModel}}, Path=DeleteDHT11SensorCommand}"
-                                                     CommandParameter="{Binding .}"/>
+                                            <Label Grid.Column="0"
+                                                   Style="{StaticResource SensorNameLabelStyle}"
+                                                   Text="DS18B20"/>
+                                            <Label Grid.Column="1"
+                                                   Style="{StaticResource SensorHeaderLabelStyle}"
+                                                   HorizontalOptions="End"
+                                                   Text="{Binding SensorID, StringFormat='Sensor ID: {0}'}"/>
+                                        </Grid>
+
+                                        <Grid Grid.Row="1"
+                                               HorizontalOptions="Center">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Label Grid.Row="0"
+                                                   Style="{StaticResource SensorDataDescriptionLabel}"
+                                                   Text="Temperature"/>
+                                            <Label Grid.Row="1"
+                                                   Style="{StaticResource SensorDataLabel}"
+                                                   Text="{Binding Temperature, StringFormat='{0}°C'}"/>
+                                        </Grid>
                                     </Grid>
-                                    <Grid Grid.Row="1"
-                                          HorizontalOptions="Center"
-                                          ColumnSpacing="50">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="auto"/>
-                                            <ColumnDefinition Width="auto"/>
-                                        </Grid.ColumnDefinitions>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <CollectionView ItemsSource="{Binding DHT11Sensors}">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical"
+                                               ItemSpacing="5"/>
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.EmptyView>
+                            <StackLayout></StackLayout>
+                        </CollectionView.EmptyView>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="vm:DHT11SensorViewModel">
+                                <Frame Style="{StaticResource SectionFrameStyle}">
+                                    <Grid RowSpacing="10">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="auto"/>
-                                            <RowDefinition/>
+                                            <RowDefinition Height="auto"/>
                                         </Grid.RowDefinitions>
 
-                                        <Label Grid.Row="0"
-                                               Grid.Column="0"
-                                               Style="{StaticResource SensorDataDescriptionLabel}"
-                                               Text="Temperature"/>
-                                        <Label Grid.Row="0"
-                                               Grid.Column="1"
-                                               Style="{StaticResource SensorDataDescriptionLabel}"
-                                               Text="Humidity"/>
-                                        <Label Grid.Row="1"
-                                               Grid.Column="0"
-                                               Style="{StaticResource SensorDataLabel}"
-                                               Text="{Binding Temperature, StringFormat='{0}°C'}"/>
-                                        <Label Grid.Row="1"
-                                               Grid.Column="1"
-                                               Style="{StaticResource SensorDataLabel}"
-                                               TextColor="#007DA5"
-                                               Text="{Binding Humidity, StringFormat='{0}%'}"/>
+                                        <Grid Grid.Row="0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto"/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Label Style="{StaticResource SensorNameLabelStyle}"
+                                                   Grid.Column="0"
+                                                   Text="DHT11"/>
+                                            <Label Grid.Column="1"
+                                                   Style="{StaticResource SensorHeaderLabelStyle}"
+                                                   Text="{Binding Pin, StringFormat='Pin: {0}'}"/>
+                                            <ImageButton Grid.Column="2"
+                                                         Source="delete_icon.png"
+                                                         BackgroundColor="Transparent"
+                                                         WidthRequest="{OnPlatform Android=30, WinUI=1}"
+                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SensorsPageViewModel}}, Path=DeleteDHT11SensorCommand}"
+                                                         CommandParameter="{Binding .}"/>
+                                        </Grid>
+                                        <Grid Grid.Row="1"
+                                              HorizontalOptions="Center"
+                                              ColumnSpacing="50">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto"/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+
+                                            <Label Grid.Row="0"
+                                                   Grid.Column="0"
+                                                   Style="{StaticResource SensorDataDescriptionLabel}"
+                                                   Text="Temperature"/>
+                                            <Label Grid.Row="0"
+                                                   Grid.Column="1"
+                                                   Style="{StaticResource SensorDataDescriptionLabel}"
+                                                   Text="Humidity"/>
+                                            <Label Grid.Row="1"
+                                                   Grid.Column="0"
+                                                   Style="{StaticResource SensorDataLabel}"
+                                                   Text="{Binding Temperature, StringFormat='{0}°C'}"/>
+                                            <Label Grid.Row="1"
+                                                   Grid.Column="1"
+                                                   Style="{StaticResource SensorDataLabel}"
+                                                   TextColor="#007DA5"
+                                                   Text="{Binding Humidity, StringFormat='{0}%'}"/>
+                                        </Grid>
                                     </Grid>
-                                </Grid>
-                            </Frame>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </VerticalStackLayout>
-        </ScrollView>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </ScrollView>
+        </RefreshView>
 
         <ImageButton Grid.Row="1"
                      Style="{StaticResource AddButtonStyle}"
