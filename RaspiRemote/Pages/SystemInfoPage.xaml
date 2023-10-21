@@ -52,15 +52,15 @@
                 <Border Style="{StaticResource ElemBorderStyle}">
                     <Grid Style="{StaticResource SectionGridStyle}">
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
                             <RowDefinition/>
                             <RowDefinition/>
                             <RowDefinition/>
                             <RowDefinition/>
                             <RowDefinition/>
                             <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
@@ -140,7 +140,7 @@
                 <Border Style="{StaticResource ElemBorderStyle}">
                     <Grid Style="{StaticResource SectionGridStyle}">
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
+                            <RowDefinition Height="auto"/>
                             <RowDefinition/>
                             <RowDefinition/>
                             <RowDefinition/>
