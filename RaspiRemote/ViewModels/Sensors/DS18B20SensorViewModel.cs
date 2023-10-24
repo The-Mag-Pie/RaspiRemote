@@ -21,10 +21,8 @@ namespace RaspiRemote.ViewModels.Sensors
         {
             var cmd = _sshClient.CreateCommand($"~/raspiremote/ReadSensorData ds18b20 {SensorID}");
 
-            while (true)
+            while (_ct.IsCancellationRequested is false)
             {
-                _ct.ThrowIfCancellationRequested();
-
                 cmd.Execute();
                 var result = cmd.Result.Trim();
 
