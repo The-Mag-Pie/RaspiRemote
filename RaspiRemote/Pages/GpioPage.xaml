@@ -4,8 +4,9 @@
              x:Class="RaspiRemote.Pages.GpioPage"
              xmlns:vm="clr-namespace:RaspiRemote.ViewModels.Gpio"
              x:DataType="vm:GpioPageViewModel"
-             Title="GPIO">
-
+             Title="GPIO"
+             xmlns:page="clr-namespace:RaspiRemote.Pages">
+    
     <ContentPage.Resources>
         <Style x:Key="PinBorderStyle" TargetType="Border" BasedOn="{StaticResource ElemBorderStyle}">
             <Setter Property="Margin" Value="0,0,15,0"/>
@@ -36,6 +37,18 @@
             <Setter Property="BackgroundColor" Value="White"/>
         </Style>
     </ContentPage.Resources>
+
+    <Shell.TitleView>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="0"
+                   Text="{Binding Source={RelativeSource AncestorType={x:Type page:GpioPage}}, Path=Title}"/>
+        </Grid>
+    </Shell.TitleView>
     
     <Grid RowSpacing="5">
         <Grid.RowDefinitions>
