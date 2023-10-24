@@ -4,30 +4,31 @@
                xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                x:Class="RaspiRemote.Popups.LoadingPopup"
                CanBeDismissedByTappingOutsideOfPopup="False"
-               Color="Transparent">
+               Color="#80000000">
 
-    <Border StrokeShape="RoundRectangle 15,15,15,15"
-            StrokeThickness="0"
-            BackgroundColor="White"
-            Padding="10"
-            WidthRequest="130"
-            HeightRequest="130">
+    <Grid>
+        <Border StrokeShape="RoundRectangle 15,15,15,15"
+                StrokeThickness="0"
+                BackgroundColor="White"
+                Padding="10"
+                WidthRequest="130"
+                HeightRequest="130">
 
-        <VerticalStackLayout Margin="15"
-                             Spacing="10">
+            <VerticalStackLayout Margin="15"
+                                 Spacing="10">
 
-            <ActivityIndicator HeightRequest="50"
-                               WidthRequest="50"
-                               IsRunning="True"
-                               VerticalOptions="Center"
-                               HorizontalOptions="Center"/>
+                <ActivityIndicator HeightRequest="50"
+                                   WidthRequest="50"
+                                   IsRunning="True"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"/>
 
-            <Label Text="Loading..."
-                   VerticalOptions="Center"
-                   HorizontalOptions="Center"/>
+                <Label Text="Loading..."
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"/>
 
-        </VerticalStackLayout>
+            </VerticalStackLayout>
 
-    </Border>
-
+        </Border>
+    </Grid>
 </toolkit:Popup>

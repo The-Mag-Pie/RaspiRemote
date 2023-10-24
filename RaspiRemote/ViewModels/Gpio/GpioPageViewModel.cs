@@ -21,11 +21,13 @@ namespace RaspiRemote.ViewModels.Gpio
         {
             _sshClient = sshClientContainer.SshClient;
             _deviceInfo = sshClientContainer.DeviceInfo;
+
+            _ = LoadDataWithLoader();
         }
 
         public async Task OnAppearing()
         {
-            await LoadDataWithLoader();
+            //await LoadDataWithLoader();
         }
 
         [RelayCommand]
