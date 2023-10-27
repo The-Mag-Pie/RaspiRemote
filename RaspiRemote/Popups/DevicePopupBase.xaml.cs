@@ -10,6 +10,7 @@ public partial class DevicePopupBase : Popup
     public DevicePopupBase(RpiDevice device, string title)
 	{
 		InitializeComponent();
+        Size = new Size(DeviceDisplay.Current.MainDisplayInfo.Width, DeviceDisplay.Current.MainDisplayInfo.Height);
 
         _device = device;
         BindingContext = _device;

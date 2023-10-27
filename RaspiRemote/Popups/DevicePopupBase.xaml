@@ -6,85 +6,86 @@
                xmlns:model="clr-namespace:RaspiRemote.Models"
                x:DataType="model:RpiDevice"
                CanBeDismissedByTappingOutsideOfPopup="False"
-               Color="Transparent">
+               Color="#80000000">
 
-    <Border StrokeShape="RoundRectangle 15,15,15,15"
-            StrokeThickness="0"
-            BackgroundColor="White"
-            Padding="10"
-            WidthRequest="350"
-            HeightRequest="340">
+    <Grid>
+        <Border StrokeShape="RoundRectangle 15,15,15,15"
+                StrokeThickness="0"
+                BackgroundColor="White"
+                Padding="10"
+                WidthRequest="350"
+                HeightRequest="340">
 
-        <VerticalStackLayout Margin="5"
-                             Spacing="10">
+            <VerticalStackLayout Margin="5"
+                                 Spacing="10">
 
-            <Label x:Name="titleLabel"
-                   VerticalOptions="Center"
-                   HorizontalOptions="Center"
-                   FontSize="Title"/>
+                <Label x:Name="titleLabel"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"
+                       FontSize="Title"/>
 
-            <VerticalStackLayout>
-                <Label Text="Device name:"/>
-                <Entry x:Name="nameEntry"
-                       Text="{Binding Name}"
-                       Placeholder="Enter device's name"/>
+                <VerticalStackLayout>
+                    <Label Text="Device name:"/>
+                    <Entry x:Name="nameEntry"
+                           Text="{Binding Name}"
+                           Placeholder="Enter device's name"/>
+                </VerticalStackLayout>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <VerticalStackLayout Grid.Column="0">
+                        <Label Text="Host:"/>
+                        <Entry x:Name="hostEntry"
+                               Text="{Binding Host}"
+                               Placeholder="Enter device's host"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Column="1">
+                        <Label Text="Port:"/>
+                        <Entry x:Name="portEntry"
+                               Text="{Binding Port}"
+                               Placeholder="Port"
+                               Keyboard="Numeric"/>
+                    </VerticalStackLayout>
+                </Grid>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <VerticalStackLayout Grid.Column="0">
+                        <Label Text="Username:"/>
+                        <Entry x:Name="usernameEntry"
+                               Text="{Binding Username}"
+                               Placeholder="Enter username"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Column="1">
+                        <Label Text="Password:"/>
+                        <Entry x:Name="passwordEntry"
+                               Text="{Binding Password}"
+                               Placeholder="Enter password"
+                               IsPassword="True"/>
+                    </VerticalStackLayout>
+                </Grid>
+
+                <Grid ColumnSpacing="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Text="Cancel"
+                            Clicked="CancelBtnClicked"
+                            Grid.Column="0"/>
+                    <Button Text="Save"
+                            Clicked="SaveBtnClicked"
+                            Grid.Column="1"/>
+                </Grid>
+
             </VerticalStackLayout>
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*"/>
-                    <ColumnDefinition Width="2*"/>
-                </Grid.ColumnDefinitions>
-                <VerticalStackLayout Grid.Column="0">
-                    <Label Text="Host:"/>
-                    <Entry x:Name="hostEntry"
-                           Text="{Binding Host}"
-                           Placeholder="Enter device's host"/>
-                </VerticalStackLayout>
-                <VerticalStackLayout Grid.Column="1">
-                    <Label Text="Port:"/>
-                    <Entry x:Name="portEntry"
-                           Text="{Binding Port}"
-                           Placeholder="Port"
-                           Keyboard="Numeric"/>
-                </VerticalStackLayout>
-            </Grid>
-
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <VerticalStackLayout Grid.Column="0">
-                    <Label Text="Username:"/>
-                    <Entry x:Name="usernameEntry"
-                           Text="{Binding Username}"
-                           Placeholder="Enter username"/>
-                </VerticalStackLayout>
-                <VerticalStackLayout Grid.Column="1">
-                    <Label Text="Password:"/>
-                    <Entry x:Name="passwordEntry"
-                           Text="{Binding Password}"
-                           Placeholder="Enter password"
-                           IsPassword="True"/>
-                </VerticalStackLayout>
-            </Grid>
-
-            <Grid ColumnSpacing="10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Button Text="Cancel"
-                        Clicked="CancelBtnClicked"
-                        Grid.Column="0"/>
-                <Button Text="Save"
-                        Clicked="SaveBtnClicked"
-                        Grid.Column="1"/>
-            </Grid>
-
-        </VerticalStackLayout>
-
-    </Border>
-
+        </Border>
+    </Grid>
 </toolkit:Popup>
