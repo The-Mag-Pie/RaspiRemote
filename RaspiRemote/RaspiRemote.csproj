@@ -111,9 +111,6 @@
 	  <Compile Update="Pages\FileExplorer\FileExplorerPage.xaml.cs">
 	    <DependentUpon>FileExplorerPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Popups\DeviceOptionsPopup.xaml.cs">
-	    <DependentUpon>DeviceOptionsPopup.xaml</DependentUpon>
-	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -136,9 +133,6 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\TerminalPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Popups\DeviceOptionsPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Popups\DevicePopupBase.xaml">

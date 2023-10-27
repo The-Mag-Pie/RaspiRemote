@@ -32,29 +32,6 @@ namespace RaspiRemote.ViewModels
         }
 
         [RelayCommand]
-        private async Task EditDevice(RpiDevice device)
-        {
-            var popup = new EditDevicePopup(device);
-            var editedDevice = await Application.Current.MainPage.ShowPopupAsync(popup) as RpiDevice;
-            if (editedDevice != null)
-            {
-                device.Name = editedDevice.Name;
-                device.Host = editedDevice.Host;
-                device.Port = editedDevice.Port;
-                device.Username = editedDevice.Username;
-                device.Password = editedDevice.Password;
-                SaveDevices();
-            }
-        }
-
-        [RelayCommand]
-        private void DeleteDevice(RpiDevice device)
-        {
-            Devices.Remove(device);
-            SaveDevices();
-        }
-
-        [RelayCommand]
         private async Task ConnectToDevice(RpiDevice device)
         {
             await InvokeAsyncWithLoader(async () =>
@@ -76,21 +53,40 @@ namespace RaspiRemote.ViewModels
         [RelayCommand]
         private async Task OpenDeviceOptions(RpiDevice device)
         {
-            var popup = new DeviceOptionsPopup();
-            var result = await Application.Current.MainPage.ShowPopupAsync(popup);
-            if (result != null)
-            {
-                switch (result)
-                {
-                    case DeviceOptionsActions.Edit:
-                        _ = EditDevice(device);
-                        break;
+            var result = await DisplayActionSheet("Options", "Cancel", null, new[] { "Edit", "Delete" });
+            if (result is null) return;
 
-                    case DeviceOptionsActions.Delete:
-                        DeleteDevice(device);
-                        break;
-                }
+            switch (result)
+            {
+                case "Edit":
+                    _ = EditDevice(device);
+                    break;
+
+                case "Delete":
+                    DeleteDevice(device);
+                    break;
             }
+        }
+
+        private async Task EditDevice(RpiDevice device)
+        {
+            var popup = new EditDevicePopup(device);
+            var editedDevice = await Application.Current.MainPage.ShowPopupAsync(popup) as RpiDevice;
+            if (editedDevice != null)
+            {
+                device.Name = editedDevice.Name;
+                device.Host = editedDevice.Host;
+                device.Port = editedDevice.Port;
+                device.Username = editedDevice.Username;
+                device.Password = editedDevice.Password;
+                SaveDevices();
+            }
+        }
+
+        private void DeleteDevice(RpiDevice device)
+        {
+            Devices.Remove(device);
+            SaveDevices();
         }
 
         private void LoadDevices()
