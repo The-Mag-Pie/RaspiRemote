@@ -46,11 +46,7 @@
             </Grid.ColumnDefinitions>
 
             <Label Grid.Column="0"
-                   VerticalOptions="Center"
-                   TextColor="White"
-                   FontAttributes="Bold"
-                   FontSize="{OnPlatform Android=Large, WinUI=Title}"
-                   Margin="{OnPlatform Android='0,0,0,0', WinUI='10,0,0,0'}"
+                   Style="{StaticResource TitleViewLabelStyle}"
                    Text="{Binding Source={RelativeSource AncestorType={x:Type page:GpioPage}}, Path=Title}"/>
 
             <ImageButton Grid.Column="1"

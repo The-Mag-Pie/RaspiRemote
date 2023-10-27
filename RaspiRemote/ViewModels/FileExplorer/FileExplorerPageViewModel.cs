@@ -78,6 +78,9 @@ namespace RaspiRemote.ViewModels.FileExplorer
         }
 
         [RelayCommand]
+        private async Task RefreshBtn() => await InvokeAsyncWithLoader(LoadItems);
+
+        [RelayCommand]
         private async Task Refresh()
         {
             IsRefreshing = true;

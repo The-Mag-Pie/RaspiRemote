@@ -5,6 +5,7 @@
              xmlns:vm="clr-namespace:RaspiRemote.ViewModels.FileExplorer"
              xmlns:models="clr-namespace:RaspiRemote.Models"
              xmlns:sftp="clr-namespace:Renci.SshNet.Sftp;assembly=Renci.SshNet"
+             xmlns:page="clr-namespace:RaspiRemote.Pages.FileExplorer"
              x:DataType="vm:FileExplorerPageViewModel"
              Title="File Explorer">
 
@@ -36,6 +37,24 @@
             <Setter Property="FontSize" Value="17"/>
         </Style>
     </ContentPage.Resources>
+
+    <Shell.TitleView>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="0"
+                   Style="{StaticResource TitleViewLabelStyle}"
+                   Text="{Binding Source={RelativeSource AncestorType={x:Type page:FileExplorerPage}}, Path=Title}"/>
+
+            <ImageButton Grid.Column="1"
+                         BackgroundColor="Transparent"
+                         Source="refresh_icon.png"
+                         Command="{Binding RefreshBtnCommand}"/>
+        </Grid>
+    </Shell.TitleView>
 
     <Grid>
 
