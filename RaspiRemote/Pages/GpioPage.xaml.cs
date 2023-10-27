@@ -10,7 +10,5 @@ public partial class GpioPage : ContentPage
 
 		var vm = ServiceHelper.GetService<GpioPageViewModel>();
 		BindingContext = vm;
-
-		Appearing += async (s, e) => await vm.OnAppearing();
 	}
 }
