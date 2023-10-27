@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RaspiRemote.Pages.SystemInfoPage"
              xmlns:vm="clr-namespace:RaspiRemote.ViewModels"
+             xmlns:page="clr-namespace:RaspiRemote.Pages"
              x:DataType="vm:SystemInfoPageViewModel"
              Title="System information">
 
@@ -42,6 +43,24 @@
             <Setter Property="TranslationY" Value="{OnPlatform Android=0, WinUI=3}"/>
         </Style>
     </ContentPage.Resources>
+
+    <Shell.TitleView>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="0"
+                   Style="{StaticResource TitleViewLabelStyle}"
+                   Text="{Binding Source={RelativeSource AncestorType={x:Type page:SystemInfoPage}}, Path=Title}"/>
+
+            <ImageButton Grid.Column="1"
+                         BackgroundColor="Transparent"
+                         Source="refresh_icon.png"
+                         Command="{Binding RefreshBtnCommand}"/>
+        </Grid>
+    </Shell.TitleView>
 
     <RefreshView IsRefreshing="{Binding IsRefreshing}"
                  Command="{Binding RefreshCommand}">

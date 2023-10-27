@@ -98,6 +98,9 @@ namespace RaspiRemote.ViewModels
         }
 
         [RelayCommand]
+        private async Task RefreshBtn() => await InvokeAsyncWithLoader(LoadBasicInfo);
+
+        [RelayCommand]
         private async Task Refresh()
         {
             IsRefreshing = true;
