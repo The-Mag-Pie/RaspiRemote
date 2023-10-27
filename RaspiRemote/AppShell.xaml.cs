@@ -51,7 +51,7 @@ public partial class ShellViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error", ex.Message, "OK");
+            await DisplayError(ex.Message);
         }
     });
 
