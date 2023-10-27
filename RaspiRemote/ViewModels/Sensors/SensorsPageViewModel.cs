@@ -160,10 +160,18 @@ namespace RaspiRemote.ViewModels.Sensors
         }
 
         [RelayCommand]
+        private async Task RefreshBtn() => await InvokeAsyncWithLoader(Reload);
+
+        [RelayCommand]
         private async Task Refresh() => await Task.Run(() =>
         {
             IsRefreshing = true;
+            Reload();
+            IsRefreshing = false;
+        });
 
+        private void Reload()
+        {
             OnDisappearing();
             DS18B20Sensors.Clear();
             DHT11Sensors.Clear();
@@ -171,9 +179,7 @@ namespace RaspiRemote.ViewModels.Sensors
 
             LoadDS18B20Sensors();
             LoadDHT11Sensors();
-
-            IsRefreshing = false;
-        });
+        }
 
         private void RemoveEventHandlers()
         {
