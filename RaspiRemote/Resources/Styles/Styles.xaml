@@ -9,7 +9,7 @@
         <Setter Property="VerticalOptions" Value="Center"/>
         <Setter Property="TextColor" Value="White"/>
         <Setter Property="FontAttributes" Value="Bold"/>
-        <Setter Property="FontSize" Value="{OnPlatform Android=Large, WinUI=Title}"/>
+        <Setter Property="FontSize" Value="{OnPlatform Android=18, WinUI=Title}"/>
         <Setter Property="Margin" Value="{OnPlatform Android='0,0,0,0', WinUI='10,0,0,0'}"/>
     </Style>
     
