@@ -79,6 +79,7 @@
 	  <None Remove="Resources\Images\Flyout\terminal_icon.svg" />
 	  <None Remove="Resources\Images\folder_icon.svg" />
 	  <None Remove="Resources\Images\link_icon.svg" />
+	  <None Remove="Resources\Images\refresh_icon.svg" />
 	  <None Remove="Resources\Raw\ConsoleIndex.html" />
 	  <None Remove="Resources\Raw\res\script.js" />
 	  <None Remove="Resources\Raw\res\xterm-addon-attach.js" />

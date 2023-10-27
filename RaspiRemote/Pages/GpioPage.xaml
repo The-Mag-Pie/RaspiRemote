@@ -46,7 +46,17 @@
             </Grid.ColumnDefinitions>
 
             <Label Grid.Column="0"
+                   VerticalOptions="Center"
+                   TextColor="White"
+                   FontAttributes="Bold"
+                   FontSize="Title"
+                   Margin="10,0,0,0"
                    Text="{Binding Source={RelativeSource AncestorType={x:Type page:GpioPage}}, Path=Title}"/>
+
+            <ImageButton Grid.Column="1"
+                         BackgroundColor="Transparent"
+                         Source="refresh_icon.png"
+                         Command="{Binding LoadDataWithLoaderCommand}"/>
         </Grid>
     </Shell.TitleView>
     

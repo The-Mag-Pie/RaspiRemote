@@ -25,10 +25,6 @@ namespace RaspiRemote.ViewModels.Gpio
             _ = LoadDataWithLoader();
         }
 
-        public async Task OnAppearing()
-        {
-            //await LoadDataWithLoader();
-        }
 
         [RelayCommand]
         private async Task Refresh()
@@ -38,6 +34,7 @@ namespace RaspiRemote.ViewModels.Gpio
             IsRefreshing = false;
         }
 
+        [RelayCommand]
         private async Task LoadDataWithLoader() => await InvokeAsyncWithLoader(HandleLoadData);
 
         private async Task HandleLoadData()
