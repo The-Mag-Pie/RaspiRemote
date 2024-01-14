@@ -12,7 +12,7 @@ namespace RaspiRemote.Helpers
         public const string Hostname = "hostname";
         public const string IPv4Addresses = "ip add show | grep -v \"inet 127.0.0.1\" | grep -v inet6 | grep inet | awk -F ' ' '{print $2}'";
         public const string IPv6Addresses = "ip add show | grep -v \"inet6 ::1\" | grep inet6 | awk -F ' ' '{print $2}'";
-        public const string CPUUsage = "top -bn2 | grep '%Cpu(s)' | awk -F ' ' '{print $8*10}' | sed -n 2p";
+        public const string CPUUsage = "top -bn2 | grep '%Cpu(s)' | awk -F ',' '{print $4}' | sed -n 2p | awk -F ' ' '{print $1*10}'";
         public const string CPUTemperature = "cat /sys/class/thermal/thermal_zone0/temp";
         public const string RAMUsage = "free --mega | grep Mem | awk -F ' ' '{print $3}{print$2}'";
         public const string SwapUsage = "free --mega | grep Swap | awk -F ' ' '{print $3}{print$2}'";
