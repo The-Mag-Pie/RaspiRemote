@@ -103,7 +103,6 @@ namespace RaspiRemote.ViewModels.Gpio
             if (command.ExitStatus != 0)
             {
                 await DisplayError($"User {_deviceInfo.Username} is not in \"gpio\" group. An attempt to add the user to the group has failed. You have to manually add the user to the \"gpio\" group in order to use this module.");
-                // TODO: navigate to another module
             }
             else
             {

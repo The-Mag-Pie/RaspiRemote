@@ -135,24 +135,11 @@
                                                         Value="folder_icon.png"/>
                                             </DataTrigger>
                                         </Image.Triggers>
-                                        <!--<Image.Shadow>
-                                        <Shadow Brush="Black"
-                                                Radius="5"
-                                                Opacity="0.8"/>
-                                    </Image.Shadow>-->
                                     </Image>
 
                                     <Label Style="{StaticResource ItemNameLabelStyle}"
                                            Grid.Column="1" Grid.ColumnSpan="2"
                                            Text="{Binding Name}">
-                                        <!--<Label.Triggers>
-                                        <DataTrigger TargetType="Label"
-                                                     Binding="{Binding Name}"
-                                                     Value="..">
-                                            <Setter Property="Text"
-                                                    Value=".. (up)"/>
-                                        </DataTrigger>
-                                    </Label.Triggers>-->
                                     </Label>
                                 </Grid>
 

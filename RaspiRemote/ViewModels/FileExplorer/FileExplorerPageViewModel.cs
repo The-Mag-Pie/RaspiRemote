@@ -188,7 +188,6 @@ namespace RaspiRemote.ViewModels.FileExplorer
                     break;
 
                 case "Delete":
-                    //await InvokeAsyncWithLoader(async () => await TryDeleteItem($"{Path}/{item.Name}"));
                     await TryDeleteItem($"{Path}/{item.Name}");
                     break;
 
